@@ -1,0 +1,3 @@
+[submodule "MidnightEngine"]
+	path = MidnightEngine
+	url = https://github.com/Glabay/MidnightEngine.git
