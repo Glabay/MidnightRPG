@@ -7,6 +7,10 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.rpg.scene.GameStartMode;
+import dev.midnightcoder.rpg.scene.SceneManager;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
+import dev.midnightcoder.rpg.scene.impl.LoginScreen;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
 import java.awt.*;
@@ -18,30 +22,45 @@ import java.awt.*;
  * @since 2026-04-30
  */
 public class MidnightRPG implements Game {
-    private GameMap currentMap;
-    private PlayerAvatar player;
+    private SceneManager sceneManager;
+    private InputManager input;
 
     @Override
     public void init(InputManager input) {
-        currentMap = new TutorialIsland();
-        currentMap.initTileMap();
-        var redSquare = TextureFactory.createSolidColor(32, 32, Color.RED);
-        player = new PlayerAvatar(100, 100, redSquare, input, new Movement(currentMap.getTileMap()));
+        sceneManager = new SceneManager();
+        this.input = input;
+
+        sceneManager.setScene(new LoginScreen(input,
+            this::startNewGame,
+            this::loadGame,
+            this::quitGame
+        ));
     }
 
     @Override
     public void update(double delta) {
-        player.update(delta);
+        sceneManager.update(delta);
     }
 
     @Override
     public void render(Renderer renderer) {
-        currentMap.renderTileMap(renderer);
-        player.render(renderer);
+        sceneManager.render(renderer);
     }
 
     @Override
     public void shutdown() {
+        System.exit(0);
+    }
 
+    private void startNewGame() {
+        sceneManager.setScene(new GameScreen(input, GameStartMode.NEW_GAME));
+    }
+
+    private void loadGame() {
+        sceneManager.setScene(new GameScreen(input, GameStartMode.LOAD_GAME));
+    }
+
+    private void quitGame() {
+        shutdown();
     }
 }
