@@ -1,4 +1,4 @@
-package dev.midnightcoder.rpg.scene;
+package dev.midnightcoder.rpg.scene.impl;
 
 import dev.midnightcoder.engine.scene.Scene;
 
@@ -8,5 +8,5 @@ import dev.midnightcoder.engine.scene.Scene;
  * @social Discord: Glabay
  * @since 2026-04-30
  */
-public class GameScreen extends Scene {
+public class LoginScreen extends Scene {
 }
