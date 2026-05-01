@@ -1,9 +1,13 @@
 package dev.midnightcoder.rpg;
 
 import dev.midnightcoder.engine.core.Game;
-import dev.midnightcoder.engine.entity.mob.Player;
+import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
+import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
+import dev.midnightcoder.engine.system.Movement;
+import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.rpg.world.TutorialIsland;
 
 import java.awt.*;
 
@@ -14,13 +18,15 @@ import java.awt.*;
  * @since 2026-04-30
  */
 public class MidnightRPG implements Game {
-
-    private Player player;
+    private GameMap currentMap;
+    private PlayerAvatar player;
 
     @Override
-    public void init() {
+    public void init(InputManager input) {
+        currentMap = new TutorialIsland();
+        currentMap.initTileMap();
         var redSquare = TextureFactory.createSolidColor(32, 32, Color.RED);
-        player = new Player(100, 100, redSquare);
+        player = new PlayerAvatar(100, 100, redSquare, input, new Movement(currentMap.getTileMap()));
     }
 
     @Override
@@ -30,6 +36,7 @@ public class MidnightRPG implements Game {
 
     @Override
     public void render(Renderer renderer) {
+        currentMap.renderTileMap(renderer);
         player.render(renderer);
     }
 
