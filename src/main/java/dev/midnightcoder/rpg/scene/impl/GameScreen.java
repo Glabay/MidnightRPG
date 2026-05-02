@@ -78,11 +78,7 @@ public class GameScreen extends Scene {
         IO.println("Starting new game");
         // Generate the World
         currentMap = new TutorialIsland();
-
-
-        var playerMovement = new PlayerMovement(currentMap.getTileMap());
-
-        player = new Player(playerMovement, input);
+        player = new Player(currentMap, input);
 
     }
 

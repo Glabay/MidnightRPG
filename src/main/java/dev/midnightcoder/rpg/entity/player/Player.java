@@ -4,6 +4,7 @@ import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.system.PlayerMovement;
+import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.Entity;
 
 /**
@@ -15,8 +16,9 @@ import dev.midnightcoder.rpg.entity.Entity;
 public class Player extends Entity {
     private PlayerAvatar playerAvatar;
 
-    public Player(PlayerMovement playerMovement, InputManager input) {
-        playerAvatar = new PlayerAvatar(100, 100, input, playerMovement);
+    public Player(GameMap currentMap, InputManager input) {
+        var playerMovement = new PlayerMovement(currentMap.getTileMap());
+        playerAvatar = new PlayerAvatar(currentMap, input, playerMovement);
     }
 
     @Override
