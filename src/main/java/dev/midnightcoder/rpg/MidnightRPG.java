@@ -1,19 +1,12 @@
 package dev.midnightcoder.rpg;
 
 import dev.midnightcoder.engine.core.Game;
-import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
-import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
-import dev.midnightcoder.engine.system.Movement;
-import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
 import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.scene.impl.LoginScreen;
-import dev.midnightcoder.rpg.world.TutorialIsland;
-
-import java.awt.*;
 
 /**
  * @author Glabay | Glabay-Studios

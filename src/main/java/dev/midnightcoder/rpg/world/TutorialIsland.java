@@ -5,10 +5,8 @@ import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.engine.world.TileMap;
-import dev.midnightcoder.engine.world.tile.CollisionFlag;
-import dev.midnightcoder.engine.world.tile.Tile;
-import dev.midnightcoder.engine.world.tile.TileType;
+import dev.midnightcoder.engine.world.loader.PngMapLoader;
+import dev.midnightcoder.engine.world.tile.*;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -27,29 +25,18 @@ public class TutorialIsland extends GameMap {
     TileType WALL  = new TileType("wall_stone", wallTex, CollisionFlag.FULL.getMask());
     TileType WATER = new TileType("water_full", waterTex, CollisionFlag.FULL.getMask());
 
-    public void initTileMap() {
+    public TutorialIsland() {
+        IO.println("Initializing tile map for Tutorial Island");
+        tileColorRegistry = new TileColorRegistry();
+        tileColorRegistry.register(TileColor.GRASS_PLAIN, GRASS);
+
+        var mapPath = "/world/map/tutorial/map_landscape.png";
+        tileMap = new PngMapLoader(tileColorRegistry).loadMapFile(mapPath);
+
+        mapWidth = tileMap.width;
+        mapHeight = tileMap.height;
+
         initializeCamera();
-
-        mapWidth = 32;
-        mapHeight = 24;
-
-        tileMap = new TileMap(mapWidth, mapHeight);
-        for (int x = 0; x < mapWidth; x++) {
-            for (int y = 0; y < mapHeight; y++) {
-                TileType type = GRASS;
-                // Border walls
-                if (x == 0 || y == 0 ||
-                    x == mapWidth - 1 ||
-                    y == mapHeight - 1
-                ) type = WALL;
-                // Simple water patch
-                if (x > 5 && x < 10 &&
-                    y > 5 && y < 10
-                ) type = WATER;
-
-                tileMap.setTile(x, y, new Tile(x, y, type));
-            }
-        }
     }
 
     private void initializeCamera() {

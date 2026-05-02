@@ -35,6 +35,11 @@ public class GameScreen extends Scene {
             startNewGame();
         else if (startMode == GameStartMode.LOAD_GAME)
             loadExistingGame();
+        // TODO: add multiple UI/HUD
+        //      - TopBar  | USERNAME      | CENTER HUD |       Health: 99/99  |
+        //      - Anything central | Equipment, bank/storage, settings
+        //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
+        //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
     }
 
     @Override
@@ -45,12 +50,23 @@ public class GameScreen extends Scene {
 
     @Override
     public void render(Renderer renderer) {
-        // TODO: Implement rendering logic
+        // Landscape map
         if (Objects.nonNull(currentMap))
             currentMap.renderTileMap(renderer);
 
+        // Object map
+
+        // Entities - Player
         if (Objects.nonNull(player))
             player.render(renderer);
+
+        // Entities - NPCs
+
+        // Projectiles
+
+        // Particles
+
+        // Heads-up display
     }
 
     @Override
@@ -60,12 +76,7 @@ public class GameScreen extends Scene {
 
     private void startNewGame() {
         IO.println("Starting new game");
-
-        /* TODO:
-         * Create fresh player
-         * Create/load initial world
-         * Spawn player at starting position
-         */
+        // Generate the World
         currentMap = new TutorialIsland();
 
 
@@ -77,12 +88,5 @@ public class GameScreen extends Scene {
 
     private void loadExistingGame() {
         IO.println("Loading existing game");
-
-        /* TODO:
-         * Read save file
-         * Restore player state
-         * Restore world state
-         * Spawn player at saved position
-         */
     }
 }
