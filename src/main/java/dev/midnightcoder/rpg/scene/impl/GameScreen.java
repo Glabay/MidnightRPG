@@ -3,6 +3,7 @@ package dev.midnightcoder.rpg.scene.impl;
 import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
+import dev.midnightcoder.engine.system.PlayerMovement;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
@@ -66,10 +67,11 @@ public class GameScreen extends Scene {
          * Spawn player at starting position
          */
         currentMap = new TutorialIsland();
-        currentMap.initTileMap();
 
-        player = new Player(currentMap, input);
 
+        var playerMovement = new PlayerMovement(currentMap.getTileMap());
+
+        player = new Player(playerMovement, input);
 
     }
 
