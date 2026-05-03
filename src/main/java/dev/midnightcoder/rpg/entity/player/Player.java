@@ -21,6 +21,7 @@ import dev.midnightcoder.rpg.inventory.container.Equipment;
 public class Player extends Entity {
     private final PlayerAvatar playerAvatar;
 
+    private final PlayerProfile profile;
     private final SkillSet skillSet;
     private final Backpack backpack;
     private final Equipment equipment;
@@ -30,6 +31,7 @@ public class Player extends Entity {
         var playerMovement = new PlayerMovement(currentMap.getTileMap());
         playerAvatar = new PlayerAvatar(currentMap, input, playerMovement);
 
+        this.profile = new PlayerProfile();
         this.skillSet = new SkillSet(this);
         this.backpack = new Backpack();
         this.equipment = new Equipment();
