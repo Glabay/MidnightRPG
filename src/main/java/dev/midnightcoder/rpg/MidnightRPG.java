@@ -7,6 +7,7 @@ import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
 import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.scene.impl.LoginScreen;
+import dev.midnightcoder.rpg.ui.UIManager;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -17,10 +18,13 @@ import dev.midnightcoder.rpg.scene.impl.LoginScreen;
 public class MidnightRPG implements Game {
     private SceneManager sceneManager;
     private InputManager input;
+    private UIManager uiManager;
 
     @Override
     public void init(InputManager input) {
         sceneManager = new SceneManager();
+        uiManager = new UIManager();
+
         this.input = input;
 
         sceneManager.setScene(new LoginScreen(input,
@@ -46,11 +50,11 @@ public class MidnightRPG implements Game {
     }
 
     private void startNewGame() {
-        sceneManager.setScene(new GameScreen(input, GameStartMode.NEW_GAME));
+        sceneManager.setScene(new GameScreen(uiManager, input, GameStartMode.NEW_GAME));
     }
 
     private void loadGame() {
-        sceneManager.setScene(new GameScreen(input, GameStartMode.LOAD_GAME));
+        sceneManager.setScene(new GameScreen(uiManager, input, GameStartMode.LOAD_GAME));
     }
 
     private void quitGame() {
