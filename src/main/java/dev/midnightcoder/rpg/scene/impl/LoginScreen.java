@@ -3,6 +3,8 @@ package dev.midnightcoder.rpg.scene.impl;
 import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
+import dev.midnightcoder.engine.window.WindowConfig;
+import dev.midnightcoder.engine.world.tile.Tile;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -19,6 +21,9 @@ public class LoginScreen extends Scene {
     private final Runnable onQuit;
     private final InputManager input;
 
+    private Font fontBold;
+    private Font fontPlain;
+
     private int selectedOption = 0;
 
     public LoginScreen(InputManager input, Runnable... args) {
@@ -33,6 +38,8 @@ public class LoginScreen extends Scene {
     @Override
     public void onLoad() {
         IO.println("Loading login screen...");
+        fontBold = new Font("Arial", Font.BOLD, 80);
+        fontPlain = new Font("Arial", Font.PLAIN, 42);
     }
 
     @Override
@@ -60,13 +67,23 @@ public class LoginScreen extends Scene {
     @Override
     public void render(Renderer renderer) {
         super.render(renderer);
-        renderer.setFont(new Font("Arial", Font.BOLD, 32));
-        renderer.renderText("Welcome to Midnight-RPG", 320, 128);
+        renderer.setFont(fontBold);
+        var title = "Midnight-RPG";
+        renderer.renderText(title, getTextCentered(renderer, title), Tile.TILE_SIZE * 4);
 
-        renderer.setFont(new Font("Arial", Font.PLAIN, 24));
-        renderer.renderText("%sNew Game".formatted(selectedOption == 0 ? "> ": ""), 420, 256);
-        renderer.renderText("%sLoad Game".formatted(selectedOption == 1 ? "> ": ""), 418, 288);
-        renderer.renderText("%sQuit".formatted(selectedOption == 2 ? "> ": ""), 450, 320);
+        renderer.setFont(fontPlain);
+        renderer.renderText("%sNEW GAME".formatted(selectedOption == 0 ? "> ": ""), getTextCentered(renderer, "NEW GAME"), Tile.TILE_SIZE * 14);
+        renderer.renderText("%sLOAD GAME".formatted(selectedOption == 1 ? "> ": ""), getTextCentered(renderer, "LOAD GAME"), Tile.TILE_SIZE * 16);
+        renderer.renderText("%sQUIT".formatted(selectedOption == 2 ? "> ": ""), getTextCentered(renderer, "QUIT"), Tile.TILE_SIZE * 18);
+    }
+
+    private int getTextCentered(Renderer renderer, String text) {
+        var graphics = renderer.getGraphics2D();
+        var fontMetrics = graphics.getFontMetrics();
+        var textWidth = fontMetrics.stringWidth(text);
+        var screenWidth = WindowConfig.getWindowWidth();
+
+        return (screenWidth - textWidth) / 2;
     }
 
     public void onAction() {
