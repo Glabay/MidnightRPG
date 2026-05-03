@@ -3,10 +3,11 @@ package dev.midnightcoder.rpg.scene.impl;
 import dev.midnightcoder.engine.input.InputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
-import dev.midnightcoder.engine.system.PlayerMovement;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
+import dev.midnightcoder.rpg.ui.UIManager;
+import dev.midnightcoder.rpg.ui.interfaces.TopHUD;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
 import java.util.Objects;
@@ -20,11 +21,16 @@ import java.util.Objects;
 public class GameScreen extends Scene {
     private final GameStartMode startMode;
     private final InputManager input;
+    private final UIManager uiManager;
 
     private GameMap currentMap;
     private Player player;
 
-    public GameScreen(InputManager input, GameStartMode startMode) {
+    // UI Related Objects
+    private TopHUD topHUD;
+
+    public GameScreen(UIManager uiManager, InputManager input, GameStartMode startMode) {
+        this.uiManager = uiManager;
         this.input = input;
         this.startMode = startMode;
     }
@@ -36,16 +42,20 @@ public class GameScreen extends Scene {
         else if (startMode == GameStartMode.LOAD_GAME)
             loadExistingGame();
         // TODO: add multiple UI/HUD
-        //      - TopBar  | USERNAME      | CENTER HUD |       Health: 99/99  |
+        //      - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
         //      - Anything central | Equipment, bank/storage, settings
         //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
         //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
+        topHUD = new TopHUD(player);
+
+        uiManager.addPanel(topHUD);
     }
 
     @Override
     public void update(double delta) {
-        // TODO: Implement game update logic
         player.update(delta);
+
+        uiManager.update();
     }
 
     @Override
@@ -67,6 +77,7 @@ public class GameScreen extends Scene {
         // Particles
 
         // Heads-up display
+        uiManager.render(renderer);
     }
 
     @Override
