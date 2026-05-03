@@ -1,0 +1,37 @@
+package dev.midnightcoder.rpg.entity.skill;
+
+import dev.midnightcoder.rpg.entity.player.Player;
+import dev.midnightcoder.rpg.entity.player.PlayerLevelHandler;
+
+import java.util.EnumMap;
+import java.util.Map;
+
+/**
+ * @author Glabay | Glabay-Studios
+ * @project MidnightRPG
+ * @social Discord: Glabay
+ * @since 2026-05-03
+ */
+public class SkillSet {
+    private final Map<SkillType, Skill> skills = new EnumMap<>(SkillType.class);
+
+    public SkillSet(Player owner) {
+        for (var skillType : SkillType.values()) {
+            skills.put(skillType, getDefaultSkill(owner, skillType));
+        }
+    }
+
+    private Skill getDefaultSkill(Player owner, SkillType skillType) {
+        return new Skill(skillType) {
+            @Override
+            protected void onLevelUp(int oldLevel, int newLevel) {
+                PlayerLevelHandler.onLevelUp(owner, getSkillType(), oldLevel, newLevel);
+            }
+        };
+    }
+
+    public Skill getSkill(SkillType skillType) {
+        return skills.get(skillType);
+    }
+
+}
