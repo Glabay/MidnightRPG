@@ -14,7 +14,7 @@ import dev.midnightcoder.rpg.entity.Entity;
  * @since 2026-05-01
  */
 public class Player extends Entity {
-    private PlayerAvatar playerAvatar;
+    private final PlayerAvatar playerAvatar;
 
     public Player(GameMap currentMap, InputManager input) {
         var playerMovement = new PlayerMovement(currentMap.getTileMap());
@@ -29,5 +29,9 @@ public class Player extends Entity {
     @Override
     public void render(Renderer renderer) {
         playerAvatar.render(renderer);
+    }
+
+    public PlayerAvatar getAvatar() {
+        return playerAvatar;
     }
 }
