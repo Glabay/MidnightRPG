@@ -9,6 +9,8 @@ import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
 import dev.midnightcoder.rpg.entity.skill.SkillSet;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
+import dev.midnightcoder.rpg.inventory.container.Backpack;
+import dev.midnightcoder.rpg.inventory.container.Equipment;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -20,6 +22,8 @@ public class Player extends Entity {
     private final PlayerAvatar playerAvatar;
 
     private final SkillSet skillSet;
+    private final Backpack backpack;
+    private final Equipment equipment;
     private final CombatStats combatStats;
 
     public Player(GameMap currentMap, InputManager input) {
@@ -27,8 +31,14 @@ public class Player extends Entity {
         playerAvatar = new PlayerAvatar(currentMap, input, playerMovement);
 
         this.skillSet = new SkillSet(this);
+        this.backpack = new Backpack();
+        this.equipment = new Equipment();
         this.combatStats = new CombatStats(getMaxHealth());
+
+        // load up default details
         loadDefaults();
+
+        // load Saved details
     }
 
     @Override
