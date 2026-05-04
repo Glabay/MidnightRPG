@@ -1,12 +1,13 @@
 package dev.midnightcoder.rpg.ui.interfaces;
 
+import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.ui.components.UIAction;
 import dev.midnightcoder.engine.renderer.ui.components.UIButton;
 import dev.midnightcoder.engine.renderer.ui.components.UILabel;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
-import dev.midnightcoder.rpg.entity.player.Player;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -66,11 +67,13 @@ public class BottomHUD extends UIPanel {
     }
 
     private final Player player;
+    private final AWTMouseInputHandler mouseInputHandler;
 
-    public BottomHUD(Player player) {
+    public BottomHUD(Player player, AWTMouseInputHandler mouseInputHandler) {
         super(new Vec2i(0, WindowConfig.getWindowHeight() - 32),
             new Vec2i(WindowConfig.getWindowWidth(), 32));
         this.player = player;
+        this.mouseInputHandler = mouseInputHandler;
 
         addBottomPanel();
         display();
@@ -85,17 +88,17 @@ public class BottomHUD extends UIPanel {
             nameLabel.dropShadow = true;
 
         addComponent(nameLabel);
-        addComponent(getTabButton(Tabs.SKILL));
-        addComponent(getTabButton(Tabs.EQUIPMENT));
-        addComponent(getTabButton(Tabs.QUEST));
-        addComponent(getTabButton(Tabs.MUSIC));
-        addComponent(getTabButton(Tabs.SETTINGS));
-        addComponent(getTabButton(Tabs.SPELLBOOK));
-        addComponent(getTabButton(Tabs.COMBAT));
-        addComponent(getTabButton(Tabs.INVENTORY));
+        addComponent(getTabButton(Tabs.SKILL, mouseInputHandler));
+        addComponent(getTabButton(Tabs.EQUIPMENT, mouseInputHandler));
+        addComponent(getTabButton(Tabs.QUEST, mouseInputHandler));
+        addComponent(getTabButton(Tabs.MUSIC, mouseInputHandler));
+        addComponent(getTabButton(Tabs.SETTINGS, mouseInputHandler));
+        addComponent(getTabButton(Tabs.SPELLBOOK, mouseInputHandler));
+        addComponent(getTabButton(Tabs.COMBAT, mouseInputHandler));
+        addComponent(getTabButton(Tabs.INVENTORY, mouseInputHandler));
     }
 
-    private UIButton getTabButton(Tabs tab) {
-        return new UIButton(tab.getSlot(), tab.getIcon(), tab.getAction());
+    private UIButton getTabButton(Tabs tab, AWTMouseInputHandler mouse) {
+        return new UIButton(mouse, tab.getSlot(), tab.getIcon(), tab.getAction());
     }
 }
