@@ -1,7 +1,7 @@
 package dev.midnightcoder.rpg.entity.skill;
 
-import dev.midnightcoder.rpg.entity.player.Player;
-import dev.midnightcoder.rpg.entity.player.PlayerLevelHandler;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.entity.mob.player.PlayerLevelHandler;
 
 import java.util.EnumMap;
 import java.util.Map;

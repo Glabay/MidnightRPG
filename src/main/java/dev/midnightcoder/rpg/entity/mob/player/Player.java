@@ -1,16 +1,19 @@
-package dev.midnightcoder.rpg.entity.player;
+package dev.midnightcoder.rpg.entity.mob.player;
 
 import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
-import dev.midnightcoder.engine.input.InputManager;
+import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
-import dev.midnightcoder.engine.system.PlayerMovement;
+import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.skill.SkillSet;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
+
+import java.awt.event.KeyEvent;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -18,26 +21,31 @@ import dev.midnightcoder.rpg.inventory.container.Equipment;
  * @social Discord: Glabay
  * @since 2026-05-01
  */
-public class Player extends Entity {
+public class Player extends Mob {
     private final PlayerAvatar playerAvatar;
 
+    private final PlayerMovement playerMovement;
+    private final KeyboardInputManager input;
     private final PlayerProfile profile;
     private final SkillSet skillSet;
     private final Backpack backpack;
     private final Equipment equipment;
     private final CombatStats combatStats;
+    private final Vec2i startingPosition;
 
     private Entity selectedEntity;
 
-    public Player(GameMap currentMap, InputManager input) {
-        var playerMovement = new PlayerMovement(currentMap.getTileMap());
-        playerAvatar = new PlayerAvatar(currentMap, input, playerMovement);
+    public Player(String username, GameMap currentMap, KeyboardInputManager input) {
+        this.input = input;
+        startingPosition = new Vec2i(100 << 5, 100 << 5);
 
-        this.profile = new PlayerProfile("Glabay");
-        this.skillSet = new SkillSet(this);
-        this.backpack = new Backpack();
-        this.equipment = new Equipment();
-        this.combatStats = new CombatStats(getMaxHealth());
+        playerMovement = new PlayerMovement(currentMap.getTileMap());
+        playerAvatar = new PlayerAvatar(startingPosition, currentMap, this.input, playerMovement);
+        profile = new PlayerProfile(username);
+        skillSet = new SkillSet(this);
+        backpack = new Backpack();
+        equipment = new Equipment();
+        combatStats = new CombatStats(getMaxHealth());
 
         // load up default details
         loadDefaults();
@@ -47,7 +55,24 @@ public class Player extends Entity {
 
     @Override
     public void update(double delta) {
-        playerAvatar.update(delta);
+        // Movement logic
+        if (input.isKeyHeld(KeyEvent.VK_SHIFT))
+            speed = 4; // running
+        else
+            speed = 3;
+
+        var dx = (int) (getAvatar().getMoveX() * speed * delta);
+        var dy = (int) (getAvatar().getMoveY() * speed * delta);
+
+        playerMovement.move(getAvatar(), dx, dy);
+
+        // Camera follow
+        var targetX = getX() + (getAvatar().getWidth() / 2f);
+        var targetY = getY() + (getAvatar().getHeight() / 2f);
+
+        getAvatar().getCurrentMap()
+            .getCamera()
+            .follow(targetX, targetY);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dev.midnightcoder.rpg.entity.player;
+package dev.midnightcoder.rpg.entity.mob.player;
 
 /**
  * @author Glabay | Glabay-Studios

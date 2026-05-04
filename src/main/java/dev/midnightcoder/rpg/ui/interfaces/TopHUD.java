@@ -7,7 +7,7 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 
 import dev.midnightcoder.rpg.entity.Entity;
-import dev.midnightcoder.rpg.entity.player.Player;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 import java.awt.*;
 
