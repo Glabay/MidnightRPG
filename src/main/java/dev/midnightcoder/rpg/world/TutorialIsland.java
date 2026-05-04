@@ -3,7 +3,7 @@ package dev.midnightcoder.rpg.world;
 import dev.midnightcoder.engine.renderer.camera.Camera2D;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.engine.world.loader.PngMapLoader;
+import dev.midnightcoder.rpg.assets.PngMapLoader;
 import dev.midnightcoder.engine.world.tile.Tile;
 
 /**
