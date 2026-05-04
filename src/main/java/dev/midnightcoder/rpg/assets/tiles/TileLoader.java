@@ -39,38 +39,54 @@ public class TileLoader {
 
 
     public void loadTiles() {
-        var groundTiles = getTileTexture("ground_tileset");
+        var groundTiles = getTileTexture("ground_tileset").image();
 
-        var grassFull = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(0, 3));
+        var grassFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 3));
 
-        var waterGrassNorthWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(0, 0));
-        var waterGrassNorth = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(0, 1));
-        var waterGrassNorthEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(0, 2));
+        var waterGrassNorthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 0));
+        var waterGrassNorth = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 1));
+        var waterGrassNorthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 2));
 
-        var waterGrassWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(1, 0));
-        var waterFull = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(1, 1));
-        var waterGrassEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(1, 2));
+        var waterGrassWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 0));
+        var waterFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 1));
+        var waterGrassEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 2));
 
-        var waterGrassSouthWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(2, 0));
-        var waterGrassSouth = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(2, 1));
-        var waterGrassSouthEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(2, 2));
+        var waterGrassSouthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 0));
+        var waterGrassSouth = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 1));
+        var waterGrassSouthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 2));
 
-        var dirtGrassNorthWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(3, 0));
-        var dirtGrassNorth = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(3, 1));
-        var dirtGrassNorthEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(3, 2));
+        var dirtGrassNorthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(3, 0));
+        var dirtGrassNorth = getTextureFromSpriteSheet(groundTiles, new Vec2i(3, 1));
+        var dirtGrassNorthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(3, 2));
 
-        var dirtGrassWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(4, 0));
-        var dirtFull = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(4, 1));
-        var dirtGrassEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(4, 2));
+        var dirtGrassWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(4, 0));
+        var dirtFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(4, 1));
+        var dirtGrassEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(4, 2));
 
-        var dirtGrassSouthWest = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(5, 0));
-        var dirtGrassSouth = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(5, 1));
-        var dirtGrassSouthEast = getTextureFromSpriteSheet(groundTiles.image(), new Vec2i(5, 2));
+        var dirtGrassSouthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(5, 0));
+        var dirtGrassSouth = getTextureFromSpriteSheet(groundTiles, new Vec2i(5, 1));
+        var dirtGrassSouthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(5, 2));
 
 
         // Load in textures
         var registry = TileColorRegistry.getInstance();
             registry.register(TileColor.GRASS_PLAIN, new GroundTile("ground_grass", grassFull));
+            registry.register(TileColor.DIRT_GRASS_SOUTH_WEST, new GroundTile("ground_dirt_grass_sw", dirtGrassSouthWest));
+            registry.register(TileColor.DIRT_GRASS_SOUTH_EAST, new GroundTile("ground_dirt_grass_se", dirtGrassSouthEast));
+            registry.register(TileColor.DIRT_GRASS_NORTH_EAST, new GroundTile("ground_dirt_grass_ne", dirtGrassNorthEast));
+            registry.register(TileColor.DIRT_GRASS_NORTH_WEST, new GroundTile("ground_dirt_grass_nw", dirtGrassNorthWest));
+            registry.register(TileColor.DIRT_GRASS_NORTH, new GroundTile("ground_dirt_grass_n", dirtGrassNorth));
+            registry.register(TileColor.DIRT_GRASS_EAST, new GroundTile("ground_dirt_grass_e", dirtGrassEast));
+            registry.register(TileColor.DIRT_GRASS_WEST, new GroundTile("ground_dirt_grass_w", dirtGrassWest));
+            registry.register(TileColor.DIRT_GRASS_SOUTH, new GroundTile("ground_dirt_grass_s", dirtGrassSouth));
+//            registry.register(TileColor.DIRT_GRASS_NORTH_WEST_CORNER, new GroundTile("ground_dirt_grass_nw_corner", dirtGrassNorthWestCorner));
+//            registry.register(TileColor.DIRT_GRASS_NORTH_EAST_CORNER, new GroundTile("ground_dirt_grass_ne_corner", dirtGrassNorthEastCorner));
+//            registry.register(TileColor.DIRT_GRASS_SOUTH_WEST_CORNER, new GroundTile("ground_dirt_grass_sw_corner", dirtGrassSouthWestCorner));
+//            registry.register(TileColor.DIRT_GRASS_SOUTH_EAST_CORNER, new GroundTile("ground_dirt_grass_se_corner", dirtGrassSouthEastCorner));
+            registry.register(TileColor.WATER_GRASS_NORTH, new GroundTile("ground_water_grass_n", waterGrassNorth));
+            registry.register(TileColor.WATER_GRASS_WEST, new GroundTile("ground_water_grass_w", waterGrassWest));
+            registry.register(TileColor.WATER_GRASS_NORTH_WEST, new GroundTile("ground_water_grass_nw", waterGrassNorthWest));
+
             registry.register(TileColor.STONE_WALL, getTileType("wall_stone", CollisionFlag.FULL));
             registry.register(TileColor.STONE_WALL_TOP, getTileType("wall_stone_cap", CollisionFlag.FULL));
             registry.register(TileColor.WOOD_WALL, getTileType("wall_wood", CollisionFlag.FULL));
