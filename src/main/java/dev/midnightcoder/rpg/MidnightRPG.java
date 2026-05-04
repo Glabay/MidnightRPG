@@ -1,7 +1,8 @@
 package dev.midnightcoder.rpg;
 
 import dev.midnightcoder.engine.core.Game;
-import dev.midnightcoder.engine.input.InputManager;
+import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
+import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
@@ -17,17 +18,19 @@ import dev.midnightcoder.rpg.ui.UIManager;
  */
 public class MidnightRPG implements Game {
     private SceneManager sceneManager;
-    private InputManager input;
+    private KeyboardInputManager input;
+    private AWTMouseInputHandler mouse;
     private UIManager uiManager;
 
     @Override
-    public void init(InputManager input) {
+    public void init(KeyboardInputManager input, AWTMouseInputHandler mouse) {
         sceneManager = new SceneManager();
         uiManager = new UIManager();
 
         this.input = input;
+        this.mouse = mouse;
 
-        sceneManager.setScene(new LoginScreen(input,
+        sceneManager.setScene(new LoginScreen(input, mouse,
             this::startNewGame,
             this::loadGame,
             this::quitGame
@@ -50,11 +53,11 @@ public class MidnightRPG implements Game {
     }
 
     private void startNewGame() {
-        sceneManager.setScene(new GameScreen(uiManager, input, GameStartMode.NEW_GAME));
+        sceneManager.setScene(new GameScreen(uiManager, input, mouse, GameStartMode.NEW_GAME));
     }
 
     private void loadGame() {
-        sceneManager.setScene(new GameScreen(uiManager, input, GameStartMode.LOAD_GAME));
+        sceneManager.setScene(new GameScreen(uiManager, input, mouse, GameStartMode.LOAD_GAME));
     }
 
     private void quitGame() {

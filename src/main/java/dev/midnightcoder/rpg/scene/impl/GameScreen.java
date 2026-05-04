@@ -1,10 +1,11 @@
 package dev.midnightcoder.rpg.scene.impl;
 
-import dev.midnightcoder.engine.input.InputManager;
+import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
+import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.entity.player.Player;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
 import dev.midnightcoder.rpg.ui.interfaces.BottomHUD;
@@ -21,7 +22,8 @@ import java.util.Objects;
  */
 public class GameScreen extends Scene {
     private final GameStartMode startMode;
-    private final InputManager input;
+    private final KeyboardInputManager input;
+    private final AWTMouseInputHandler mouse;
     private final UIManager uiManager;
 
     private GameMap currentMap;
@@ -31,9 +33,10 @@ public class GameScreen extends Scene {
     private TopHUD topHUD;
     private BottomHUD bottomHUD;
 
-    public GameScreen(UIManager uiManager, InputManager input, GameStartMode startMode) {
+    public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
         this.input = input;
+        this.mouse = mouse;
         this.startMode = startMode;
     }
 
@@ -49,7 +52,7 @@ public class GameScreen extends Scene {
         //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
         //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
         topHUD = new TopHUD(player);
-        bottomHUD = new BottomHUD(player);
+        bottomHUD = new BottomHUD(player, mouse);
 
         uiManager.addPanel(topHUD);
         uiManager.addPanel(bottomHUD);
@@ -93,7 +96,7 @@ public class GameScreen extends Scene {
         IO.println("Starting new game");
         // Generate the World
         currentMap = new TutorialIsland();
-        player = new Player(currentMap, input);
+        player = new Player("Glabay", currentMap, input);
 
     }
 

@@ -1,6 +1,7 @@
 package dev.midnightcoder.rpg.scene.impl;
 
-import dev.midnightcoder.engine.input.InputManager;
+import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
+import dev.midnightcoder.engine.input.mouse.MouseInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.window.WindowConfig;
@@ -19,14 +20,14 @@ public class LoginScreen extends Scene {
     private final Runnable onNewGame;
     private final Runnable onLoadGame;
     private final Runnable onQuit;
-    private final InputManager input;
+    private final KeyboardInputManager input;
 
     private Font fontBold;
     private Font fontPlain;
 
     private int selectedOption = 0;
 
-    public LoginScreen(InputManager input, Runnable... args) {
+    public LoginScreen(KeyboardInputManager input, MouseInputManager mouse, Runnable... args) {
         if (args.length != 3)
             throw new IllegalArgumentException("Expected 3 arguments for LoginScreen constructor");
         this.input = input;
