@@ -1,0 +1,101 @@
+package dev.midnightcoder.rpg.ui.interfaces;
+
+import dev.midnightcoder.engine.renderer.ui.components.UIAction;
+import dev.midnightcoder.engine.renderer.ui.components.UIButton;
+import dev.midnightcoder.engine.renderer.ui.components.UILabel;
+import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
+import dev.midnightcoder.engine.util.Vec2i;
+import dev.midnightcoder.engine.window.WindowConfig;
+import dev.midnightcoder.rpg.entity.player.Player;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+/**
+ * @author Glabay | Glabay-Studios
+ * @project MidnightRPG
+ * @social Discord: Glabay
+ * @since 2026-05-03
+ */
+public class BottomHUD extends UIPanel {
+    private enum Tabs {
+        EQUIPMENT	(1, "equipTab", () -> IO.println("Equipment Tab pressed")),
+        SKILL		(2, "skillTab", () -> IO.println("Skill Tab pressed")),
+        QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
+        MUSIC		(4, "musicTab", () -> IO.println("Music Tab pressed.")),
+        SETTINGS	(5, "optionsTab", () -> IO.println("Settings Tab pressed.")),
+        SPELLBOOK	(6, "spellbookTab", () -> IO.println("Spellbook Tab pressed")),
+        COMBAT		(7, "combatTab", () -> IO.println("Combat Tab pressed")),
+        INVENTORY	(8, "backpackTab", () -> IO.println("Inventory Tab pressed"));
+
+        private final int slotId;
+        private final UIAction action;
+        private final BufferedImage icon;
+
+        Tabs(int slotId, String imageName, UIAction action) {
+            this.slotId = slotId;
+            this.action = action;
+            icon = getButtonImage(imageName);
+        }
+
+        private BufferedImage getButtonImage(String imageName) {
+            var imageFile = getClass().getResourceAsStream("/ui/icons/" + imageName + ".png");
+            if (imageFile == null)
+                throw new IllegalArgumentException("Image file not found: " + imageName);
+            try {
+                return ImageIO.read(imageFile);
+            }
+            catch (IOException _) {
+                return null;
+            }
+        }
+
+        public Vec2i getSlot() {
+            return new Vec2i(WindowConfig.getWindowWidth() - 32 * slotId, 0);
+        }
+
+        public BufferedImage getIcon() {
+            return icon;
+        }
+
+        public UIAction getAction() {
+            return action;
+        }
+    }
+
+    private final Player player;
+
+    public BottomHUD(Player player) {
+        super(new Vec2i(0, WindowConfig.getWindowHeight() - 32),
+            new Vec2i(WindowConfig.getWindowWidth(), 32));
+        this.player = player;
+
+        addBottomPanel();
+        display();
+    }
+
+    private void addBottomPanel() {
+        setColor(0x4f4f4f);
+
+        var nameLabel = new UILabel(new Vec2i(42, 24), player.getProfile().getUsername());
+            nameLabel.setTextColor(new Color(0x5f5f5f));
+            nameLabel.setFont(new Font("Verdana", Font.PLAIN, 24));
+            nameLabel.dropShadow = true;
+
+        addComponent(nameLabel);
+        addComponent(getTabButton(Tabs.SKILL));
+        addComponent(getTabButton(Tabs.EQUIPMENT));
+        addComponent(getTabButton(Tabs.QUEST));
+        addComponent(getTabButton(Tabs.MUSIC));
+        addComponent(getTabButton(Tabs.SETTINGS));
+        addComponent(getTabButton(Tabs.SPELLBOOK));
+        addComponent(getTabButton(Tabs.COMBAT));
+        addComponent(getTabButton(Tabs.INVENTORY));
+    }
+
+    private UIButton getTabButton(Tabs tab) {
+        return new UIButton(tab.getSlot(), tab.getIcon(), tab.getAction());
+    }
+}

@@ -1,12 +1,12 @@
 package dev.midnightcoder.rpg.ui.interfaces;
 
-import dev.midnightcoder.engine.entity.Entity;
-import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.renderer.ui.components.UILabel;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.renderer.ui.components.UIProgressBar;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
+
+import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.player.Player;
 
 import java.awt.*;
@@ -18,14 +18,13 @@ import java.awt.*;
  * @since 2026-05-02
  */
 public class TopHUD extends UIPanel {
+    private final Player player;
+
     private UIProgressBar uiHealthBar;
     private UILabel uiHealthBarLabel;
     private UILabel mobInfo;
     private UILabel mobInfo2;
 
-    public static String name = "";
-
-    private Player player;
 
     public TopHUD(Player player) {
         super(new Vec2i(), new Vec2i(WindowConfig.getWindowWidth(), 32));
@@ -64,21 +63,19 @@ public class TopHUD extends UIPanel {
     public void update() {
         if (visible) {
             if (player != null) {
-//                uiHealthBar.setProgress(player.getHealth() / (double) player.getSkill(Skill.HITPOINTS).getSkillLevel());
-//                uiHealthBarLabel.updateText("Health: " + player.getHealth() + "/" + player.getSkill(Skill.HITPOINTS).getSkillLevel());
-//
-//                if (player.getSelectedEntity() != null) {
-//                    if (entityWithinDist(player.getSelectedEntity())) {
+                uiHealthBar.setProgress(player.getCurrentHealth() / (double) player.getMaxHealth());
+                uiHealthBarLabel.updateText("Health: " + player.getCurrentHealth() + "/" + player.getMaxHealth());
+
+                if (player.getSelectedEntity() != null) {
+                    if (entityWithinDist(player.getSelectedEntity())) {
 //                        if (player.getSelectedEntity() instanceof NPC) {
 //                            NPC target = (NPC) player.getSelectedEntity();
 //                            mobInfo.setColor(0xFF13FF);
 //                            mobInfo.updateText(player.getSelectedEntity().getName());
 //                            mobInfo2.updateText("Level - " + (int) target.getCombatLevel());
 //                        }
-//                    } else player.setSelectedEntity(null);
-//
-//                } else clearMobInfo();
-//
+                    } else player.setSelectedEntity(null);
+                } else clearMobInfo();
             }
         }
     }
@@ -93,6 +90,7 @@ public class TopHUD extends UIPanel {
             new Vec2i(player.getAvatar().getX(), player.getAvatar().getY()),
             new Vec2i(entity.getX(), entity.getY())
         );
+        // return true if we're within 11 tiles
         return dist <= (11 << 5);
     }
 }

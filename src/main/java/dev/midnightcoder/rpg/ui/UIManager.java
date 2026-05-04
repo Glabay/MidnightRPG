@@ -14,7 +14,6 @@ import java.util.List;
  * @since 2026-05-01
  */
 public class UIManager {
-    private TopHUD topHud;
 
     private final List<UIPanel> panels = new ArrayList<>();
 
