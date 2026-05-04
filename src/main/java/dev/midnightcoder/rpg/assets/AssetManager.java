@@ -1,5 +1,7 @@
 package dev.midnightcoder.rpg.assets;
 
+import dev.midnightcoder.rpg.assets.tiles.TileLoader;
+
 /**
  * @author Glabay | Glabay-Studios
  * @project MidnightRPG

@@ -3,7 +3,7 @@ package dev.midnightcoder.rpg.assets;
 import dev.midnightcoder.engine.world.TileMap;
 import dev.midnightcoder.engine.world.loader.MapLoader;
 import dev.midnightcoder.engine.world.tile.Tile;
-import dev.midnightcoder.engine.world.tile.TileColorRegistry;
+import dev.midnightcoder.rpg.assets.tiles.TileColorRegistry;
 
 import javax.imageio.ImageIO;
 
