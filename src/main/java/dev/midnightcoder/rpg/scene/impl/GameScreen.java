@@ -7,6 +7,7 @@ import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
+import dev.midnightcoder.rpg.ui.interfaces.BottomHUD;
 import dev.midnightcoder.rpg.ui.interfaces.TopHUD;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
@@ -28,6 +29,7 @@ public class GameScreen extends Scene {
 
     // UI Related Objects
     private TopHUD topHUD;
+    private BottomHUD bottomHUD;
 
     public GameScreen(UIManager uiManager, InputManager input, GameStartMode startMode) {
         this.uiManager = uiManager;
@@ -47,8 +49,10 @@ public class GameScreen extends Scene {
         //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
         //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
         topHUD = new TopHUD(player);
+        bottomHUD = new BottomHUD(player);
 
         uiManager.addPanel(topHUD);
+        uiManager.addPanel(bottomHUD);
     }
 
     @Override
