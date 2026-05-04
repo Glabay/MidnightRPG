@@ -7,4 +7,13 @@ package dev.midnightcoder.rpg.entity.player;
  * @since 2026-05-03
  */
 public class PlayerProfile {
+    private final String username;
+
+    public PlayerProfile(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 }
