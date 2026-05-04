@@ -27,11 +27,13 @@ public class Player extends Entity {
     private final Equipment equipment;
     private final CombatStats combatStats;
 
+    private Entity selectedEntity;
+
     public Player(GameMap currentMap, InputManager input) {
         var playerMovement = new PlayerMovement(currentMap.getTileMap());
         playerAvatar = new PlayerAvatar(currentMap, input, playerMovement);
 
-        this.profile = new PlayerProfile();
+        this.profile = new PlayerProfile("Glabay");
         this.skillSet = new SkillSet(this);
         this.backpack = new Backpack();
         this.equipment = new Equipment();
@@ -55,7 +57,7 @@ public class Player extends Entity {
 
     private void loadDefaults() {
         // Assign some HP to the player
-        skillSet.getSkill(SkillType.HITPOINTS).addExp(1_000);
+        skillSet.getSkill(SkillType.HITPOINTS).addExp(900);
     }
 
     public int getMaxHealth() {
@@ -71,6 +73,12 @@ public class Player extends Entity {
     }
 
 
+    /// Setters here
+
+    public void setSelectedEntity(Entity entity) {
+        this.selectedEntity = entity;
+    }
+
     /// Getters Below here
 
     public PlayerAvatar getAvatar() {
@@ -79,6 +87,10 @@ public class Player extends Entity {
 
     public CombatStats getCombatStats() {
         return combatStats;
+    }
+
+    public Entity getSelectedEntity() {
+        return selectedEntity;
     }
 
     public PlayerProfile getProfile() {
@@ -95,5 +107,13 @@ public class Player extends Entity {
 
     public Equipment getEquipment() {
         return equipment;
+    }
+
+    public int getX() {
+        return playerAvatar.getX();
+    }
+
+    public int getY() {
+        return playerAvatar.getY();
     }
 }
