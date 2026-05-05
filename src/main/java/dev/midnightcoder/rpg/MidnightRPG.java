@@ -30,7 +30,7 @@ public class MidnightRPG implements Game {
         this.input = input;
         this.mouse = mouse;
 
-        sceneManager.setScene(new LoginScreen(input, mouse,
+        sceneManager.setScene(new LoginScreen(input,
             this::startNewGame,
             this::loadGame,
             this::quitGame
