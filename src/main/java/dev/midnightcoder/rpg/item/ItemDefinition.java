@@ -9,5 +9,6 @@ package dev.midnightcoder.rpg.item;
 public record ItemDefinition(
     int id,
     String name,
+    String description,
     boolean stackable
 ) {}
