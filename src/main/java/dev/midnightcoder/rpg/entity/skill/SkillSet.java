@@ -4,6 +4,7 @@ import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.mob.player.PlayerLevelHandler;
 
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,6 +29,10 @@ public class SkillSet {
                 PlayerLevelHandler.onLevelUp(owner, getSkillType(), oldLevel, newLevel);
             }
         };
+    }
+
+    public List<Skill> getSkills() {
+        return List.copyOf(skills.values());
     }
 
     public Skill getSkill(SkillType skillType) {
