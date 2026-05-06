@@ -4,7 +4,9 @@ import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.tile.*;
+import dev.midnightcoder.rpg.world.tiles.WorldTile;
 import dev.midnightcoder.rpg.world.tiles.impl.GroundTile;
+import dev.midnightcoder.rpg.world.tiles.impl.WallTile;
 import dev.midnightcoder.rpg.world.tiles.impl.WaterTile;
 
 import java.awt.image.BufferedImage;
@@ -27,7 +29,7 @@ public class TileLoader {
     }
 
     private TileType getTileType(String textureName, CollisionFlag collisionFlag) {
-        return new TileType(textureName, getTileTexture(textureName), collisionFlag.getMask());
+        return new WorldTile(textureName, getTileTexture(textureName), collisionFlag);
     }
 
     private Texture getTileTexture(String textureName) {

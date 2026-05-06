@@ -13,6 +13,7 @@ import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
 
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
