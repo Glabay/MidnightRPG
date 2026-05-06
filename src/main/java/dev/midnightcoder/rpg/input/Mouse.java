@@ -2,6 +2,7 @@ package dev.midnightcoder.rpg.input;
 
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 
 /**
@@ -11,27 +12,17 @@ import java.awt.event.MouseEvent;
  * @since 2026-05-04
  */
 public class Mouse extends AWTMouseInputHandler {
+    public static Mouse instance;
 
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
+    public static Mouse getInstance() {
+        if (instance == null) {
+            instance = new Mouse();
+        }
+        return instance;
     }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
-        mouseX = e.getX();
-        mouseY = e.getY();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        mouseB = MouseEvent.NOBUTTON;
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        mouseB = e.getButton();
+    public Point getPosition() {
+        return new Point(getX(), getY());
     }
 
 }
