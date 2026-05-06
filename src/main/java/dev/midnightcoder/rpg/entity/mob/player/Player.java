@@ -3,6 +3,7 @@ package dev.midnightcoder.rpg.entity.mob.player;
 import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.entity.Entity;
@@ -83,6 +84,7 @@ public class Player extends Mob {
     }
 
     private void loadDefaults() {
+        playerAvatar.setTexture(TextureFactory.createFromImageFile("/texture/entity/player/wizard/wizard.png"));
         playerAvatar.getHitbox().setOffset(3, 5);
         playerAvatar.setHitboxDimension(26, 27);
         // Assign some HP to the player
