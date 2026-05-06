@@ -4,6 +4,10 @@ import dev.midnightcoder.engine.entity.Entity;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.world.TileMap;
 import dev.midnightcoder.engine.world.tile.CollisionFlag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 
 import static dev.midnightcoder.engine.world.tile.Tile.TILE_SIZE;
 
@@ -14,6 +18,7 @@ import static dev.midnightcoder.engine.world.tile.Tile.TILE_SIZE;
  * @since 2026-04-30
  */
 public class PlayerMovement extends Movement {
+    private final Logger logger = LoggerFactory.getLogger(PlayerMovement.class);
 
     public PlayerMovement(TileMap tileMap) {
         super(tileMap);
@@ -39,7 +44,7 @@ public class PlayerMovement extends Movement {
             var right = (entity.getX() + entity.getWidth() - 1) / TILE_SIZE;
             for (int ty = top; ty <= bottom; ty++) {
                 // Look left
-                if (isBlocked(right, ty)) {
+                if (isBlocked(entity, right, ty)) {
                     entity.setX(right * TILE_SIZE - entity.getWidth());
                     break;
                 }
@@ -49,7 +54,7 @@ public class PlayerMovement extends Movement {
             var left = entity.getX() / TILE_SIZE;
             for (int ty = top; ty <= bottom; ty++) {
                 // Look left
-                if (isBlocked(left, ty)) {
+                if (isBlocked(entity, left, ty)) {
                     entity.setX((left + 1) * TILE_SIZE);
                     break;
                 }
@@ -66,20 +71,38 @@ public class PlayerMovement extends Movement {
 
         for (int tx = left; tx <= right; tx++) {
             // look down
-            if (dy > 0 && isBlocked(tx, bottom)) {
+            if (dy > 0 && isBlocked(entity, tx, bottom)) {
                 entity.setY(top * TILE_SIZE);
                 break;
             }
             // look up
-            if (dy < 0 && isBlocked(tx, top)) {
+            if (dy < 0 && isBlocked(entity, tx, top)) {
                 entity.setY(bottom * TILE_SIZE);
                 break;
             }
         }
     }
-    protected boolean isBlocked(int tileX, int tileY) {
+
+    protected boolean isBlocked(Entity entity, int tileX, int tileY) {
         var tile = tileMap.getTile(tileX, tileY);
-        return tile != null &&
-            tile.type().getCollisionFlags() != CollisionFlag.NONE.getMask();
+        if (tile == null)
+            return true;
+        var hasNoCollision = tile.type().getCollisionFlags() == CollisionFlag.NONE.getMask();
+        if (hasNoCollision)
+            return false;
+
+        var flag = tile.type().getCollisionFlags();
+        var entityHb = entity.getHitbox();
+        var rec = tile.getHitbox(tileX, tileY);
+        var collided = entityHb.getHitboxRectangle().intersects(rec);
+
+        if ((flag & CollisionFlag.FULL.getMask()) != 0)
+            return collided;
+
+        if (flag == CollisionFlag.PROGRAMMATIC.getMask()) {
+            // TODO: Smarter Collision detection
+            return entityHb.getHitboxRectangle().intersects(rec);
+        }
+        return false;
     }
 }

@@ -55,6 +55,7 @@ public class Player extends Mob {
 
     @Override
     public void update(double delta) {
+        playerAvatar.updateHitbox();
         // Movement logic
         if (input.isKeyHeld(KeyEvent.VK_SHIFT))
             speed = 4; // running
@@ -81,6 +82,8 @@ public class Player extends Mob {
     }
 
     private void loadDefaults() {
+        playerAvatar.getHitbox().setOffset(3, 5);
+        playerAvatar.setHitboxDimension(26, 27);
         // Assign some HP to the player
         skillSet.getSkill(SkillType.HITPOINTS).addExp(900);
     }
