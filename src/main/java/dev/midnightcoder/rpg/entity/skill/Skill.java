@@ -1,5 +1,7 @@
 package dev.midnightcoder.rpg.entity.skill;
 
+import java.text.DecimalFormat;
+
 /**
  * @author Glabay | Glabay-Studios
  * @project MidnightRPG
@@ -40,8 +42,8 @@ public class Skill {
         return level;
     }
 
-    public int getExperience() {
-        return experience;
+    public String getExperience() {
+        return DecimalFormat.getInstance().format(level);
     }
 
     protected void onLevelUp(int oldLevel, int newLevel) {}
