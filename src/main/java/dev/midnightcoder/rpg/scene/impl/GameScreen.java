@@ -10,6 +10,7 @@ import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
 import dev.midnightcoder.rpg.ui.interfaces.BottomHUD;
 import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
+import dev.midnightcoder.rpg.ui.interfaces.SkillsHUD;
 import dev.midnightcoder.rpg.ui.interfaces.TopHUD;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
@@ -34,6 +35,7 @@ public class GameScreen extends Scene {
     private TopHUD topHUD;
     private BottomHUD bottomHUD;
     private InventoryHUD inventoryHUD;
+    private SkillsHUD skillsHUD;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
@@ -56,10 +58,12 @@ public class GameScreen extends Scene {
         topHUD = new TopHUD(player);
         bottomHUD = new BottomHUD(player, mouse);
         inventoryHUD = new InventoryHUD(player);
+        skillsHUD = new SkillsHUD(player);
 
         uiManager.addPanel(topHUD);
         uiManager.addPanel(bottomHUD);
         uiManager.addPanel(inventoryHUD);
+        uiManager.addPanel(skillsHUD);
     }
 
     @Override
@@ -110,6 +114,10 @@ public class GameScreen extends Scene {
 
     public InventoryHUD getInventoryHUD() {
         return inventoryHUD;
+    }
+
+    public SkillsHUD getSkillsHUD() {
+        return skillsHUD;
     }
 
 }

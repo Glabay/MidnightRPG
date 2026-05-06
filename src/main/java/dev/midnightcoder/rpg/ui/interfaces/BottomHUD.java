@@ -22,9 +22,9 @@ import java.io.IOException;
  * @since 2026-05-03
  */
 public class BottomHUD extends UIPanel {
-    private enum Tabs {
+    public enum Tabs {
         EQUIPMENT	(1, "equipTab", () -> IO.println("Equipment Tab pressed")),
-        SKILL		(2, "skillTab", () -> IO.println("Skill Tab pressed")),
+        SKILL		(2, "skillTab", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
         QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
         MUSIC		(4, "musicTab", () -> IO.println("Music Tab pressed.")),
         SETTINGS	(5, "optionsTab", () -> IO.println("Settings Tab pressed.")),
@@ -52,6 +52,10 @@ public class BottomHUD extends UIPanel {
             catch (IOException _) {
                 return null;
             }
+        }
+
+        public int getSlotId() {
+            return slotId;
         }
 
         public Vec2i getSlot() {

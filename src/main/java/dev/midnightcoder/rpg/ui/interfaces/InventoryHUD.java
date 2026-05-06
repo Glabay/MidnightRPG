@@ -2,9 +2,7 @@ package dev.midnightcoder.rpg.ui.interfaces;
 
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
-import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
-import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.inventory.Item;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
@@ -20,29 +18,26 @@ import java.util.List;
  * @social Discord: Glabay
  * @since 2026-05-06
  */
-public class InventoryHUD extends UIPanel  {
+public class InventoryHUD extends Inventory  {
     private final Backpack backpack;
     private final List<Slot> slots;
     private final int rows;
     private final int cols;
-    private final Font font;
 
     public InventoryHUD(Player player) {
-        super(
-            new Vec2i(
-                WindowConfig.getWindowWidth() - 228,
-                WindowConfig.getWindowHeight() - 342
-            ),
-            new Vec2i(305, 218)
-        );
+        super(player);
         slots = new ArrayList<>();
         font = new Font("Arial", Font.PLAIN, 18);
-        this.player = player.getAvatar();
         this.backpack = player.getBackpack();
         rows = 4;
         cols = 5;
         generateSlots();
         background = TextureFactory.createFromImageFile("/ui/inventory.png").image();
+    }
+
+    @Override
+    protected int getInventoryIndex() {
+        return BottomHUD.Tabs.INVENTORY.getSlotId();
     }
 
     @Override
@@ -55,7 +50,7 @@ public class InventoryHUD extends UIPanel  {
     @Override
     public void render(Renderer renderer) {
         if (visible) {
-            renderer.renderImage(background, position.getX(), position.getY(), size.getHeight(), size.getWidth());
+            renderer.renderImage(background, position.getX(), position.getY(), size.getWidth(), size.getHeight());
             slots.forEach(slot -> slot.render(renderer));
             renderer.setFont(font);
             renderer.setColor(Color.BLACK);

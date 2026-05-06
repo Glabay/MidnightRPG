@@ -13,6 +13,7 @@ import dev.midnightcoder.rpg.entity.skill.SkillSet;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
+import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -36,6 +37,7 @@ public class Player extends Mob {
     private final Vec2i startingPosition;
 
     private Entity selectedEntity;
+    private Inventory currentInventoryView;
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
@@ -110,7 +112,15 @@ public class Player extends Mob {
         this.selectedEntity = entity;
     }
 
+    public void setCurrentInventoryView(Inventory inventory) {
+        this.currentInventoryView = inventory;
+    }
+
     /// Getters Below here
+
+    public Inventory getCurrentInventoryView() {
+        return currentInventoryView;
+    }
 
     public PlayerAvatar getAvatar() {
         return playerAvatar;
