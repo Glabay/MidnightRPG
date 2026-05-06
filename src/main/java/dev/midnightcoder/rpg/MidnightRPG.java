@@ -17,10 +17,20 @@ import dev.midnightcoder.rpg.ui.UIManager;
  * @since 2026-04-30
  */
 public class MidnightRPG implements Game {
+    public static MidnightRPG instance;
+
     private SceneManager sceneManager;
     private KeyboardInputManager input;
     private AWTMouseInputHandler mouse;
     private UIManager uiManager;
+    private GameScreen gameScreen;
+
+    public static MidnightRPG getInstance() {
+        if (instance == null) {
+            instance = new MidnightRPG();
+        }
+        return instance;
+    }
 
     @Override
     public void init(KeyboardInputManager input, AWTMouseInputHandler mouse) {
@@ -53,14 +63,24 @@ public class MidnightRPG implements Game {
     }
 
     private void startNewGame() {
-        sceneManager.setScene(new GameScreen(uiManager, input, mouse, GameStartMode.NEW_GAME));
+        gameScreen = createGameScreen(GameStartMode.NEW_GAME);
+        sceneManager.setScene(gameScreen);
     }
 
     private void loadGame() {
-        sceneManager.setScene(new GameScreen(uiManager, input, mouse, GameStartMode.LOAD_GAME));
+        gameScreen = createGameScreen(GameStartMode.LOAD_GAME);
+        sceneManager.setScene(gameScreen);
+    }
+
+    private GameScreen createGameScreen(GameStartMode mode) {
+        return new GameScreen(uiManager, input, mouse, mode);
     }
 
     private void quitGame() {
         shutdown();
+    }
+
+    public GameScreen getGameScreen() {
+        return gameScreen;
     }
 }
