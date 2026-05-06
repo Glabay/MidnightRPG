@@ -75,6 +75,10 @@ public class TileLoader {
         var dirtGrassSouth = getTextureFromSpriteSheet(groundTiles, new Vec2i(4, 2));
         var dirtGrassSouthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(5, 2));
 
+        var woodenWall = getTileTexture("wall_wood");
+        var woodenWallCap = getTileTexture("wall_wood_cap");
+        var stoneWall = getTileTexture("wall_stone");
+        var stoneWallCap = getTileTexture("wall_stone_cap");
 
         // Load in textures
         var registry = TileColorRegistry.getInstance();
@@ -97,10 +101,11 @@ public class TileLoader {
             registry.register(TileColor.DIRT_FULL, new GroundTile("ground_dirt_full", dirtFull));
             registry.register(TileColor.WATER_TILE, new WaterTile("water_full", waterFull));
 
-            registry.register(TileColor.STONE_WALL, getTileType("wall_stone", CollisionFlag.FULL));
-            registry.register(TileColor.STONE_WALL_TOP, getTileType("wall_stone_cap", CollisionFlag.FULL));
-            registry.register(TileColor.WOOD_WALL, getTileType("wall_wood", CollisionFlag.FULL));
-            registry.register(TileColor.WOOD_WALL_TOP, getTileType("wall_wood_cap", CollisionFlag.FULL));
+            registry.register(TileColor.STONE_WALL, new WallTile("wall_stone", stoneWall));
+            registry.register(TileColor.STONE_WALL_TOP, new WallTile("wall_stone_cap", stoneWallCap));
+            registry.register(TileColor.WOOD_WALL, new WallTile("wall_wood", woodenWall));
+            registry.register(TileColor.WOOD_WALL_TOP, new WallTile("wall_wood_cap", woodenWallCap));
+
             registry.register(TileColor.STONE_PATH, getTileType("ground_stone", CollisionFlag.NONE));
             registry.register(TileColor.WOOD_FLOOR, getTileType("floor_wood", CollisionFlag.NONE));
             registry.register(TileColor.GARDEN_PATCH, getTileType("farm_plot", CollisionFlag.NONE));
