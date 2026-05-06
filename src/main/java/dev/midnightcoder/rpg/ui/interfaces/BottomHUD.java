@@ -7,6 +7,7 @@ import dev.midnightcoder.engine.renderer.ui.components.UILabel;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 import javax.imageio.ImageIO;
@@ -29,7 +30,7 @@ public class BottomHUD extends UIPanel {
         SETTINGS	(5, "optionsTab", () -> IO.println("Settings Tab pressed.")),
         SPELLBOOK	(6, "spellbookTab", () -> IO.println("Spellbook Tab pressed")),
         COMBAT		(7, "combatTab", () -> IO.println("Combat Tab pressed")),
-        INVENTORY	(8, "backpackTab", () -> IO.println("Inventory Tab pressed"));
+        INVENTORY	(8, "backpackTab", () -> MidnightRPG.getInstance().getGameScreen().getInventoryHUD().display());
 
         private final int slotId;
         private final UIAction action;

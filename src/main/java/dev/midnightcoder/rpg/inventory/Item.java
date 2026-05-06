@@ -1,6 +1,9 @@
 package dev.midnightcoder.rpg.inventory;
 
+import dev.midnightcoder.engine.entity.item.GameItem;
+import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.rpg.item.ItemDefinition;
+import dev.midnightcoder.rpg.ui.container.Slot;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -8,7 +11,7 @@ import dev.midnightcoder.rpg.item.ItemDefinition;
  * @social Discord: Glabay
  * @since 2026-05-03
  */
-public class Item {
+public class Item extends GameItem {
     private final ItemDefinition definition;
     private int quantity;
 
@@ -32,7 +35,25 @@ public class Item {
         return 0;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
     public ItemDefinition getDefinition() {
         return definition;
     }
+
+    public Texture getIcon() {
+        return icon;
+    }
+
+    public String getItemDefaultAction() {
+        return "";
+    }
+
+    public void handleDefaultOption(Slot slot, String option) {
+
+    }
+
+
 }
