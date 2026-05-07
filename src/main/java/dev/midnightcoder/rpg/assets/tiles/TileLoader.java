@@ -48,15 +48,16 @@ public class TileLoader {
 
         var waterGrassNorthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 0));
         var waterGrassNorth = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 0));
-        var waterGrassNorthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 0));
 
         var waterGrassWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 1));
         var waterFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 1));
         var waterGrassEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 1));
-
-        var waterGrassSouthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 2));
         var waterGrassSouth = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 2));
-        var waterGrassSouthEast = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 2));
+
+        var waterGrassNorthWestCorner = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 4));
+        var waterGrassNorthEastCorner = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 4));
+        var waterGrassSouthWestCorner = getTextureFromSpriteSheet(groundTiles, new Vec2i(1, 3));
+        var waterGrassSouthEastCorner = getTextureFromSpriteSheet(groundTiles, new Vec2i(2, 3));
 
         var dirtGrassNorthWest = getTextureFromSpriteSheet(groundTiles, new Vec2i(3, 0));
         var dirtGrassNorth = getTextureFromSpriteSheet(groundTiles, new Vec2i(4, 0));
@@ -97,9 +98,15 @@ public class TileLoader {
             registry.register(TileColor.DIRT_GRASS_SOUTH_EAST_CORNER, new GroundTile("ground_dirt_grass_se_corner", dirtGrassSouthEastCorner));
             registry.register(TileColor.WATER_GRASS_NORTH, new WaterTile("ground_water_grass_n", waterGrassNorth));
             registry.register(TileColor.WATER_GRASS_WEST, new WaterTile("ground_water_grass_w", waterGrassWest));
+            registry.register(TileColor.WATER_GRASS_EAST, new WaterTile("ground_water_grass_e", waterGrassEast));
+            registry.register(TileColor.WATER_GRASS_SOUTH, new WaterTile("ground_water_grass_s", waterGrassSouth));
             registry.register(TileColor.WATER_GRASS_NORTH_WEST, new WaterTile("ground_water_grass_nw", waterGrassNorthWest));
             registry.register(TileColor.DIRT_FULL, new GroundTile("ground_dirt_full", dirtFull));
             registry.register(TileColor.WATER_TILE, new WaterTile("water_full", waterFull));
+            registry.register(TileColor.WATER_GRASS_NORTH_WEST_CORNER, new WaterTile("ground_water_grass_nw_corner", waterGrassNorthWestCorner));
+            registry.register(TileColor.WATER_GRASS_NORTH_EAST_CORNER, new WaterTile("ground_water_grass_ne_corner", waterGrassNorthEastCorner));
+            registry.register(TileColor.WATER_GRASS_SOUTH_WEST_CORNER, new WaterTile("ground_water_grass_sw_corner", waterGrassSouthWestCorner));
+            registry.register(TileColor.WATER_GRASS_SOUTH_EAST_CORNER, new WaterTile("ground_water_grass_se_corner", waterGrassSouthEastCorner));
 
             registry.register(TileColor.STONE_WALL, new WallTile("wall_stone", stoneWall));
             registry.register(TileColor.STONE_WALL_TOP, new WallTile("wall_stone_cap", stoneWallCap));
