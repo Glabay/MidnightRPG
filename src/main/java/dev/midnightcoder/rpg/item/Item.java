@@ -3,6 +3,8 @@ package dev.midnightcoder.rpg.item;
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.rpg.ui.container.Slot;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -11,6 +13,7 @@ import dev.midnightcoder.rpg.ui.container.Slot;
  * @since 2026-05-03
  */
 public class Item extends GameItem {
+    private static final Logger log = LoggerFactory.getLogger(Item.class);
     private final ItemDefinition definition;
     private int quantity;
 
@@ -38,6 +41,14 @@ public class Item extends GameItem {
         return quantity;
     }
 
+    public int decrease(int amount) {
+        if (amount > quantity) {
+            amount = quantity;
+        }
+        quantity -= amount;
+        return amount;
+    }
+
     public ItemDefinition getDefinition() {
         return definition;
     }
@@ -46,12 +57,35 @@ public class Item extends GameItem {
         return icon;
     }
 
+    public String getItemDescription() {
+        return getDefinition().description();
+    }
+
     public String getItemDefaultAction() {
-        return "";
+        if (getDefinition().inventoryOptions()[0] != null ||
+            getDefinition().inventoryOptions()[0].equalsIgnoreCase("null")
+        ) return getDefinition().inventoryOptions()[0];
+
+        // return the "use" option
+        return getDefinition().inventoryOptions()[1];
     }
 
     public void handleDefaultOption(Slot slot, String option) {
+        switch (option.toLowerCase()) {
+            case "equip": {
+                log.info("Equipping item: {}", getDefinition().name());
+                break;
+            }
 
+            case "drink": {
+                log.info("Drinking item: {}", getDefinition().name());
+                break;
+            }
+
+            default:
+                log.warn("Unknown default option: {}", option);
+                break;
+        }
     }
 
 
