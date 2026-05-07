@@ -54,7 +54,7 @@ public class Item extends GameItem {
     }
 
     public Texture getIcon() {
-        return icon;
+        return texture;
     }
 
     public String getItemDescription() {
@@ -89,4 +89,7 @@ public class Item extends GameItem {
     }
 
 
+    @Override
+    public void update(double delta) {
+    }
 }

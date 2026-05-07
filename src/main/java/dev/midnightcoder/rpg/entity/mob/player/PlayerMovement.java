@@ -1,6 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
 import dev.midnightcoder.engine.entity.Entity;
+import dev.midnightcoder.engine.entity.mob.Mob;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.world.TileMap;
 import dev.midnightcoder.engine.world.tile.CollisionFlag;
@@ -25,7 +26,7 @@ public class PlayerMovement extends Movement {
     }
 
     @Override
-    public void move(Entity entity, int dx, int dy) {
+    public void move(Mob entity, int dx, int dy) {
         if (dx != 0) {
             entity.setX(entity.getX() + dx);
             resolveX(entity, dx);
@@ -36,7 +37,7 @@ public class PlayerMovement extends Movement {
         }
     }
 
-    private void resolveX(Entity entity, int dx) {
+    private void resolveX(Mob entity, int dx) {
         int top = entity.getY() / TILE_SIZE;
         int bottom =(entity.getY() + entity.getHeight() - 1) / TILE_SIZE;
 
@@ -62,7 +63,7 @@ public class PlayerMovement extends Movement {
         }
     }
 
-    private void resolveY(Entity entity, int dy) {
+    private void resolveY(Mob entity, int dy) {
         var left = entity.getX() / TILE_SIZE;
         var right = (entity.getX() + entity.getWidth() -1) / TILE_SIZE;
 
