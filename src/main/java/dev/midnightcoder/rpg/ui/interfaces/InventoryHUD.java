@@ -68,9 +68,72 @@ public class InventoryHUD extends Inventory  {
             for (int row = 0; row < rows; row++) {
                 var x = position.getX() + padding + (spacing * row) + padding;
                 var y = position.getY() + padding + (spacing * col) + padding;
-                slots.add(new Slot(new Vec2i(x, y), slotSize, slotSize));
+                slots.add(new Slot(new Vec2i(x, y), slotSize, slots.size()));
             }
         }
+    }
+
+    public boolean containsItem(Item item) {
+        return slots.stream().anyMatch(slot -> slot.getItem() == item);
+    }
+
+    public int getTotalFreeSlots() {
+        return Math.toIntExact(slots.stream()
+            .filter(slot -> slot.getItem() == null)
+            .count());
+    }
+
+    public void addItem(Item item) {
+        if (backpack.addNewItem(item)) {
+            var slot = backpack.findSlotForItem(item);
+            if (slot >= 0) {
+                log.debug("Found existing slot for item: {}", item);
+                addItemToSlot(item, slot);
+                return;
+            }
+            var slotIndex = backpack.getFirstAvailableSlot();
+            if (slotIndex >= 0) {
+                log.debug("Adding item to first available slot: {}", slotIndex);
+                addItemToSlot(item, slotIndex);
+            }
+        }
+    }
+
+    public void addItemToSlot(Item item, int slotIndex) {
+        if (slotIndex < 0 || slotIndex >= slots.size()) {
+            log.warn("Invalid slot index: {}", slotIndex);
+            return;
+        }
+        var slot = slots.get(slotIndex);
+        if (slot.hasAnItem()) {
+            log.warn("Slot {} is already occupied", slotIndex);
+            return;
+        }
+        log.debug("Setting item {} in slot {}", item, slotIndex);
+        slot.setItem(item);
+    }
+
+    public void removeItem(int itemId, int amount) {
+        var optionalSlot = slots.stream()
+            .filter(Slot::hasAnItem)
+            .filter(slot -> slot.getItem().getDefinition().id() == itemId)
+            .findFirst();
+        if (optionalSlot.isPresent()) {
+            var slot = optionalSlot.get();
+            if (slot.getItem().decrease(amount) <= 0) {
+                slot.setItem(null);
+            }
+        }
+    }
+
+    public void removeItemFromSlot(Slot slot) {
+        if (!slot.hasAnItem()) {
+            log.debug("Attempting to remove item from empty slot");
+            return;
+        }
+        var item = slot.getItem();
+        slot.setItem(null);
+        log.debug("Removed item {} from slot", item.getDefinition().name());
     }
 
 }
