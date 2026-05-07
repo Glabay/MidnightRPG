@@ -41,7 +41,7 @@ public class Player extends Mob {
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
-        startingPosition = new Vec2i(100 << 5, 100 << 5);
+        startingPosition = new Vec2i(37 << 5, 50 << 5);
 
         playerMovement = new PlayerMovement(currentMap.getTileMap());
         playerAvatar = new PlayerAvatar(startingPosition, currentMap, this.input, playerMovement);
