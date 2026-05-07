@@ -4,11 +4,15 @@ import dev.midnightcoder.engine.core.Game;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
 import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.scene.impl.LoginScreen;
 import dev.midnightcoder.rpg.ui.UIManager;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -24,6 +28,8 @@ public class MidnightRPG implements Game {
     private AWTMouseInputHandler mouse;
     private UIManager uiManager;
     private GameScreen gameScreen;
+
+    protected List<Player> players = new ArrayList<>();
 
     public static MidnightRPG getInstance() {
         if (instance == null) {
@@ -82,5 +88,9 @@ public class MidnightRPG implements Game {
 
     public GameScreen getGameScreen() {
         return gameScreen;
+    }
+
+    public AWTMouseInputHandler getMouse() {
+        return mouse;
     }
 }

@@ -4,8 +4,9 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
-import dev.midnightcoder.rpg.input.Mouse;
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +51,9 @@ public class Slot extends Rectangle {
     public void update(UIPanel panel) {
         if (item != null)
             icon = item.getIcon().image();
-        var leftMouseButtonDown = Mouse.getInstance().getButton() == MouseEvent.BUTTON1;
-
-        if (contains(Mouse.getInstance().getPosition())) {
+        var mouse = MidnightRPG.getInstance().getMouse();
+        var leftMouseButtonDown = mouse.getButton() == MouseEvent.BUTTON1;
+        if (contains(new Point(mouse.getX(), mouse.getY()))) {
             if (!inside)
                 ignorePressed = leftMouseButtonDown;
             // The Mouse is inside the slot
@@ -64,11 +65,12 @@ public class Slot extends Rectangle {
                     // TODO: Handle Dragging items from one slot to another
                     // System.out.println("Clicked Slot: " + slotID);
                     panel.setMousePressed(true);
-                } else if (!leftMouseButtonDown && panel.isMousePressed()) {
+                }
+                else if (!leftMouseButtonDown && panel.isMousePressed()) {
                     // TODO: Handle Default left click action
-//                    if (panel instanceof InventoryHUD) {
-//                        item.handleDefaultOption(this, getItem().getItemDefaultAction());
-//                    }
+                    if (panel instanceof InventoryHUD) {
+                        item.handleDefaultOption(this, getItem().getItemDefaultAction());
+                    }
 //                    if (panel instanceof EquipmentHUD) {
 //                        item.unEquipItem(this);
 //                    }
