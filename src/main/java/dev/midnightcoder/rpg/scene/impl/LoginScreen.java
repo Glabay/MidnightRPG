@@ -67,6 +67,7 @@ public class LoginScreen extends Scene {
     @Override
     public void render(Renderer renderer) {
         super.render(renderer);
+        renderer.setColor(Color.BLUE);
         renderer.setFont(fontBold);
         var title = "Midnight-RPG";
         renderer.renderText(title, getTextCentered(renderer, title), Tile.TILE_SIZE * 4);
