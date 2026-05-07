@@ -8,7 +8,15 @@ package dev.midnightcoder.rpg.item;
  */
 public record ItemDefinition(
     int id,
+    int value,
+    int equipSlotId,
     String name,
     String description,
-    boolean stackable
+    String category,
+    String[] inventoryOptions,
+    String[] equipmentOptions,
+    boolean stackable,
+    boolean equippable,
+    boolean tradable,
+    ItemEquipmentData equipmentData
 ) {}
