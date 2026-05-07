@@ -5,6 +5,8 @@ import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 
@@ -15,6 +17,7 @@ import java.awt.*;
  * @since 2026-05-06
  */
 public abstract class Inventory extends UIPanel  {
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
     protected final Player player;
 
     protected Font font;
