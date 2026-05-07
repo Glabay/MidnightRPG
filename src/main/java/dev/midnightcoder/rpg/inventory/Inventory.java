@@ -34,6 +34,15 @@ public abstract class Inventory {
         return items[slot];
     }
 
+    public int getFirstAvailableSlot() {
+        for (var index = 0; index < capacity; index++) {
+            if (items[index] == null) {
+                return index;
+            }
+        }
+        return -1;
+    }
+
     public int getCapacity() {
         return capacity;
     }
