@@ -4,7 +4,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
-import dev.midnightcoder.rpg.inventory.Item;
+import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.ui.container.Slot;
 

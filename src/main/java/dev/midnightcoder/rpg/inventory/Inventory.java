@@ -1,5 +1,7 @@
 package dev.midnightcoder.rpg.inventory;
 
+import dev.midnightcoder.rpg.item.Item;
+
 /**
  * @author Glabay | Glabay-Studios
  * @project MidnightRPG

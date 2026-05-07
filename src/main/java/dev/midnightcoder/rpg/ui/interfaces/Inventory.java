@@ -1,18 +1,12 @@
 package dev.midnightcoder.rpg.ui.interfaces;
 
 import dev.midnightcoder.engine.renderer.Renderer;
-import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
-import dev.midnightcoder.rpg.inventory.Item;
-import dev.midnightcoder.rpg.inventory.container.Backpack;
-import dev.midnightcoder.rpg.ui.container.Slot;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Glabay | Glabay-Studios

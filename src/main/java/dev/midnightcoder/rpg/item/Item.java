@@ -1,8 +1,7 @@
-package dev.midnightcoder.rpg.inventory;
+package dev.midnightcoder.rpg.item;
 
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
-import dev.midnightcoder.rpg.item.ItemDefinition;
 import dev.midnightcoder.rpg.ui.container.Slot;
 
 /**

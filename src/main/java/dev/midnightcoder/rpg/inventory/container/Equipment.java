@@ -1,6 +1,6 @@
 package dev.midnightcoder.rpg.inventory.container;
 
-import dev.midnightcoder.rpg.inventory.Item;
+import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.item.EquipmentSlot;
 
 import java.util.EnumMap;
