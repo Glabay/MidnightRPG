@@ -45,6 +45,7 @@ public class NpcAvatar extends Avatar {
     @Override
     public void update(double delta) {
         super.update(delta);
+        updateHitbox();
 
         // TODO: Implement some way to not move every tick
 
