@@ -4,6 +4,8 @@ import dev.midnightcoder.engine.core.Game;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.rpg.entity.Entity;
+import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
@@ -29,7 +31,10 @@ public class MidnightRPG implements Game {
     private UIManager uiManager;
     private GameScreen gameScreen;
 
+    protected List<Entity> entities = new ArrayList<>();
     protected List<Player> players = new ArrayList<>();
+    protected List<NPC> NPCs = new ArrayList<>();
+
 
     public static MidnightRPG getInstance() {
         if (instance == null) {
@@ -92,5 +97,14 @@ public class MidnightRPG implements Game {
 
     public AWTMouseInputHandler getMouse() {
         return mouse;
+    }
+
+    public void addEntity(Entity entity) {
+        if (entity instanceof NPC npc)
+            NPCs.add(npc);
+        else if (entity instanceof Player player)
+            players.add(player);
+
+        entities.add(entity);
     }
 }

@@ -5,6 +5,8 @@ import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
@@ -68,7 +70,14 @@ public class GameScreen extends Scene {
 
     @Override
     public void update(double delta) {
+        // Entities - Player
         player.update(delta);
+
+        // Entities - NPCs
+        if (!currentMap.getEntities().isEmpty())
+            currentMap.getEntities()
+                .stream().map(e -> (NPC) e)
+                .forEach(entity -> entity.update(delta));
 
         uiManager.update();
     }
@@ -85,7 +94,13 @@ public class GameScreen extends Scene {
         if (Objects.nonNull(player))
             player.render(renderer);
 
+        // Entities - NetworkPlayer
+
         // Entities - NPCs
+        if (!currentMap.getEntities().isEmpty())
+            currentMap.getEntities()
+                .stream().map(e -> (NPC) e)
+                .forEach(entity -> entity.render(renderer));
 
         // Projectiles
 
@@ -105,7 +120,7 @@ public class GameScreen extends Scene {
         // Generate the World
         currentMap = new TutorialIsland();
         player = new Player("Glabay", currentMap, input);
-
+        MidnightRPG.getInstance().addEntity(player);
     }
 
     private void loadExistingGame() {

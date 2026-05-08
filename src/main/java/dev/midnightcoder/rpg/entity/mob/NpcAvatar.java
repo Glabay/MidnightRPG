@@ -41,17 +41,4 @@ public class NpcAvatar extends Avatar {
         if (direction == Direction.SOUTH) dy += moveSpeed;
         return dy;
     }
-
-    @Override
-    public void update(double delta) {
-        super.update(delta);
-        updateHitbox();
-
-        // TODO: Implement some way to not move every tick
-
-        var dx = (int) (getMoveX() * speed * delta);
-        var dy = (int) (getMoveY() * speed * delta);
-
-        movement.move(this, dx, dy);
-    }
 }

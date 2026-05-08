@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.npc;
 
+import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
@@ -25,21 +26,32 @@ public class NPC extends Mob {
     private final List<Behavior> behaviors = new ArrayList<>();
     private final int id;
 
-    public NPC(int id, Vec2i position, NpcDefinition definition, NpcMovement movement, GameMap currentMap) {
+    public NPC(int id, Vec2i position, GameMap currentMap) {
         this.id = id;
-        this.avatar = new NpcAvatar(position, movement, currentMap);
-        this.movement = movement;
-        this.currentMap = currentMap;
+        this.movement = new NpcMovement(currentMap.getTileMap());
         this.spawnPosition = position;
-        this.definition = definition;
+        this.avatar = new NpcAvatar(spawnPosition, movement, currentMap);
+        this.currentMap = currentMap;
+        this.definition = NpcManager.getInstance().getDefinition(id);
     }
 
     @Override
     public void update(double delta) {
-        getAvatar().update(delta);
+        getAvatar().updateHitbox();
 
         behaviors.forEach(behavior ->
             behavior.update(this, delta));
+
+        var dx = (int) (getAvatar().getMoveX() * speed * delta);
+        var dy = (int) (getAvatar().getMoveY() * speed * delta);
+
+        movement.move(getAvatar(), dx, dy);
+    }
+
+    @Override
+    public void render(Renderer renderer) {
+        avatar.render(renderer);
+        IO.println("NPC Render: " + spawnPosition);
     }
 
     public void addBehavior(Behavior behavior) {
