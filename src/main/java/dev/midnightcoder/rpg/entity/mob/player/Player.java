@@ -1,6 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
-import dev.midnightcoder.engine.entity.mob.PlayerAvatar;
+import dev.midnightcoder.rpg.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
@@ -15,7 +15,6 @@ import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 
 /**
