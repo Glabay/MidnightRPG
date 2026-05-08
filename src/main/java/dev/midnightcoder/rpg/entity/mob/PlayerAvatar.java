@@ -73,12 +73,4 @@ public class PlayerAvatar extends Avatar {
         super.update(delta);
     }
 
-    @Override
-    public void render(Renderer renderer) {
-        if (texture != null) {
-            var screenX = (int) (getX() - currentMap.getCamera().getX());
-            var screenY = (int) (getY() - currentMap.getCamera().getY());
-            renderer.renderTexture(texture, screenX, screenY);
-        }
-    }
 }

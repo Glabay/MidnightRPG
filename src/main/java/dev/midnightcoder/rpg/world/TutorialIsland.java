@@ -32,7 +32,7 @@ public class TutorialIsland extends GameMap {
 
         initializeCamera();
 
-        var npc = new NPC(0, new Vec2i(37, 52), this);
+        var npc = new NPC(0, new Vec2i(37 << 5, 52 << 5), this);
         npcs.add(npc);
     }
 
