@@ -92,7 +92,7 @@ public class Slot extends Rectangle {
         renderer.drawRectangle(position, size, size, Color.WHITE);
         renderer.setFont(slotFont);
         if (item != null) {
-            renderer.renderImage(item.getIcon().image(), (int) getX(), (int) getY());
+            renderer.renderImage(item.getIcon().image(), (int) getX() + 4, (int) getY() + 4);
             if (item.getQuantity() > 1) {
                 renderer.renderText(String.valueOf(item.getQuantity()), (int) getX() + 26, (int) getY() + 36);
             }
