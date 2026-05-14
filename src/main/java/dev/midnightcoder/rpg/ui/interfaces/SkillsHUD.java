@@ -2,7 +2,6 @@ package dev.midnightcoder.rpg.ui.interfaces;
 
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
-import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 import java.awt.*;

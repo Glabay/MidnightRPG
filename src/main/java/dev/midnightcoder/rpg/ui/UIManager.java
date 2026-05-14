@@ -2,7 +2,6 @@ package dev.midnightcoder.rpg.ui;
 
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
-import dev.midnightcoder.rpg.ui.interfaces.*;
 
 import java.util.ArrayList;
 import java.util.List;
