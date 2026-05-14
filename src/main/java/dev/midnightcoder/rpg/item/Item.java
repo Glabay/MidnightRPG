@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.item;
 
+import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.cache.model.ItemDefinition;
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
@@ -55,7 +56,7 @@ public class Item extends GameItem {
     }
 
     public Texture getIcon() {
-        return texture;
+        return CacheReader.getInstance().getTexture(definition.getSpriteId());
     }
 
     public String getItemDescription() {
