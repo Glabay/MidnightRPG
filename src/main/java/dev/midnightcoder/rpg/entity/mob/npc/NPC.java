@@ -1,15 +1,16 @@
 package dev.midnightcoder.rpg.entity.mob.npc;
 
+import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.assets.definitions.NpcDefinition;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -19,12 +20,13 @@ import java.util.List;
  */
 public class NPC extends Mob {
     private final NpcAvatar avatar;
-    private final NpcMovement movement; // TODO: NpcMovement
+    private final NpcMovement movement;
     private final GameMap currentMap;
     private final Vec2i spawnPosition;
-    private final NpcDefinition definition;
     private final List<Behavior> behaviors = new ArrayList<>();
     private final int id;
+
+    private final Random random = new Random();
 
     public NPC(int id, Vec2i position, GameMap currentMap) {
         this.id = id;
@@ -32,7 +34,6 @@ public class NPC extends Mob {
         this.spawnPosition = position;
         this.avatar = new NpcAvatar(spawnPosition, movement, currentMap);
         this.currentMap = currentMap;
-        this.definition = NpcManager.getInstance().getDefinition(id);
     }
 
     @Override
@@ -42,16 +43,26 @@ public class NPC extends Mob {
         behaviors.forEach(behavior ->
             behavior.update(this, delta));
 
-        var dx = (int) (getAvatar().getMoveX() * speed * delta);
-        var dy = (int) (getAvatar().getMoveY() * speed * delta);
+        if (random.nextDouble() < 0.01) {
+            if (random.nextDouble() < 0.3)
+                getAvatar().setDirection(Direction.NORTH);
+            else if (random.nextDouble() > 0.3 && random.nextDouble() < 0.6)
+                getAvatar().setDirection(Direction.SOUTH);
+            else if (random.nextDouble() > 0.6 && random.nextDouble() < 0.9)
+                getAvatar().setDirection(Direction.WEST);
+            else if (random.nextDouble() > 0.9)
+                getAvatar().setDirection(Direction.EAST);
 
-        movement.move(getAvatar(), dx, dy);
+            var dx = (int) (getAvatar().getMoveX() * speed * delta);
+            var dy = (int) (getAvatar().getMoveY() * speed * delta);
+
+            movement.move(getAvatar(), dx, dy);
+        }
     }
 
     @Override
     public void render(Renderer renderer) {
         avatar.render(renderer);
-        IO.println("NPC Render: " + spawnPosition);
     }
 
     public void addBehavior(Behavior behavior) {
@@ -62,10 +73,6 @@ public class NPC extends Mob {
 
     public GameMap getCurrentMap() {
         return currentMap;
-    }
-
-    public NpcDefinition getDefinition() {
-        return definition;
     }
 
     public NpcAvatar getAvatar() {
