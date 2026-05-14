@@ -1,4 +1,3 @@
 rootProject.name = 'MidnightRPG'
 
 include("MidnightEngine")
-include("MidnightCache")
