@@ -25,6 +25,10 @@ public class NpcAvatar extends Avatar {
         texture = TextureFactory.createSolidColor(width, height, Color.BLUE);
     }
 
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
     @Override
     public int getMoveX() {
         var dx = 0;
