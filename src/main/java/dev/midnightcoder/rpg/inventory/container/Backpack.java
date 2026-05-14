@@ -18,7 +18,7 @@ public class Backpack extends Inventory {
     public int findSlotForItem(Item item) {
         for (var index = 0; index < getItems().length; index++) {
             var invItem = getItems()[index];
-            if (invItem.getDefinition().id() == item.getDefinition().id()) {
+            if (invItem.getDefinition().getId() == item.getDefinition().getId()) {
                 return index;
             }
         }
