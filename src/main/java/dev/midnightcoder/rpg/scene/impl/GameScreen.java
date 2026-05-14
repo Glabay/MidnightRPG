@@ -8,12 +8,14 @@ import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
 import dev.midnightcoder.rpg.ui.interfaces.BottomHUD;
 import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
 import dev.midnightcoder.rpg.ui.interfaces.SkillsHUD;
 import dev.midnightcoder.rpg.ui.interfaces.TopHUD;
+import dev.midnightcoder.rpg.util.ItemId;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
 import java.util.Objects;
@@ -66,6 +68,11 @@ public class GameScreen extends Scene {
         uiManager.addPanel(bottomHUD);
         uiManager.addPanel(inventoryHUD);
         uiManager.addPanel(skillsHUD);
+
+        inventoryHUD.addItem(new Item(ItemId.HEALTH_POTION, 1));
+        inventoryHUD.addItem(new Item(ItemId.STONE_AXE, 1));
+        inventoryHUD.addItem(new Item(ItemId.STONE_PICKAXE, 1));
+        inventoryHUD.addItem(new Item(ItemId.IRON_SWORD, 1));
     }
 
     @Override
