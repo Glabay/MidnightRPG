@@ -1,6 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob.npc;
 
-import dev.midnightcoder.rpg.assets.definitions.NpcDefinition;
+import dev.midnightcoder.cache.CacheReader;
+import dev.midnightcoder.cache.model.NPCDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 public class NpcManager {
     private static NpcManager instance;
 
-    private List<NpcDefinition> definitions;
+    private final List<NPCDefinition> definitions;
+    private final CacheReader cacheReader;
 
     public static NpcManager getInstance() {
         if (instance == null) {
@@ -24,17 +26,22 @@ public class NpcManager {
     }
 
     NpcManager() {
-        definitions = new ArrayList<>();
+        this.cacheReader = CacheReader.getInstance();
+
+        this.definitions = new ArrayList<>();
 
         loadDefinitions();
     }
 
-    public NpcDefinition getDefinition(int id) {
+    public NPCDefinition getDefinition(int id) {
         return definitions.stream()
                 .filter(def -> def.getId() == id)
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(() -> new IllegalArgumentException("NPC definition not found for ID: " + id));
     }
 
-    public void loadDefinitions() {}
+    public void loadDefinitions() {
+        // Read out to cache manager, and look in the NPC Store for definitions
+        definitions.addAll(cacheReader.getCacheManager().getNpcs());
+    }
 }
