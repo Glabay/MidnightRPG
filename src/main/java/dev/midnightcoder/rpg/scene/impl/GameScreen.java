@@ -11,10 +11,7 @@ import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
-import dev.midnightcoder.rpg.ui.interfaces.BottomHUD;
-import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
-import dev.midnightcoder.rpg.ui.interfaces.SkillsHUD;
-import dev.midnightcoder.rpg.ui.interfaces.TopHUD;
+import dev.midnightcoder.rpg.ui.interfaces.*;
 import dev.midnightcoder.rpg.util.ItemId;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
@@ -40,6 +37,7 @@ public class GameScreen extends Scene {
     private BottomHUD bottomHUD;
     private InventoryHUD inventoryHUD;
     private SkillsHUD skillsHUD;
+    private ContextMenu contextMenu;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
@@ -63,11 +61,13 @@ public class GameScreen extends Scene {
         bottomHUD = new BottomHUD(player, mouse);
         inventoryHUD = new InventoryHUD(player);
         skillsHUD = new SkillsHUD(player);
+        contextMenu = new ContextMenu(player);
 
         uiManager.addPanel(topHUD);
         uiManager.addPanel(bottomHUD);
         uiManager.addPanel(inventoryHUD);
         uiManager.addPanel(skillsHUD);
+        uiManager.addPanel(contextMenu);
 
         inventoryHUD.addItem(new Item(ItemId.HEALTH_POTION, 1));
         inventoryHUD.addItem(new Item(ItemId.STONE_AXE, 1));
@@ -142,4 +142,7 @@ public class GameScreen extends Scene {
         return skillsHUD;
     }
 
+    public ContextMenu getContextMenu() {
+        return contextMenu;
+    }
 }

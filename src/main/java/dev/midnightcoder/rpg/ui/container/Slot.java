@@ -4,6 +4,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
+import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -51,8 +53,10 @@ public class Slot extends Rectangle {
     public void update(UIPanel panel) {
         if (item != null)
             icon = item.getIcon().image();
+
         var mouse = MidnightRPG.getInstance().getMouse();
         var leftMouseButtonDown = mouse.getButton() == MouseEvent.BUTTON1;
+        var rightMouseButtonDown = mouse.getButton() == MouseEvent.BUTTON3;
         if (contains(new Point(mouse.getX(), mouse.getY()))) {
             if (!inside)
                 ignorePressed = leftMouseButtonDown;
@@ -61,7 +65,35 @@ public class Slot extends Rectangle {
             this.inside = true;
             if (getItem() != null) {
                 // Slot does have an item
-                if (leftMouseButtonDown && !panel.isMousePressed() && !ignorePressed) {
+                if (rightMouseButtonDown && !panel.isMousePressed() && !ignorePressed) {
+                    if (panel instanceof InventoryHUD) {
+                        var defaultOptions = item.getDefinition().getBackpackActions();
+                        var menuOpts = new ArrayList<String>();
+                        for (var option : defaultOptions) {
+                            if (option == null || option.isBlank())
+                                continue;
+                            menuOpts.add(option);
+                        }
+
+                        // Open context menu
+                        var contextMenu = MidnightRPG.getInstance()
+                            .getGameScreen()
+                            .getContextMenu()
+                            .setPosition(new Vec2i(mouse.getX(), mouse.getY()))
+                            .withTitle("Choose")
+                            .withOptions(menuOpts.toArray(new String[0]));
+
+                        contextMenu.init();
+
+                        if (contextMenu.getPosition().getX() + contextMenu.getSize().getWidth() > WindowConfig.getWindowWidth())
+                            contextMenu.setPosition(new Vec2i(WindowConfig.getWindowWidth() - contextMenu.getSize().getWidth(), contextMenu.getPosition().getY()));
+
+                        if (!contextMenu.isDisplayed())
+                            contextMenu.display();
+                    }
+                    panel.setMousePressed(false);
+                }
+                else if (leftMouseButtonDown && !panel.isMousePressed() && !ignorePressed) {
                     // TODO: Handle Dragging items from one slot to another
                     // System.out.println("Clicked Slot: " + slotID);
                     panel.setMousePressed(true);
