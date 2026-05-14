@@ -1,6 +1,3 @@
 [submodule "MidnightEngine"]
 	path = MidnightEngine
 	url = https://github.com/Glabay/MidnightEngine.git
-[submodule "MidnightCache"]
-	path = MidnightCache
-	url = https://github.com/Glabay/MidnightCache.git
