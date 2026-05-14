@@ -25,7 +25,8 @@ public class TutorialIsland extends GameMap {
     public TutorialIsland() {
         IO.println("Initializing tile map for Tutorial Island");
         var mapPath = "/world/map/tutorial/map_landscape.png";
-        tileMap = new PngMapLoader().loadMapFile(mapPath);
+        var mapUUID = "6260d79a-7c0d-4438-bdca-e5f14089f83c";
+        tileMap = new PngMapLoader().loadMapFile(mapUUID);
 
         mapWidth = tileMap.width;
         mapHeight = tileMap.height;
