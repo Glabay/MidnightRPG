@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.item;
 
+import dev.midnightcoder.cache.model.ItemDefinition;
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.rpg.ui.container.Slot;
@@ -58,27 +59,27 @@ public class Item extends GameItem {
     }
 
     public String getItemDescription() {
-        return getDefinition().description();
+        return getDefinition().getDescription();
     }
 
     public String getItemDefaultAction() {
-        if (getDefinition().inventoryOptions()[0] != null ||
-            getDefinition().inventoryOptions()[0].equalsIgnoreCase("null")
-        ) return getDefinition().inventoryOptions()[0];
+        if (getDefinition().getBackpackActions()[0] != null ||
+            getDefinition().getBackpackActions()[0].equalsIgnoreCase("null")
+        ) return getDefinition().getBackpackActions()[0];
 
         // return the "use" option
-        return getDefinition().inventoryOptions()[1];
+        return getDefinition().getBackpackActions()[1];
     }
 
     public void handleDefaultOption(Slot slot, String option) {
         switch (option.toLowerCase()) {
             case "equip": {
-                log.info("Equipping item: {}", getDefinition().name());
+                log.info("Equipping item: {}", getDefinition().getName());
                 break;
             }
 
             case "drink": {
-                log.info("Drinking item: {}", getDefinition().name());
+                log.info("Drinking item: {}", getDefinition().getName());
                 break;
             }
 
