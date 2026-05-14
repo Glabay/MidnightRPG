@@ -19,8 +19,9 @@ public class Item extends GameItem {
     private final ItemDefinition definition;
     private int quantity;
 
-    public Item(ItemDefinition definition, int quantity) {
-        this.definition = definition;
+    public Item(int itemId, int quantity) {
+        this.definition = CacheReader.getInstance().getItemDefinition(itemId)
+            .orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + itemId));
         this.quantity = quantity;
     }
 
