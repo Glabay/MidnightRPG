@@ -55,8 +55,8 @@ public class InventoryHUD extends Inventory  {
             renderer.setFont(font);
             renderer.setColor(Color.BLACK);
             var string = getSelectedGameItem() == null ? "" :
-                ((Item) getSelectedGameItem()).getDefinition().name();
-            renderer.renderText(string, position.getX() + 10, position.getY() + size.getHeight() - 26);
+                ((Item) getSelectedGameItem()).getDefinition().getName();
+            renderer.renderText(string, getTextCentered(renderer, string), position.getY() + size.getHeight() - 20);
         }
     }
 
@@ -116,7 +116,7 @@ public class InventoryHUD extends Inventory  {
     public void removeItem(int itemId, int amount) {
         var optionalSlot = slots.stream()
             .filter(Slot::hasAnItem)
-            .filter(slot -> slot.getItem().getDefinition().id() == itemId)
+            .filter(slot -> slot.getItem().getDefinition().getId() == itemId)
             .findFirst();
         if (optionalSlot.isPresent()) {
             var slot = optionalSlot.get();
@@ -133,7 +133,7 @@ public class InventoryHUD extends Inventory  {
         }
         var item = slot.getItem();
         slot.setItem(null);
-        log.debug("Removed item {} from slot", item.getDefinition().name());
+        log.debug("Removed item {} from slot", item.getDefinition().getName());
     }
 
 }
