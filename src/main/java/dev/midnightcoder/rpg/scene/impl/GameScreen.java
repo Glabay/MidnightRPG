@@ -3,6 +3,7 @@ package dev.midnightcoder.rpg.scene.impl;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
@@ -52,17 +53,24 @@ public class GameScreen extends Scene {
 
     @Override
     public void onLoad() {
-        music.loadAudioFiles();
-        music.setTrack(1);
-        music.play();
-        music.loop();
+        initializeAudioSystem();
 
+        var isNewGame = startMode == GameStartMode.NEW_GAME;
+        // First, we need to create or load the player
+        if (isNewGame) startNewGame();
+        else loadExistingGame();
+
+        // next we load the Heads-up Displays
         loadHeadsUpDisplays();
 
-        if (startMode == GameStartMode.NEW_GAME)
-            startNewGame();
-        else if (startMode == GameStartMode.LOAD_GAME)
-            loadExistingGame();
+        // finally, one more check if this is a new game for a starter pack
+        if (isNewGame) {
+            player.addItem(Item.of(ItemId.HEALTH_POTION));
+            player.addItem(Item.of(ItemId.STONE_HATCHET));
+            player.addItem(Item.of(ItemId.STONE_PICKAXE));
+            player.addItem(Item.of(ItemId.IRON_SWORD));
+            player.addItem(Item.of(ItemId.WOODEN_STAFF));
+        }
     }
 
     @Override
@@ -113,18 +121,25 @@ public class GameScreen extends Scene {
         music.stop();
     }
 
-    private void loadHeadsUpDisplays() {
-        // TODO: add multiple UI/HUD
-        //      - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
-        //      - Anything central | Equipment, bank/storage, settings
-        //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
-        //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
+    private void initializeAudioSystem() {
+        music.loadAudioFiles();
+        music.setTrack(1);
+        music.play();
+        music.loop();
+    }
 
+    private void loadHeadsUpDisplays() {
+        // - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
         topHUD = new TopHUD(player);
+
+        // - Anything central | Equipment, bank/storage, settings
+        contextMenu = new ContextMenu(player);
+
+        // - User Interactions | Inventory, combat, spellbook, settings, music, quest skill, equipment
+        // - BottomBar | Chat/Dialogue window             | [I][C][S][S][M][Q][S][E]] |
         bottomHUD = new BottomHUD(player, mouse);
         inventoryHUD = new InventoryHUD(player);
         skillsHUD = new SkillsHUD(player);
-        contextMenu = new ContextMenu(player);
         this.audioHUD = new AudioHUD(player);
 
         addHeadsUpDisplay();
@@ -145,13 +160,6 @@ public class GameScreen extends Scene {
         currentMap = new TutorialIsland();
         player = new Player("Glabay", currentMap, input);
         MidnightRPG.getInstance().addEntity(player);
-
-        // provide a little starter pack
-        player.addItem(Item.of(ItemId.HEALTH_POTION));
-        player.addItem(Item.of(ItemId.STONE_HATCHET));
-        player.addItem(Item.of(ItemId.STONE_PICKAXE));
-        player.addItem(Item.of(ItemId.IRON_SWORD));
-        player.addItem(Item.of(ItemId.WOODEN_STAFF));
     }
 
     private void loadExistingGame() {
@@ -176,5 +184,9 @@ public class GameScreen extends Scene {
 
     public TopHUD getTopHUD() {
         return topHUD;
+    }
+
+    public AudioHUD getMusicHUD() {
+        return audioHUD;
     }
 }
