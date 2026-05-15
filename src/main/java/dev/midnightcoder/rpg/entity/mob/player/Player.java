@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
@@ -13,6 +14,7 @@ import dev.midnightcoder.rpg.entity.skill.SkillSet;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
+import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 
 import java.awt.event.KeyEvent;
@@ -104,6 +106,13 @@ public class Player extends Mob {
         return combatStats.isDead();
     }
 
+    /// Simple way to add an item to the player for now, to be removed and improved later
+    public void addItem(Item item) {
+        MidnightRPG.getInstance()
+            .getGameScreen()
+            .getInventoryHUD()
+            .addItem(item);
+    }
 
     /// Setters here
 
@@ -156,4 +165,5 @@ public class Player extends Mob {
     public int getY() {
         return playerAvatar.getY();
     }
+
 }
