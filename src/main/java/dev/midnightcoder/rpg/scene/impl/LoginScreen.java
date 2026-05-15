@@ -5,6 +5,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.tile.Tile;
+import dev.midnightcoder.rpg.assets.audio.MusicTrack;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -24,6 +25,8 @@ public class LoginScreen extends Scene {
     private Font fontBold;
     private Font fontPlain;
 
+    private final MusicTrack music;
+
     private int selectedOption = 0;
 
     public LoginScreen(KeyboardInputManager input, Runnable... args) {
@@ -33,6 +36,7 @@ public class LoginScreen extends Scene {
         this.onNewGame = args[0];
         this.onLoadGame = args[1];
         this.onQuit = args[2];
+        this.music = new MusicTrack();
     }
 
     @Override
@@ -40,11 +44,17 @@ public class LoginScreen extends Scene {
         IO.println("Loading login screen...");
         fontBold = new Font("Arial", Font.BOLD, 80);
         fontPlain = new Font("Arial", Font.PLAIN, 42);
+
+        music.loadAudioFiles();
+        music.setTrack(0);
+        music.play();
+        music.loop();
     }
 
     @Override
     public void onUnload() {
         IO.println("Unloading login screen...");
+        music.stop();
     }
 
     @Override
