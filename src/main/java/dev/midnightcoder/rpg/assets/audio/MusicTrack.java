@@ -1,9 +1,11 @@
 package dev.midnightcoder.rpg.assets.audio;
 
+import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.engine.audio.Audio;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
@@ -59,14 +61,13 @@ public class MusicTrack extends Audio {
     }
 
     private InputStream getTrackByName(String name) {
-        try {
-            var track = getClass().getResourceAsStream("/audio/track/%s.wav".formatted(name));
-            if (track == null)
-                throw new IllegalArgumentException("Track not found: " + name);
-            return track;
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Failed to load track: " + name, e);
-        }
+        return CacheReader.getInstance().getAudioDefinition(name)
+                .map(def -> (InputStream) new ByteArrayInputStream(def.getDecompressedData()))
+                .orElseGet(() -> {
+                    var track = getClass().getResourceAsStream("/audio/track/%s.wav".formatted(name));
+                    if (track == null)
+                        throw new IllegalArgumentException("Track not found in cache or resources: " + name);
+                    return track;
+                });
     }
 }
