@@ -6,6 +6,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.assets.audio.MusicTrack;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
@@ -28,6 +29,7 @@ public class GameScreen extends Scene {
     private final KeyboardInputManager input;
     private final AWTMouseInputHandler mouse;
     private final UIManager uiManager;
+    private final MusicTrack music;
 
     private GameMap currentMap;
     private Player player;
@@ -44,10 +46,16 @@ public class GameScreen extends Scene {
         this.input = input;
         this.mouse = mouse;
         this.startMode = startMode;
+        this.music = new MusicTrack();
     }
 
     @Override
     public void onLoad() {
+        music.loadAudioFiles();
+        music.setTrack(1);
+        music.play();
+        music.loop();
+
         if (startMode == GameStartMode.NEW_GAME)
             startNewGame();
         else if (startMode == GameStartMode.LOAD_GAME)
@@ -120,6 +128,7 @@ public class GameScreen extends Scene {
     @Override
     public void onUnload() {
         // TODO: Implement cleanup logic
+        music.stop();
     }
 
     private void startNewGame() {
