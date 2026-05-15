@@ -145,4 +145,12 @@ public class GameScreen extends Scene {
     public ContextMenu getContextMenu() {
         return contextMenu;
     }
+
+    public BottomHUD getBottomHUD() {
+        return bottomHUD;
+    }
+
+    public TopHUD getTopHUD() {
+        return topHUD;
+    }
 }
