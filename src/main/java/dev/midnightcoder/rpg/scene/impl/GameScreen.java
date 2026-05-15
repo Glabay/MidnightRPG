@@ -40,6 +40,7 @@ public class GameScreen extends Scene {
     private InventoryHUD inventoryHUD;
     private SkillsHUD skillsHUD;
     private ContextMenu contextMenu;
+    private AudioHUD audioHUD;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
