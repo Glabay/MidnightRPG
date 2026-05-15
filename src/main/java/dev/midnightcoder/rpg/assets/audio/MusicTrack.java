@@ -25,11 +25,12 @@ public class MusicTrack extends Audio {
         if (!sources.isEmpty())
             sources.clear();
 
-        var theme = getTrackByName("midnight-theme");
-        var tutorialBliss = getTrackByName("tutorial-bliss");
+        var audioDefs = CacheReader.getInstance().getCacheManager().getAudio();
 
-        sources.add(theme);
-        sources.add(tutorialBliss);
+        audioDefs.forEach(def -> {
+            var track = (InputStream) new ByteArrayInputStream(def.getDecompressedData());
+            sources.add(def.getId(), track);
+        });
     }
 
     @Override
@@ -57,6 +58,17 @@ public class MusicTrack extends Audio {
         }
         catch (Exception e) {
             throw new RuntimeException("Failed to load track: " + sources.get(index), e);
+        }
+    }
+
+    public void setTrack(String trackName) {
+        try {
+            var ais = AudioSystem.getAudioInputStream(getTrackByName(trackName));
+            clip = AudioSystem.getClip();
+            clip.open(ais);
+        }
+        catch (Exception e) {
+            throw new RuntimeException("Failed to load track: " + trackName, e);
         }
     }
 

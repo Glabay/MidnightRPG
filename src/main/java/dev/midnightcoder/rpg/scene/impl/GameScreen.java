@@ -123,7 +123,7 @@ public class GameScreen extends Scene {
 
     private void initializeAudioSystem() {
         music.loadAudioFiles();
-        music.setTrack(1);
+        music.setTrack("magnus-opus");
         music.play();
         music.loop();
     }
