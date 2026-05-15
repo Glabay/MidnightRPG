@@ -26,7 +26,7 @@ public class BottomHUD extends UIPanel {
         EQUIPMENT	(1, "equipTab", () -> IO.println("Equipment Tab pressed")),
         SKILL		(2, "skillTab", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
         QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
-        MUSIC		(4, "musicTab", () -> IO.println("Music Tab pressed.")),
+        MUSIC		(4, "musicTab", () -> MidnightRPG.getInstance().getGameScreen().getMusicHUD().display()),
         SETTINGS	(5, "optionsTab", () -> IO.println("Settings Tab pressed.")),
         SPELLBOOK	(6, "spellbookTab", () -> IO.println("Spellbook Tab pressed")),
         COMBAT		(7, "combatTab", () -> IO.println("Combat Tab pressed")),
