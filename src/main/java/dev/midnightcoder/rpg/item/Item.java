@@ -25,6 +25,14 @@ public class Item extends GameItem {
         this.quantity = quantity;
     }
 
+    public static Item of(int itemId) {
+        return of(itemId, 1);
+    }
+
+    public static Item of(int itemId, int quantity) {
+        return new Item(itemId, quantity);
+    }
+
     /**
      *
      * @param amount - Amount to add to the item stack
