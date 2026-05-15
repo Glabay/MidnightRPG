@@ -56,31 +56,12 @@ public class GameScreen extends Scene {
         music.play();
         music.loop();
 
+        loadHeadsUpDisplays();
+
         if (startMode == GameStartMode.NEW_GAME)
             startNewGame();
         else if (startMode == GameStartMode.LOAD_GAME)
             loadExistingGame();
-        // TODO: add multiple UI/HUD
-        //      - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
-        //      - Anything central | Equipment, bank/storage, settings
-        //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
-        //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
-        topHUD = new TopHUD(player);
-        bottomHUD = new BottomHUD(player, mouse);
-        inventoryHUD = new InventoryHUD(player);
-        skillsHUD = new SkillsHUD(player);
-        contextMenu = new ContextMenu(player);
-
-        uiManager.addPanel(topHUD);
-        uiManager.addPanel(bottomHUD);
-        uiManager.addPanel(inventoryHUD);
-        uiManager.addPanel(skillsHUD);
-        uiManager.addPanel(contextMenu);
-
-        inventoryHUD.addItem(new Item(ItemId.HEALTH_POTION, 1));
-        inventoryHUD.addItem(new Item(ItemId.STONE_HATCHET, 1));
-        inventoryHUD.addItem(new Item(ItemId.STONE_PICKAXE, 1));
-        inventoryHUD.addItem(new Item(ItemId.IRON_SWORD, 1));
     }
 
     @Override
@@ -131,12 +112,45 @@ public class GameScreen extends Scene {
         music.stop();
     }
 
+    private void loadHeadsUpDisplays() {
+        // TODO: add multiple UI/HUD
+        //      - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
+        //      - Anything central | Equipment, bank/storage, settings
+        //      - User Interactions | Inventory, mini-setting, spellbook, community, skill
+        //      - BottomBar | Chat/Dialogue window             |  Interactive tabs here  |
+
+        topHUD = new TopHUD(player);
+        bottomHUD = new BottomHUD(player, mouse);
+        inventoryHUD = new InventoryHUD(player);
+        skillsHUD = new SkillsHUD(player);
+        contextMenu = new ContextMenu(player);
+        this.audioHUD = new AudioHUD(player);
+
+        addHeadsUpDisplay();
+    }
+
+    private void addHeadsUpDisplay() {
+        uiManager.addPanel(topHUD);
+        uiManager.addPanel(bottomHUD);
+        uiManager.addPanel(inventoryHUD);
+        uiManager.addPanel(skillsHUD);
+        uiManager.addPanel(contextMenu);
+        uiManager.addPanel(audioHUD);
+    }
+
     private void startNewGame() {
         IO.println("Starting new game");
         // Generate the World
         currentMap = new TutorialIsland();
         player = new Player("Glabay", currentMap, input);
         MidnightRPG.getInstance().addEntity(player);
+
+        // provide a little starter pack
+        player.addItem(Item.of(ItemId.HEALTH_POTION));
+        player.addItem(Item.of(ItemId.STONE_HATCHET));
+        player.addItem(Item.of(ItemId.STONE_PICKAXE));
+        player.addItem(Item.of(ItemId.IRON_SWORD));
+        player.addItem(Item.of(ItemId.WOODEN_STAFF));
     }
 
     private void loadExistingGame() {
