@@ -70,7 +70,7 @@ public class GameScreen extends Scene {
         uiManager.addPanel(contextMenu);
 
         inventoryHUD.addItem(new Item(ItemId.HEALTH_POTION, 1));
-        inventoryHUD.addItem(new Item(ItemId.STONE_AXE, 1));
+        inventoryHUD.addItem(new Item(ItemId.STONE_HATCHET, 1));
         inventoryHUD.addItem(new Item(ItemId.STONE_PICKAXE, 1));
         inventoryHUD.addItem(new Item(ItemId.IRON_SWORD, 1));
     }
