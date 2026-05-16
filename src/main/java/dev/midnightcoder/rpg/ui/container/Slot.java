@@ -81,6 +81,7 @@ public class Slot extends Rectangle {
                             .getContextMenu()
                             .setPosition(new Vec2i(mouse.getX(), mouse.getY()))
                             .withTitle("Choose")
+                            .withSelectedEntity(getItem())
                             .withOptions(menuOpts.toArray(new String[0]));
 
                         contextMenu.init();

@@ -1,10 +1,12 @@
 package dev.midnightcoder.rpg.ui.interfaces;
 
+import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.container.ContextOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,7 @@ public class ContextMenu extends UIPanel {
     private Player player;
     private String[] menuOpts;
     private String title;
+    private Object selectedEntity;
 
     private int width = 75;
     private int height;
@@ -37,6 +40,15 @@ public class ContextMenu extends UIPanel {
         this.player = player;
         background = TextureFactory.createFromImageFile("/ui/blank_interface.png").image();
         menuFont = new Font("Verdana", Font.ITALIC, 17);
+    }
+
+    public ContextMenu withSelectedEntity(Object entity) {
+        this.selectedEntity = entity;
+        if (entity instanceof GameItem item) {
+            this.setSelectedItem(item);
+            this.selectedEntity = item;
+        }
+        return this;
     }
 
     public ContextMenu withOptions(String[] menuOpts) {
@@ -65,7 +77,7 @@ public class ContextMenu extends UIPanel {
                 if (menuOpts[i].isEmpty() || menuOpts[i].isBlank())
                     continue;
 
-                menuOptions.add(new ContextOption(i, width, new Vec2i(position.getX(), position.getY() + 50 + (26 * (i - 1))), menuOpts[i]));
+                menuOptions.add(new ContextOption((Item) selectedEntity, i, width, new Vec2i(position.getX(), position.getY() + 50 + (26 * (i - 1))), menuOpts[i]));
             }
         }
     }

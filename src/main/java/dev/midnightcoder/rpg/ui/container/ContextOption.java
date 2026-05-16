@@ -26,15 +26,17 @@ public class ContextOption extends Rectangle {
     private final String text;
     private final int width;
     private final int index;
+    private final Item selectedEntity;
 
     private boolean	inside = false;
     private boolean	ignorePressed = false;
 
-    public ContextOption(int index, int width, Vec2i position, String text) {
+    public ContextOption(Item selectedEntity, int index, int width, Vec2i position, String text) {
         this.position = position;
         this.text = text;
         this.width = width;
         this.index = index;
+        this.selectedEntity = selectedEntity;
         setBounds(position.getX(), position.getY(), width, 18);
         optionFont = new Font("Arial", Font.BOLD, 14);
     }
