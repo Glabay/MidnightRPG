@@ -117,8 +117,4 @@ public class ContextMenu extends UIPanel {
     public Vec2i getPosition() {
         return position;
     }
-
-    public Vec2i getSize() {
-        return size;
-    }
 }

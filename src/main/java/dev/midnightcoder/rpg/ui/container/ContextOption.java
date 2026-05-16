@@ -63,13 +63,6 @@ public class ContextOption extends Rectangle {
                 panel.setMousePressed(false);
             }
         }
-        else {
-            if (inside) {
-                panel.setSelectedItem(null);
-                panel.setMousePressed(false);
-            }
-            inside = false;
-        }
     }
 
     public void render(Renderer renderer) {
