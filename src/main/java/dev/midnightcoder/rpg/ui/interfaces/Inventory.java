@@ -53,16 +53,4 @@ public abstract class Inventory extends UIPanel  {
 
         return super.display();
     }
-
-    protected int getTextWidth(Renderer renderer, String text) {
-        var graphics = renderer.getGraphics2D();
-        var fontMetrics = graphics.getFontMetrics();
-        return fontMetrics.stringWidth(text);
-    }
-
-    protected int getTextCentered(Renderer renderer, String text) {
-        var textWidth = getTextWidth(renderer, text);
-
-        return position.getX() + (size.getWidth() - textWidth) / 2;
-    }
 }
