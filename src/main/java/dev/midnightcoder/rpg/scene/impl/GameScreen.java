@@ -8,6 +8,7 @@ import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.assets.audio.MusicTrack;
+import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
@@ -31,6 +32,7 @@ public class GameScreen extends Scene {
     private final AWTMouseInputHandler mouse;
     private final UIManager uiManager;
     private final MusicTrack music;
+    private final GroundItemManager groundItemManager;
 
     private GameMap currentMap;
     private Player player;
@@ -49,6 +51,7 @@ public class GameScreen extends Scene {
         this.mouse = mouse;
         this.startMode = startMode;
         this.music = new MusicTrack();
+        this.groundItemManager = GroundItemManager.getInstance();
     }
 
     @Override
@@ -84,6 +87,10 @@ public class GameScreen extends Scene {
                 .stream().map(e -> (NPC) e)
                 .forEach(entity -> entity.update(delta));
 
+        // Ground items
+        groundItemManager.update(delta);
+
+        // UI
         uiManager.update();
     }
 
@@ -94,6 +101,9 @@ public class GameScreen extends Scene {
             currentMap.renderTileMap(renderer);
 
         // Object map
+
+        // Ground items
+        groundItemManager.render(renderer);
 
         // Entities - Player
         if (Objects.nonNull(player))
@@ -208,5 +218,9 @@ public class GameScreen extends Scene {
 
     public void adjustVolume(float v) {
         music.adjustVolume(v);
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }
