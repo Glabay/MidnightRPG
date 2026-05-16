@@ -7,15 +7,16 @@ package dev.midnightcoder.rpg.item;
  * @since 2026-05-03
  */
 public enum EquipmentSlot {
-    HEAD,
-    CHEST,
-    LEGS,
-    WEAPON,
-    SHIELD,
     CAPE,
+    HEAD,
     AMULET,
-    RING,
+    WEAPON,
+    CHEST,
+    SHIELD,
     HANDS,
+    LEGS,
+    RING,
     FEET,
-    QUIVER
+    QUIVER,
+    POCKET
 }

@@ -44,6 +44,7 @@ public class GameScreen extends Scene {
     private SkillsHUD skillsHUD;
     private ContextMenu contextMenu;
     private AudioHUD audioHUD;
+    private EquipmentHUD equipmentHUD;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
@@ -156,6 +157,7 @@ public class GameScreen extends Scene {
 
         // - Anything central | Equipment, bank/storage, settings
         contextMenu = new ContextMenu(player);
+        equipmentHUD = new EquipmentHUD(player);
 
         // - User Interactions | Inventory, combat, spellbook, settings, music, quest skill, equipment
         // - BottomBar | Chat/Dialogue window             | [I][C][S][S][M][Q][S][E]] |
@@ -174,6 +176,7 @@ public class GameScreen extends Scene {
         uiManager.addPanel(skillsHUD);
         uiManager.addPanel(contextMenu);
         uiManager.addPanel(audioHUD);
+        uiManager.addPanel(equipmentHUD);
     }
 
     private void startNewGame() {
@@ -194,6 +197,10 @@ public class GameScreen extends Scene {
 
     public SkillsHUD getSkillsHUD() {
         return skillsHUD;
+    }
+
+    public EquipmentHUD getEquipmentHUD() {
+        return equipmentHUD;
     }
 
     public ContextMenu getContextMenu() {

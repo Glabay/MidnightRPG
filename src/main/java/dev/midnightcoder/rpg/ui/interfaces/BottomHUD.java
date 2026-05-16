@@ -23,7 +23,7 @@ import java.io.IOException;
  */
 public class BottomHUD extends UIPanel {
     public enum Tabs {
-        EQUIPMENT	(1, "equipTab", () -> IO.println("Equipment Tab pressed")),
+        EQUIPMENT	(1, "equipTab", () -> MidnightRPG.getInstance().getGameScreen().getEquipmentHUD().display()),
         SKILL		(2, "skillTab", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
         QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
         MUSIC		(4, "musicTab", () -> MidnightRPG.getInstance().getGameScreen().getMusicHUD().display()),
