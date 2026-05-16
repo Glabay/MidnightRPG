@@ -99,6 +99,40 @@ public class Item extends GameItem {
         }
     }
 
+    public void handleMenuOption(String option) {
+        var owner = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        switch (option.toLowerCase()) {
+            case "equip": {
+                log.info("Equipping item: {}", getDefinition().getName());
+                break;
+            }
+
+            case "drink": {
+                log.info("Drinking item: {}", getDefinition().getName());
+                break;
+            }
+
+            case "drop": {
+                var spawnPoint = new Vec2i(owner.getX() >> 5, owner.getY() >> 5);
+                var groundItem = GroundItem.of(this)
+                    .withOwner(owner)
+                    .onMap(owner.getAvatar().getCurrentMap())
+                    .at(spawnPoint);
+
+                log.info("Player is dropping item: {}", groundItem);
+
+                MidnightRPG.getInstance().getGameScreen().getInventoryHUD()
+                    .removeItem(getDefinition().getId(), getQuantity());
+
+                break;
+            }
+
+            default:
+                log.warn("Unknown default option: {}", option);
+                break;
+        }
+    }
+
 
     @Override
     public void update(double delta) {

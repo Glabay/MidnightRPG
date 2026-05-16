@@ -1,7 +1,6 @@
 package dev.midnightcoder.rpg.ui.container;
 
 import dev.midnightcoder.engine.renderer.Renderer;
-import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -52,12 +50,8 @@ public class ContextOption extends Rectangle {
                 panel.setMousePressed(true);
             }
             else if (!leftMouseButtonDown && panel.isMousePressed()) {
-                if (panel instanceof ContextMenu menu) {
-                    if (text.equalsIgnoreCase("drink")) {
-                        // do some logic to drink
-                        logger.info("Player is drinking item: {}", index);
-                    }
-
+                if (panel instanceof ContextMenu) {
+                    selectedEntity.handleMenuOption(text);
                 }
                 MidnightRPG.getInstance().getGameScreen().getContextMenu().display();
                 panel.setMousePressed(false);
