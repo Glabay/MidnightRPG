@@ -24,8 +24,8 @@ public class EquipmentManager {
     public int getMagicBonuses() {
         int result = 0;
 
-        for (int i = 0; i < equippedItems.length; i++)
-            result += (equippedItems[i] == null) ? 0 : equippedItems[i].getMagicBuff();
+        for (Item equippedItem : equippedItems)
+            result += (equippedItem == null) ? 0 : equippedItem.getMagicBuff();
 
         return result;
     }
@@ -33,8 +33,8 @@ public class EquipmentManager {
     public int getMeleeBonuses() {
         int result = 0;
 
-        for (int i = 0; i < equippedItems.length; i++)
-            result += (equippedItems[i] == null) ? 0 : equippedItems[i].getAtkBuff();
+        for (Item equippedItem : equippedItems)
+            result += (equippedItem == null) ? 0 : equippedItem.getAtkBuff();
 
         return result;
     }
@@ -42,8 +42,8 @@ public class EquipmentManager {
     public int getRangeBonuses() {
         int result = 0;
 
-        for (int i = 0; i < equippedItems.length; i++)
-            result += (equippedItems[i] == null) ? 0 : equippedItems[i].getRangeBuff();
+        for (Item equippedItem : equippedItems)
+            result += (equippedItem == null) ? 0 : equippedItem.getRangeBuff();
 
         return result;
     }
