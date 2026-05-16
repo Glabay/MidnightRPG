@@ -45,6 +45,7 @@ public class GameScreen extends Scene {
     private ContextMenu contextMenu;
     private AudioHUD audioHUD;
     private EquipmentHUD equipmentHUD;
+    private boolean mousePressed;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
         this.uiManager = uiManager;
@@ -93,6 +94,86 @@ public class GameScreen extends Scene {
 
         // UI
         uiManager.update();
+
+        handleEntityClicks();
+    }
+
+    private void handleEntityClicks() {
+        var mouseB = mouse.getButton();
+        if (mouseB == java.awt.event.MouseEvent.NOBUTTON) {
+            mousePressed = false;
+            return;
+        }
+
+        if (mousePressed) return; // Wait for release
+
+        // Check if clicking on UI
+        for (UIPanel panel : uiManager.getPanels()) {
+            if (panel.isVisible()) {
+                int mx = mouse.getX();
+                int my = mouse.getY();
+                int px = panel.position.getX();
+                int py = panel.position.getY();
+                int pw = panel.getSize().getX();
+                int ph = panel.getSize().getY();
+                if (mx >= px && mx <= px + pw && my >= py && my <= py + ph) {
+                    return; // Clicking on UI, don't check entities
+                }
+            }
+        }
+
+        // Convert mouse screen coordinates to world coordinates
+        int worldX = (int) (mouse.getX() + currentMap.getCamera().getX());
+        int worldY = (int) (mouse.getY() + currentMap.getCamera().getY());
+
+        // Check NPCs
+        for (Object e : currentMap.getEntities()) {
+            NPC npc = (NPC) e;
+            if (npc.contains(worldX, worldY)) {
+                onEntityClicked(npc, mouseB);
+                mousePressed = true;
+                return;
+            }
+        }
+
+        // Check Ground Items
+        for (dev.midnightcoder.rpg.entity.ground.GroundItem item : groundItemManager.getGroundItems()) {
+            if (item.contains(worldX, worldY)) {
+                onEntityClicked(item, mouseB);
+                mousePressed = true;
+                return;
+            }
+        }
+
+        // Check Player
+        if (player.contains(worldX, worldY)) {
+            onEntityClicked(player, mouseB);
+            mousePressed = true;
+            return;
+        }
+    }
+
+    private void onEntityClicked(dev.midnightcoder.rpg.entity.Entity entity, int button) {
+        if (button == java.awt.event.MouseEvent.BUTTON3) { // Right click
+            var menuOpts = new java.util.ArrayList<String>();
+            if (entity instanceof NPC) {
+                menuOpts.add("Examine");
+            } else if (entity instanceof dev.midnightcoder.rpg.entity.ground.GroundItem) {
+                menuOpts.add("Take");
+                menuOpts.add("Examine");
+            } else if (entity instanceof Player) {
+                menuOpts.add("Stats");
+            }
+
+            contextMenu.setPosition(new dev.midnightcoder.engine.util.Vec2i(mouse.getX(), mouse.getY()))
+                .withTitle("Choose Option")
+                .withSelectedEntity(entity)
+                .withOptions(menuOpts.toArray(new String[0]))
+                .init();
+            contextMenu.display();
+        } else if (button == java.awt.event.MouseEvent.BUTTON1) { // Left click
+            player.setSelectedEntity(entity);
+        }
     }
 
     @Override

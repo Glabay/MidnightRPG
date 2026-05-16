@@ -40,6 +40,8 @@ public class GroundItem extends Entity {
     public GroundItem(Item item) {
         this.item = item;
         this.TTL = DEFAULT_TTL_SECONDS;
+        this.width = 32;
+        this.height = 32;
     }
 
     public static GroundItem of(Item item) {
@@ -81,6 +83,20 @@ public class GroundItem extends Entity {
 
     public boolean isExpired() {
         return isExpired;
+    }
+
+    @Override
+    public void handleMenuOption(String option) {
+        var player = dev.midnightcoder.rpg.MidnightRPG.getInstance().getGameScreen().getPlayer();
+        switch (option.toLowerCase()) {
+            case "take" -> {
+                player.addItem(item);
+                isExpired = true; // Mark for removal
+            }
+            case "examine" -> {
+                System.out.println("It's a " + item.getDefinition().getName() + ".");
+            }
+        }
     }
 
     @Override

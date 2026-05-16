@@ -166,4 +166,14 @@ public class Player extends Mob {
         return playerAvatar.getY();
     }
 
+    @Override
+    public int getWidth() {
+        return playerAvatar.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return playerAvatar.getHeight();
+    }
+
 }

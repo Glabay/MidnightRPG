@@ -31,4 +31,8 @@ public class UIManager {
             panel.render(renderer);
         }
     }
+
+    public List<UIPanel> getPanels() {
+        return panels;
+    }
 }

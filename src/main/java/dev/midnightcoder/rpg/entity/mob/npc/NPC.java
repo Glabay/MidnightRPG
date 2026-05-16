@@ -91,4 +91,31 @@ public class NPC extends Mob {
         return id;
     }
 
+    @Override
+    public int getX() {
+        return avatar.getX();
+    }
+
+    @Override
+    public int getY() {
+        return avatar.getY();
+    }
+
+    @Override
+    public int getWidth() {
+        return avatar.getWidth();
+    }
+
+    @Override
+    public int getHeight() {
+        return avatar.getHeight();
+    }
+
+    @Override
+    public void handleMenuOption(String option) {
+        if (option.equalsIgnoreCase("examine")) {
+            System.out.println("NPC " + id + ": A mysterious traveler.");
+        }
+    }
+
 }

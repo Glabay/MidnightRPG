@@ -4,8 +4,8 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.interfaces.ContextMenu;
+import dev.midnightcoder.rpg.util.MenuActionable;
 import org.slf4j.Logger;
 
 import java.awt.*;
@@ -24,12 +24,12 @@ public class ContextOption extends Rectangle {
     private final String text;
     private final int width;
     private final int index;
-    private final Item selectedEntity;
+    private final MenuActionable selectedEntity;
 
     private boolean	inside = false;
     private boolean	ignorePressed = false;
 
-    public ContextOption(Item selectedEntity, int index, int width, Vec2i position, String text) {
+    public ContextOption(MenuActionable selectedEntity, int index, int width, Vec2i position, String text) {
         this.position = position;
         this.text = text;
         this.width = width;

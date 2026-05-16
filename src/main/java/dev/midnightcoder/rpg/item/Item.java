@@ -9,6 +9,7 @@ import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.ui.container.Slot;
 import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
+import dev.midnightcoder.rpg.util.MenuActionable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @social Discord: Glabay
  * @since 2026-05-03
  */
-public class Item extends GameItem {
+public class Item extends GameItem implements MenuActionable {
     private static final Logger log = LoggerFactory.getLogger(Item.class);
     private final ItemDefinition definition;
     private int quantity;
