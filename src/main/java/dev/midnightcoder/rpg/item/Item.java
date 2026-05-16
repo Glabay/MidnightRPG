@@ -8,6 +8,7 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.ui.container.Slot;
+import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -87,6 +88,11 @@ public class Item extends GameItem {
         switch (option.toLowerCase()) {
             case "equip": {
                 log.info("Equipping item: {}", getDefinition().getName());
+                var equipSlot = EquipmentHUD.equipmentSlots.get(getEquipSlot());
+                if (equipSlot.hasAnItem())
+                    switchEquipment(slot, equipSlot);
+                else
+                    equipItem(this, slot);
                 break;
             }
 
@@ -135,8 +141,42 @@ public class Item extends GameItem {
         }
     }
 
+    private void equipItem(Item item, Slot slot) {
+        var equipHud = MidnightRPG.getInstance().getGameScreen().getEquipmentHUD();
+
+        slot.setItem(null);
+        equipHud.addItemToSlot(item, item.getEquipSlot());
+    }
+
+    private int getEquipSlot() {
+        return definition.getEquipSlot();
+    }
+
+    private void switchEquipment(Slot backpackSlot, Slot equipSlot) {
+        var toInv = equipSlot.getItem();
+        var toEquip = backpackSlot.getItem();
+
+        backpackSlot.setItem(toInv);
+        equipSlot.setItem(toEquip);
+    }
 
     @Override
     public void update(double delta) {
+    }
+
+    public int getDefBuff() {
+        return 0;
+    }
+
+    public int getMagicBuff() {
+        return definition.getOffMagic();
+    }
+
+    public int getAtkBuff() {
+        return definition.getOffMelee();
+    }
+
+    public int getRangeBuff() {
+        return definition.getOffRanged();
     }
 }
