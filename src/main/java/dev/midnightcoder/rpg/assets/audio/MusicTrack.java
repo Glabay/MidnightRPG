@@ -82,4 +82,13 @@ public class MusicTrack extends Audio {
                     return track;
                 });
     }
+
+    public float getVolume() {
+        return volume;
+    }
+
+    public void adjustVolume(float v) {
+        var volume = Math.clamp(getVolume() + v, 0.0f, 1.0f);
+        setVolume(volume);
+    }
 }

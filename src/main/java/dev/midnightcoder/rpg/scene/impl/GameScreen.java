@@ -128,6 +128,18 @@ public class GameScreen extends Scene {
         music.loop();
     }
 
+    public void setMusicTrack(String trackName) {
+        music.stop();
+        music.setTrack(trackName);
+        music.play();
+        music.loop();
+    }
+
+    public String getMusicVolume() {
+        var vol = music.getVolume();
+        return "%d%%".formatted((int) (vol * 100));
+    }
+
     private void loadHeadsUpDisplays() {
         // - TopBar  | Health: [===99/99===]          | CENTER HUD |              |
         topHUD = new TopHUD(player);
@@ -188,5 +200,13 @@ public class GameScreen extends Scene {
 
     public AudioHUD getMusicHUD() {
         return audioHUD;
+    }
+
+    public void toggleMusicMute() {
+        music.mute();
+    }
+
+    public void adjustVolume(float v) {
+        music.adjustVolume(v);
     }
 }
