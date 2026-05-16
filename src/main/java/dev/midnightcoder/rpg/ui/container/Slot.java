@@ -159,7 +159,12 @@ public class Slot extends Rectangle {
 
     public void setItem(Item item) {
         this.item = item;
-        this.icon = item.getIcon().image();
+        if (item == null) {
+            this.icon = blankSlot;
+        }
+        else {
+            this.icon = item.getIcon().image();
+        }
     }
 
     public void clear() {
