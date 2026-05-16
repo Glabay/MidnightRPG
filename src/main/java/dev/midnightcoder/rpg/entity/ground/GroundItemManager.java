@@ -38,9 +38,13 @@ public class GroundItemManager {
 
     private void removeExpiredGroundItems() {
         var totalRemoved = 0;
-        for (var groundItem : groundItems) {
+        var iterator = groundItems.iterator();
+
+        while (iterator.hasNext()) {
+            var groundItem = iterator.next();
+
             if (groundItem.isExpired()) {
-                groundItems.remove(groundItem);
+                iterator.remove();
                 totalRemoved++;
             }
         }

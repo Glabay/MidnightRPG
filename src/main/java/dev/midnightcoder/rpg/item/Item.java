@@ -7,6 +7,7 @@ import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.ground.GroundItem;
+import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
 import dev.midnightcoder.rpg.ui.container.Slot;
 import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
 import dev.midnightcoder.rpg.util.MenuActionable;
@@ -136,6 +137,7 @@ public class Item extends GameItem implements MenuActionable {
                     .at(spawnPoint);
 
                 log.info("Player is dropping item: {}", groundItem);
+                GroundItemManager.getInstance().addGroundItem(groundItem);
 
                 MidnightRPG.getInstance().getGameScreen().getInventoryHUD()
                     .removeItem(getDefinition().getId(), getQuantity());

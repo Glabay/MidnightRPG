@@ -3,6 +3,7 @@ package dev.midnightcoder.rpg.entity.ground;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
@@ -14,7 +15,7 @@ import dev.midnightcoder.rpg.item.Item;
  * @since 2026-05-16
  */
 public class GroundItem extends Entity {
-    private static final int DEFAULT_TTL_SECONDS = 120;
+    private static final int DEFAULT_TTL_SECONDS = 120 * 60;
 
     private final Item item;
 
@@ -24,18 +25,6 @@ public class GroundItem extends Entity {
 
     private int TTL;
     private boolean isExpired = false;
-
-    public GroundItem(Item item, Vec2i position, Player owner, GameMap map) {
-        this(item, position, owner, map, DEFAULT_TTL_SECONDS);
-    }
-
-    public GroundItem(Item item, Vec2i position, Player owner, GameMap map, int ttl) {
-        this.position = position;
-        this.item = item;
-        this.owner = owner;
-        this.map = map;
-        this.TTL = ttl;
-    }
 
     public GroundItem(Item item) {
         this.item = item;
@@ -60,25 +49,26 @@ public class GroundItem extends Entity {
 
     public GroundItem at(Vec2i position) {
         this.position = position;
+        this.worldX = position.getX() * Tile.TILE_SIZE;
+        this.worldY = position.getY() * Tile.TILE_SIZE;
         return this;
     }
-
 
     @Override
     public void update(double delta) {
         if (isExpired)
             return;
-
-        if (TTL-- <= 0) {
+        if (TTL-- <= 0)
             isExpired = true;
-            return;
-        }
-        // TODO: MouseListener, clicking on an item
     }
 
     @Override
     public void render(Renderer renderer) {
-
+        if (!isExpired && map != null) {
+            var screenX = (int) (worldX - map.getCamera().getX());
+            var screenY = (int) (worldY - map.getCamera().getY());
+            renderer.renderImage(item.getIcon().image(), screenX, screenY);
+        }
     }
 
     public boolean isExpired() {
