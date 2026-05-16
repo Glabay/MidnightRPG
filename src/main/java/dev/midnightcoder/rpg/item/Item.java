@@ -4,6 +4,9 @@ import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.cache.model.ItemDefinition;
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
+import dev.midnightcoder.engine.util.Vec2i;
+import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.ui.container.Slot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +56,10 @@ public class Item extends GameItem {
     }
 
     public int decrease(int amount) {
-        if (amount > quantity) {
+        if (amount >= quantity) {
             amount = quantity;
         }
-        quantity -= amount;
-        return amount;
+        return quantity -= amount;
     }
 
     public ItemDefinition getDefinition() {
