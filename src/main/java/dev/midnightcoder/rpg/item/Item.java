@@ -90,9 +90,8 @@ public class Item extends GameItem {
                 log.info("Equipping item: {}", getDefinition().getName());
                 var equipSlot = EquipmentHUD.equipmentSlots.get(getEquipSlot());
                 if (equipSlot.hasAnItem())
-                    switchEquipment(slot, equipSlot);
-                else
-                    equipItem(this, slot);
+                    removeItem(equipSlot);
+                equipItem(this, slot);
                 break;
             }
 
@@ -105,6 +104,14 @@ public class Item extends GameItem {
                 log.warn("Unknown default option: {}", option);
                 break;
         }
+    }
+
+    private void removeItem(Slot equipSlot) {
+        var equipped = equipSlot.getItem();
+        var backpack = MidnightRPG.getInstance().getGameScreen().getInventoryHUD();
+
+        equipSlot.setItem(null);
+        backpack.addItem(equipped);
     }
 
     public void handleMenuOption(String option) {
@@ -150,14 +157,6 @@ public class Item extends GameItem {
 
     private int getEquipSlot() {
         return definition.getEquipSlot();
-    }
-
-    private void switchEquipment(Slot backpackSlot, Slot equipSlot) {
-        var toInv = equipSlot.getItem();
-        var toEquip = backpackSlot.getItem();
-
-        backpackSlot.setItem(toInv);
-        equipSlot.setItem(toEquip);
     }
 
     @Override
