@@ -7,6 +7,8 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 
 import dev.midnightcoder.rpg.entity.Entity;
+import dev.midnightcoder.rpg.entity.ground.GroundItem;
+import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 import java.awt.*;
@@ -68,12 +70,21 @@ public class TopHUD extends UIPanel {
 
                 if (player.getSelectedEntity() != null) {
                     if (entityWithinDist(player.getSelectedEntity())) {
-//                        if (player.getSelectedEntity() instanceof NPC) {
-//                            NPC target = (NPC) player.getSelectedEntity();
-//                            mobInfo.setColor(0xFF13FF);
-//                            mobInfo.updateText(player.getSelectedEntity().getName());
-//                            mobInfo2.updateText("Level - " + (int) target.getCombatLevel());
-//                        }
+                        if (player.getSelectedEntity() instanceof NPC target) {
+                            mobInfo.setColor(0xFF13FF);
+                            mobInfo.updateText(((NPC) player.getSelectedEntity()).getDefinition().getName());
+                            mobInfo2.updateText("Level - " + target.getDefinition().getCombatLevel());
+                        }
+                        if (player.getSelectedEntity() instanceof GroundItem target) {
+                            mobInfo.setColor(0xFF13FF);
+                            mobInfo.updateText(target.getItem().getDefinition().getName());
+                            mobInfo2.updateText(target.getItem().getDefinition().getDescription());
+                        }
+                        if (player.getSelectedEntity() instanceof Player target) {
+                            mobInfo.setColor(0xFF13FF);
+                            mobInfo.updateText(target.getProfile().getUsername());
+                            mobInfo2.updateText("Health: " + target.getCombatStats().getCurrentHealth());
+                        }
                     } else player.setSelectedEntity(null);
                 } else clearMobInfo();
             }
