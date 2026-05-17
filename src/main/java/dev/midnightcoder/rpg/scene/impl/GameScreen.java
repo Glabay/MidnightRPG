@@ -155,7 +155,6 @@ public class GameScreen extends Scene {
         if (player.contains(worldX, worldY)) {
             onEntityClicked(player, mouseB);
             mousePressed = true;
-            return;
         }
     }
 
@@ -169,7 +168,7 @@ public class GameScreen extends Scene {
                 menuOpts.addAll(Arrays.stream(groundItem.getItem().getDefinition().getGroundActions()).toList());
             }
             else if (entity instanceof Player player) {
-                // TODO
+                // TODO: interactions like Trade, Attack, etc.
             }
 
             menuOpts.removeIf(s -> s == null || s.isBlank());
@@ -270,7 +269,6 @@ public class GameScreen extends Scene {
     }
 
     private void startNewGame() {
-        IO.println("Starting new game");
         // Generate the World
         currentMap = new TutorialIsland();
         player = new Player("Glabay", currentMap, input);
