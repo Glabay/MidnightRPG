@@ -5,9 +5,12 @@ import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.scene.Scene;
+import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.assets.audio.MusicTrack;
+import dev.midnightcoder.rpg.entity.Entity;
+import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
@@ -18,6 +21,9 @@ import dev.midnightcoder.rpg.ui.interfaces.*;
 import dev.midnightcoder.rpg.util.ItemId;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -153,25 +159,28 @@ public class GameScreen extends Scene {
         }
     }
 
-    private void onEntityClicked(dev.midnightcoder.rpg.entity.Entity entity, int button) {
-        if (button == java.awt.event.MouseEvent.BUTTON3) { // Right click
-            var menuOpts = new java.util.ArrayList<String>();
-            if (entity instanceof NPC) {
-                menuOpts.add("Examine");
-            } else if (entity instanceof dev.midnightcoder.rpg.entity.ground.GroundItem) {
-                menuOpts.add("Take");
-                menuOpts.add("Examine");
-            } else if (entity instanceof Player) {
-                menuOpts.add("Stats");
+    private void onEntityClicked(Entity entity, int button) {
+        if (button == MouseEvent.BUTTON3) { // Right click
+            var menuOpts = new ArrayList<String>();
+            if (entity instanceof NPC npc) {
+                menuOpts.addAll(Arrays.stream(npc.getDefinition().getActions()).toList());
+            }
+            else if (entity instanceof GroundItem groundItem) {
+                menuOpts.addAll(Arrays.stream(groundItem.getItem().getDefinition().getGroundActions()).toList());
+            }
+            else if (entity instanceof Player player) {
+                // TODO
             }
 
-            contextMenu.setPosition(new dev.midnightcoder.engine.util.Vec2i(mouse.getX(), mouse.getY()))
+            menuOpts.removeIf(s -> s == null || s.isBlank());
+
+            contextMenu.setPosition(new Vec2i(mouse.getX(), mouse.getY()))
                 .withTitle("Choose Option")
                 .withSelectedEntity(entity)
                 .withOptions(menuOpts.toArray(new String[0]))
                 .init();
             contextMenu.display();
-        } else if (button == java.awt.event.MouseEvent.BUTTON1) { // Left click
+        } else if (button == MouseEvent.BUTTON1) { // Left click
             player.setSelectedEntity(entity);
         }
     }

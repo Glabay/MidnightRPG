@@ -67,7 +67,7 @@ public class ContextMenu extends UIPanel {
 
     public void init() {
         width = Math.max((String.valueOf(title).length() * 12), 75);
-        height = menuOpts.length * 32;
+        height = Math.max(80, menuOpts.length * 32);
 
         if (!menuOptions.isEmpty()) menuOptions.clear();
 
