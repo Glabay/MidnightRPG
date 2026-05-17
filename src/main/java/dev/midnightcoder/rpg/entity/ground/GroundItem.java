@@ -4,6 +4,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
@@ -81,16 +82,30 @@ public class GroundItem extends Entity {
 
     @Override
     public void handleMenuOption(String option) {
-        var player = dev.midnightcoder.rpg.MidnightRPG.getInstance().getGameScreen().getPlayer();
+        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
         switch (option.toLowerCase()) {
             case "pick-up", "take" -> {
+                // if the user is too far, send a dialogue message
+                if (!entityWithinDist(this)) {
+                    // TODO: open dialogue
+                    return;
+                }
                 player.addItem(item);
-                isExpired = true; // Mark for removal
+                isExpired = true;
             }
             case "examine" -> {
                 IO.println(item.getItemDescription());
             }
         }
+    }
+
+    private boolean entityWithinDist(Entity entity) {
+        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        var dist = Vec2i.getDistance(
+            new Vec2i(player.getAvatar().getX(), player.getAvatar().getY()),
+            new Vec2i(entity.getX(), entity.getY())
+        );
+        return dist <= (2 << 5);
     }
 
     @Override
