@@ -313,7 +313,8 @@ public class GameScreen extends Scene {
 
     public void adjustVolume(float v) {
         music.adjustVolume(v);
-        player.getProfile().setMasterVolume(v);
+        if (player != null)
+            player.getProfile().setMasterVolume(v);
     }
 
     public Player getPlayer() {
