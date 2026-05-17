@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.npc;
 
+import dev.midnightcoder.cache.model.NPCDefinition;
 import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.system.Movement;
@@ -23,6 +24,7 @@ public class NPC extends Mob {
     private final NpcMovement movement;
     private final GameMap currentMap;
     private final Vec2i spawnPosition;
+    private final NPCDefinition definition;
     private final List<Behavior> behaviors = new ArrayList<>();
     private final int id;
 
@@ -34,6 +36,7 @@ public class NPC extends Mob {
         this.spawnPosition = position;
         this.avatar = new NpcAvatar(spawnPosition, movement, currentMap);
         this.currentMap = currentMap;
+        this.definition = NpcManager.getInstance().getDefinition(id);
     }
 
     @Override
@@ -73,6 +76,10 @@ public class NPC extends Mob {
 
     public GameMap getCurrentMap() {
         return currentMap;
+    }
+
+    public NPCDefinition getDefinition() {
+        return definition;
     }
 
     public NpcAvatar getAvatar() {
