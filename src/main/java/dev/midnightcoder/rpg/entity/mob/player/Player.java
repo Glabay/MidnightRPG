@@ -175,6 +175,10 @@ public class Player extends Mob {
         return playerAvatar.getY();
     }
 
+    public Vec2i getPosition() {
+        return new Vec2i(playerAvatar.getX(), playerAvatar.getY());
+    }
+
     @Override
     public int getWidth() {
         return playerAvatar.getWidth();
