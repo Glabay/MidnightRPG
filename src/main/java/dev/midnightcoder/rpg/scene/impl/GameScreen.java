@@ -249,7 +249,7 @@ public class GameScreen extends Scene {
         // - Anything central | Equipment, bank/storage, settings
         contextMenu = new ContextMenu(player);
         equipmentHUD = new EquipmentHUD(player);
-        dialogueInterface = new DialogueInterface(player);
+        dialogueInterface = new DialogueInterface();
 
         // - User Interactions | Inventory, combat, spellbook, settings, music, quest skill, equipment
         // - BottomBar | Chat/Dialogue window             | [I][C][S][S][M][Q][S][E]] |

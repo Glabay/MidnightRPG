@@ -145,6 +145,13 @@ public class Item extends GameItem implements MenuActionable {
                 break;
             }
 
+            case "examine": {
+                MidnightRPG.getInstance()
+                    .getGameScreen().getDialogueInterface()
+                    .sendInfoInter(getDefinition().getName(), getDefinition().getDescription(), "This is an example of a second line ", "This is an example of the third line");
+                break;
+            }
+
             default:
                 log.warn("Unknown default option: {}", option);
                 break;
