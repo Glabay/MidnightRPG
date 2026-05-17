@@ -35,17 +35,15 @@ public class Player extends Mob {
     private final Backpack backpack;
     private final Equipment equipment;
     private final CombatStats combatStats;
-    private final Vec2i startingPosition;
 
     private Entity selectedEntity;
     private Inventory currentInventoryView;
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
-        startingPosition = new Vec2i(37 << 5, 50 << 5);
 
         playerMovement = new PlayerMovement(currentMap.getTileMap());
-        playerAvatar = new PlayerAvatar(startingPosition, currentMap, this.input, playerMovement);
+        playerAvatar = new PlayerAvatar(new Vec2i(37 << 5, 50 << 5), currentMap, this.input, playerMovement);
         profile = new PlayerProfile(username);
         skillSet = new SkillSet(this);
         backpack = new Backpack();
@@ -56,6 +54,7 @@ public class Player extends Mob {
         loadDefaults();
 
         // load Saved details
+        loadPlayerSettings();
     }
 
     @Override
@@ -92,6 +91,16 @@ public class Player extends Mob {
         playerAvatar.setHitboxDimension(26, 27);
         // Assign some HP to the player
         skillSet.getSkill(SkillType.HITPOINTS).addExp(900);
+    }
+
+    private void loadPlayerSettings() {
+        // update their position on this map
+        // set the volume to the last value the player set it to
+        MidnightRPG.getInstance().getGameScreen().adjustVolume(profile.getMasterVolume());
+        // load SkillSet
+        // load Backpack
+        // load Equipment
+        // load CombatStats
     }
 
     public int getMaxHealth() {
