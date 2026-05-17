@@ -6,6 +6,7 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
 
@@ -120,8 +121,25 @@ public class NPC extends Mob {
 
     @Override
     public void handleMenuOption(String option) {
-        if (option.equalsIgnoreCase("examine")) {
-            System.out.println("NPC " + id + ": A mysterious traveler.");
+        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        switch (option.toLowerCase()) {
+            case "talk-to" -> {
+                // if the user is too far, send a dialogue message
+                if (!entityWithinDist(this, 2)) {
+                    MidnightRPG.getInstance()
+                        .getGameScreen()
+                        .getDialogueInterface()
+                        .sendInfoInter("Too far away", "You are too far away to interact with this.");
+                    return;
+                }
+                // TODO: Load this NPC's dialogue
+
+            }
+            case "examine" ->
+                MidnightRPG.getInstance()
+                    .getGameScreen()
+                    .getDialogueInterface()
+                    .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
         }
     }
 

@@ -51,6 +51,8 @@ public class GameScreen extends Scene {
     private ContextMenu contextMenu;
     private AudioHUD audioHUD;
     private EquipmentHUD equipmentHUD;
+    private DialogueInterface dialogueInterface;
+
     private boolean mousePressed;
 
     public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
@@ -133,7 +135,7 @@ public class GameScreen extends Scene {
         int worldY = (int) (mouse.getY() + currentMap.getCamera().getY());
 
         // Check NPCs
-        for (Object e : currentMap.getEntities()) {
+        for (var e : currentMap.getEntities()) {
             NPC npc = (NPC) e;
             if (npc.contains(worldX, worldY)) {
                 onEntityClicked(npc, mouseB);
@@ -143,7 +145,7 @@ public class GameScreen extends Scene {
         }
 
         // Check Ground Items
-        for (dev.midnightcoder.rpg.entity.ground.GroundItem item : groundItemManager.getGroundItems()) {
+        for (var item : groundItemManager.getGroundItems()) {
             if (item.contains(worldX, worldY)) {
                 onEntityClicked(item, mouseB);
                 mousePressed = true;
@@ -247,13 +249,14 @@ public class GameScreen extends Scene {
         // - Anything central | Equipment, bank/storage, settings
         contextMenu = new ContextMenu(player);
         equipmentHUD = new EquipmentHUD(player);
+        dialogueInterface = new DialogueInterface(player);
 
         // - User Interactions | Inventory, combat, spellbook, settings, music, quest skill, equipment
         // - BottomBar | Chat/Dialogue window             | [I][C][S][S][M][Q][S][E]] |
         bottomHUD = new BottomHUD(player, mouse);
         inventoryHUD = new InventoryHUD(player);
         skillsHUD = new SkillsHUD(player);
-        this.audioHUD = new AudioHUD(player);
+        audioHUD = new AudioHUD(player);
 
         addHeadsUpDisplay();
     }
@@ -266,6 +269,7 @@ public class GameScreen extends Scene {
         uiManager.addPanel(contextMenu);
         uiManager.addPanel(audioHUD);
         uiManager.addPanel(equipmentHUD);
+        uiManager.addPanel(dialogueInterface);
     }
 
     private void startNewGame() {
@@ -277,6 +281,10 @@ public class GameScreen extends Scene {
 
     private void loadExistingGame() {
         IO.println("Loading existing game");
+    }
+
+    public DialogueInterface getDialogueInterface() {
+        return dialogueInterface;
     }
 
     public InventoryHUD getInventoryHUD() {

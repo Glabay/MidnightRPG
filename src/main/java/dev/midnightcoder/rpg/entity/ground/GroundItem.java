@@ -87,15 +87,20 @@ public class GroundItem extends Entity {
             case "pick-up", "take" -> {
                 // if the user is too far, send a dialogue message
                 if (!entityWithinDist(this, 2)) {
-                    // TODO: open dialogue
+                    MidnightRPG.getInstance()
+                        .getGameScreen()
+                        .getDialogueInterface()
+                        .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
                 }
                 player.addItem(item);
                 isExpired = true;
             }
-            case "examine" -> {
-                IO.println(item.getItemDescription());
-            }
+            case "examine" ->
+                MidnightRPG.getInstance()
+                    .getGameScreen()
+                    .getDialogueInterface()
+                    .sendInfoInter(getItem().getDefinition().getName(), getItem().getDefinition().getDescription());
         }
     }
 
