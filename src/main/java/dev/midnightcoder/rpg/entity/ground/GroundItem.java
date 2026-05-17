@@ -86,7 +86,7 @@ public class GroundItem extends Entity {
         switch (option.toLowerCase()) {
             case "pick-up", "take" -> {
                 // if the user is too far, send a dialogue message
-                if (!entityWithinDist(this)) {
+                if (!entityWithinDist(this, 2)) {
                     // TODO: open dialogue
                     return;
                 }
@@ -97,15 +97,6 @@ public class GroundItem extends Entity {
                 IO.println(item.getItemDescription());
             }
         }
-    }
-
-    private boolean entityWithinDist(Entity entity) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
-        var dist = Vec2i.getDistance(
-            new Vec2i(player.getAvatar().getX(), player.getAvatar().getY()),
-            new Vec2i(entity.getX(), entity.getY())
-        );
-        return dist <= (2 << 5);
     }
 
     @Override
