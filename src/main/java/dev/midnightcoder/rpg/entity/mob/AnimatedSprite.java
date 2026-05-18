@@ -43,7 +43,6 @@ public class AnimatedSprite {
         while (frameTimer >= frameDuration) {
             frameTimer -= frameDuration;
             currentFrameIndex = (currentFrameIndex + 1) % frames.length;
-            log.debug("Frame updated to index: {}", currentFrameIndex);
         }
     }
 
