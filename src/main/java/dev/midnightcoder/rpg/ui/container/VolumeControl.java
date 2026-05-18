@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 
 import static dev.midnightcoder.rpg.util.TextUtils.getTextCentered;
 

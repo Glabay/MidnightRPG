@@ -3,7 +3,6 @@ package dev.midnightcoder.rpg.entity.mob;
 import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.entity.mob.Avatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
-import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;

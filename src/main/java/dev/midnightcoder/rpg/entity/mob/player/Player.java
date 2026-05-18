@@ -1,15 +1,15 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
-import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.entity.mob.PlayerAvatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
+import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
 import dev.midnightcoder.rpg.entity.mob.Mob;
+import dev.midnightcoder.rpg.entity.mob.PlayerAvatar;
 import dev.midnightcoder.rpg.entity.skill.SkillSet;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;

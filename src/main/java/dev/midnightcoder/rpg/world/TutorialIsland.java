@@ -4,9 +4,8 @@ import dev.midnightcoder.engine.renderer.camera.Camera2D;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.assets.PngMapLoader;
 import dev.midnightcoder.engine.world.tile.Tile;
+import dev.midnightcoder.rpg.assets.PngMapLoader;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 
 import java.util.ArrayList;

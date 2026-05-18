@@ -5,8 +5,6 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.ui.interfaces.ContextMenu;
-import dev.midnightcoder.rpg.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
