@@ -86,8 +86,11 @@ public class Slot extends Rectangle {
 
                         contextMenu.init();
 
-                        if (contextMenu.getPosition().getX() + contextMenu.getSize().getWidth() > WindowConfig.getWindowWidth())
+                        if (contextMenu.getPosition().getX() + contextMenu.getSize().getWidth() > WindowConfig.getWindowWidth()) {
                             contextMenu.setPosition(new Vec2i(WindowConfig.getWindowWidth() - contextMenu.getSize().getWidth(), contextMenu.getPosition().getY()));
+                            // reload the menu
+                            contextMenu.init();
+                        }
 
                         if (!contextMenu.isDisplayed())
                             contextMenu.display();
