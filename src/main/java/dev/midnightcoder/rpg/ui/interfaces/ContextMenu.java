@@ -31,6 +31,7 @@ public class ContextMenu extends UIPanel {
     private String[] menuOpts;
     private String title;
     private MenuActionable selectedEntity;
+    private Color titleColor = Color.WHITE;
 
     private int width = 75;
     private int height;
@@ -40,6 +41,11 @@ public class ContextMenu extends UIPanel {
         this.player = player;
         background = TextureFactory.createFromImageFile("/ui/blank_interface.png").image();
         menuFont = new Font("Verdana", Font.ITALIC, 17);
+    }
+
+    public ContextMenu withTitleColor(Color color) {
+        this.titleColor = color;
+        return this;
     }
 
     public ContextMenu withSelectedEntity(MenuActionable entity) {
@@ -98,7 +104,7 @@ public class ContextMenu extends UIPanel {
             // Draw the background
             renderer.getGraphics2D().drawImage(background, x, y, width, height, null);
             // Draw the title
-            renderer.getGraphics2D().setColor(Color.CYAN);
+            renderer.getGraphics2D().setColor(titleColor);
             renderer.getGraphics2D().setFont(menuFont);
             renderer.getGraphics2D().drawString((title == null) ? "Title" : title, x + 8, y + 20); // title
             renderer.getGraphics2D().drawLine(x + 1, y + padding, x + width - 3, y + padding);

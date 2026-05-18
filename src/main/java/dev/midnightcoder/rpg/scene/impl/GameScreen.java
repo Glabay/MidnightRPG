@@ -21,6 +21,7 @@ import dev.midnightcoder.rpg.ui.interfaces.*;
 import dev.midnightcoder.rpg.util.ItemId;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -177,13 +178,23 @@ public class GameScreen extends Scene {
 
             contextMenu.setPosition(new Vec2i(mouse.getX(), mouse.getY()))
                 .withTitle("Choose Option")
+                .withTitleColor(getEntityTitleColor(entity))
                 .withSelectedEntity(entity)
                 .withOptions(menuOpts.toArray(new String[0]))
                 .init();
             contextMenu.display();
-        } else if (button == MouseEvent.BUTTON1) { // Left click
-            player.setSelectedEntity(entity);
         }
+        else if (button == MouseEvent.BUTTON1)
+            player.setSelectedEntity(entity);
+    }
+
+    private Color getEntityTitleColor(Entity entity) {
+        return switch (entity) {
+            case Player _ -> Color.CYAN;
+            case NPC _ -> Color.YELLOW;
+            case GroundItem _ -> Color.GREEN;
+            case null, default -> Color.WHITE;
+        };
     }
 
     @Override
