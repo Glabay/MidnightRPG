@@ -22,10 +22,8 @@ public class PlayerAvatar extends Avatar {
     private final KeyboardInputManager input;
 
     public PlayerAvatar(Vec2i position, GameMap currentMap, KeyboardInputManager input, Movement movement) {
-        super(position, movement, currentMap);
+        super(position, 32, 32, movement, currentMap);
         this.input = input;
-        width = 32;
-        height = 32;
 
         texture = TextureFactory.createSolidColor(width, height, Color.RED);
     }

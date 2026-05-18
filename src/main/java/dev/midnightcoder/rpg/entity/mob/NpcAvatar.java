@@ -17,12 +17,10 @@ import java.awt.*;
  */
 public class NpcAvatar extends Avatar {
 
-    public AnimatedSprite animatedSprite = new AnimatedSprite(0.15);
+    public AnimatedSprite animatedSprite = new AnimatedSprite(10.0);
 
     public NpcAvatar(Vec2i position, Movement movement, GameMap currentMap) {
-        super(position, movement, currentMap);
-        width = 32;
-        height = 32;
+        super(position, 32, 32, movement, currentMap);
 
         texture = TextureFactory.createSolidColor(width, height, Color.BLUE);
     }
