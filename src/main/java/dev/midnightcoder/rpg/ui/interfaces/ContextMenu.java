@@ -5,6 +5,9 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
+import dev.midnightcoder.rpg.entity.Entity;
+import dev.midnightcoder.rpg.entity.ground.GroundItem;
+import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.ui.container.ContextOption;
 import dev.midnightcoder.rpg.util.MenuActionable;
@@ -12,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +35,7 @@ public class ContextMenu extends UIPanel {
     private String[] menuOpts;
     private String title;
     private MenuActionable selectedEntity;
-    private Color titleColor = Color.WHITE;
+    private Entity entity;
 
     private int width = 75;
     private int height;
@@ -43,15 +47,24 @@ public class ContextMenu extends UIPanel {
         menuFont = new Font("Verdana", Font.ITALIC, 17);
     }
 
-    public ContextMenu withTitleColor(Color color) {
-        this.titleColor = color;
+    public ContextMenu newMenu() {
+        this.entity = null;
+        this.selectedEntity = null;
+        this.title = null;
+        this.menuOpts = null;
+        return this;
+    }
+
+    public ContextMenu forEntity(Entity entity) {
+        this.entity = entity;
+        title = getEntityTitle();
         return this;
     }
 
     public ContextMenu withSelectedEntity(MenuActionable entity) {
         this.selectedEntity = entity;
-        if (entity instanceof GameItem item) {
-            this.setSelectedItem(item);
+        if (entity instanceof GameItem i) {
+            this.setSelectedItem(i);
         }
         return this;
     }
@@ -104,9 +117,9 @@ public class ContextMenu extends UIPanel {
             // Draw the background
             renderer.getGraphics2D().drawImage(background, x, y, width, height, null);
             // Draw the title
-            renderer.getGraphics2D().setColor(titleColor);
+            renderer.getGraphics2D().setColor(getEntityTitleColor());
             renderer.getGraphics2D().setFont(menuFont);
-            renderer.getGraphics2D().drawString((title == null) ? "Title" : title, x + 8, y + 20); // title
+            renderer.getGraphics2D().drawString(getEntityTitle(), x + 8, y + 20); // title
             renderer.getGraphics2D().drawLine(x + 1, y + padding, x + width - 3, y + padding);
 
             for (var opts : menuOptions)
@@ -114,12 +127,29 @@ public class ContextMenu extends UIPanel {
         }
     }
 
-
     public boolean isDisplayed() {
         return visible;
     }
 
     public Vec2i getPosition() {
         return position;
+    }
+
+    private String getEntityTitle() {
+        return switch (entity) {
+            case Player _ -> "Player";
+            case NPC npc -> npc.getDefinition().getName();
+            case GroundItem gi -> gi.getItem().getDefinition().getName();
+            case null, default -> "Choose";
+        };
+    }
+
+    private Color getEntityTitleColor() {
+        return switch (entity) {
+            case Player _ -> Color.CYAN;
+            case NPC _ -> Color.YELLOW;
+            case GroundItem _ -> Color.GREEN;
+            case null, default -> Color.WHITE;
+        };
     }
 }

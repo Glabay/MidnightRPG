@@ -76,9 +76,8 @@ public class Slot extends Rectangle {
                         }
 
                         // Open context menu
-                        var contextMenu = MidnightRPG.getInstance()
-                            .getGameScreen()
-                            .getContextMenu()
+                        var contextMenu = MidnightRPG.getInstance().getGameScreen().getContextMenu()
+                            .newMenu()
                             .setPosition(new Vec2i(mouse.getX(), mouse.getY()))
                             .withTitle("Choose")
                             .withSelectedEntity(getItem())

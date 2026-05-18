@@ -109,7 +109,7 @@ public class GameScreen extends Scene {
 
     private void handleEntityClicks() {
         var mouseB = mouse.getButton();
-        if (mouseB == java.awt.event.MouseEvent.NOBUTTON) {
+        if (mouseB == MouseEvent.NOBUTTON) {
             mousePressed = false;
             return;
         }
@@ -177,8 +177,8 @@ public class GameScreen extends Scene {
             menuOpts.removeIf(s -> s == null || s.isBlank());
 
             contextMenu.setPosition(new Vec2i(mouse.getX(), mouse.getY()))
-                .withTitle("Choose Option")
-                .withTitleColor(getEntityTitleColor(entity))
+                .newMenu()
+                .forEntity(entity)
                 .withSelectedEntity(entity)
                 .withOptions(menuOpts.toArray(new String[0]))
                 .init();
@@ -186,15 +186,6 @@ public class GameScreen extends Scene {
         }
         else if (button == MouseEvent.BUTTON1)
             player.setSelectedEntity(entity);
-    }
-
-    private Color getEntityTitleColor(Entity entity) {
-        return switch (entity) {
-            case Player _ -> Color.CYAN;
-            case NPC _ -> Color.YELLOW;
-            case GroundItem _ -> Color.GREEN;
-            case null, default -> Color.WHITE;
-        };
     }
 
     @Override
