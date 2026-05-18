@@ -17,7 +17,7 @@ import java.awt.*;
  */
 public class NpcAvatar extends Avatar {
 
-    public AnimatedSprite animatedSprite = new AnimatedSprite(10.0);
+    public AnimatedSprite animatedSprite = new AnimatedSprite(0.15);
 
     public NpcAvatar(Vec2i position, Movement movement, GameMap currentMap) {
         super(position, 32, 32, movement, currentMap);

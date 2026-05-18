@@ -1,5 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
+import dev.midnightcoder.cache.CacheReader;
+import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
@@ -18,6 +20,9 @@ import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -26,6 +31,8 @@ import java.awt.event.KeyEvent;
  * @since 2026-05-01
  */
 public class Player extends Mob {
+    private final int SPRITESHEET_ID = 5;
+
     private final PlayerAvatar playerAvatar;
 
     private final PlayerMovement playerMovement;
@@ -55,6 +62,13 @@ public class Player extends Mob {
 
         // load Saved details
         loadPlayerSettings();
+
+        loadAnimatedFrames();
+        var frames = getAvatar().getAnimatedFrames(Direction.SOUTH);
+        if (frames != null && frames.length > 0) {
+            getAvatar().animatedSprite.setFrames(frames);
+            getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+        }
     }
 
     @Override
@@ -68,6 +82,19 @@ public class Player extends Mob {
 
         var dx = (int) (getAvatar().getMoveX() * speed * delta);
         var dy = (int) (getAvatar().getMoveY() * speed * delta);
+
+        var wasMoving = moving;
+        moving = lastX != getAvatar().getX() || lastY != getAvatar().getY();
+
+        if (moving)
+            getAvatar().animatedSprite.update(delta);
+        else if (wasMoving)
+            getAvatar().animatedSprite.reset();
+
+        getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+
+        lastX = getAvatar().getX();
+        lastY = getAvatar().getY();
 
         playerMovement.move(getAvatar(), dx, dy);
 
@@ -91,6 +118,34 @@ public class Player extends Mob {
         playerAvatar.setHitboxDimension(26, 27);
         // Assign some HP to the player
         skillSet.getSkill(SkillType.HITPOINTS).addExp(900);
+    }
+
+    private void loadAnimatedFrames() {
+        // set the NPC AnimatedSprites
+        var cacheMan = CacheReader.getInstance().getCacheManager();
+        var spriteSheets = cacheMan.getSpriteSheets();
+        var spriteSheet = spriteSheets.get(SPRITESHEET_ID);
+        var cachedSpriteIndex = spriteSheet.getSpriteId();
+        var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
+
+        for (int row = 0; row < spriteSheet.getRows(); row++) {
+            var animatedFrames = new BufferedImage[spriteSheet.getCols()];
+            for (int col = 0; col < spriteSheet.getCols(); col++) {
+                var frame = cachedSprite.image().getSubimage(
+                    col * spriteSheet.getFrameWidth(),
+                    row * spriteSheet.getFrameHeight(),
+                    spriteSheet.getFrameWidth(),
+                    spriteSheet.getFrameHeight()
+                );
+                animatedFrames[col] = frame;
+            }
+            switch (row) {
+                case 0 -> getAvatar().setAnimatedFrames(Direction.SOUTH, animatedFrames);
+                case 1 -> getAvatar().setAnimatedFrames(Direction.NORTH, animatedFrames);
+                case 2 -> getAvatar().setAnimatedFrames(Direction.WEST, animatedFrames);
+                default -> getAvatar().setAnimatedFrames(Direction.EAST, animatedFrames);
+            }
+        }
     }
 
     private void loadPlayerSettings() {
