@@ -1,6 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob;
 
 import dev.midnightcoder.engine.entity.Direction;
+import dev.midnightcoder.engine.entity.mob.AnimatedSprite;
 import dev.midnightcoder.engine.entity.mob.Avatar;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
@@ -24,7 +25,7 @@ public class PlayerAvatar extends Avatar {
     private final Map<Direction, BufferedImage[]> animatedFrames = new EnumMap<>(Direction.class);
     private final KeyboardInputManager input;
 
-    public AnimatedSprite animatedSprite = new AnimatedSprite(0.15);
+    public AnimatedSprite animatedSprite = new AnimatedSprite(5.0);
 
     public PlayerAvatar(Vec2i position, GameMap currentMap, KeyboardInputManager input, Movement movement) {
         super(position, 32, 32, movement, currentMap);
