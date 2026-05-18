@@ -17,6 +17,8 @@ import java.awt.*;
  */
 public class NpcAvatar extends Avatar {
 
+    public AnimatedSprite animatedSprite = new AnimatedSprite(0.15);
+
     public NpcAvatar(Vec2i position, Movement movement, GameMap currentMap) {
         super(position, movement, currentMap);
         width = 32;
@@ -27,6 +29,10 @@ public class NpcAvatar extends Avatar {
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public Direction getDirection() {
+        return direction;
     }
 
     @Override

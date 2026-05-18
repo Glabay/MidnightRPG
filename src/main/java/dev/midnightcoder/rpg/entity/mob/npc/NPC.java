@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.npc;
 
+import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.cache.model.NPCDefinition;
 import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.renderer.Renderer;
@@ -9,7 +10,11 @@ import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.awt.image.BufferedImage;
+import java.nio.Buffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,6 +26,7 @@ import java.util.Random;
  * @since 2026-05-07
  */
 public class NPC extends Mob {
+    private static final Logger log = LoggerFactory.getLogger(NPC.class);
     private final NpcAvatar avatar;
     private final NpcMovement movement;
     private final GameMap currentMap;
@@ -38,27 +44,74 @@ public class NPC extends Mob {
         this.avatar = new NpcAvatar(spawnPosition, movement, currentMap);
         this.currentMap = currentMap;
         this.definition = NpcManager.getInstance().getDefinition(id);
+        loadAnimatedFrames();
+        getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+    }
+
+    private void loadAnimatedFrames() {
+        // set the NPC AnimatedSprites
+        var cacheMan = CacheReader.getInstance().getCacheManager();
+        var spriteSheet = cacheMan.getSpriteSheets().get(definition.getSpriteSheetId());
+        var cachedSpriteIndex = spriteSheet.getSpriteId();
+        var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
+
+        var animatedFrames = new BufferedImage[spriteSheet.getCols()];
+        for (int row = 0; row < spriteSheet.getRows(); row++) {
+            for (int col = 0; col < spriteSheet.getCols(); col++) {
+                var frame = cachedSprite.image().getSubimage(col, row, spriteSheet.getFrameWidth(), spriteSheet.getFrameHeight());
+                animatedFrames[col] = frame;
+            }
+            switch (row) {
+                case 0 -> definition.setAnimatedFrames(Direction.SOUTH, animatedFrames);
+                case 1 -> definition.setAnimatedFrames(Direction.NORTH, animatedFrames);
+                case 2 -> definition.setAnimatedFrames(Direction.WEST, animatedFrames);
+                default -> definition.setAnimatedFrames(Direction.EAST, animatedFrames);
+            }
+        }
     }
 
     @Override
     public void update(double delta) {
+        super.update(delta);
         getAvatar().updateHitbox();
 
         behaviors.forEach(behavior ->
             behavior.update(this, delta));
 
         if (random.nextDouble() < 0.01) {
-            if (random.nextDouble() < 0.3)
+            var wasMoving = moving;
+            moving = lastX != getAvatar().getX() || lastY != getAvatar().getY();
+
+            if (random.nextDouble() < 0.3) {
                 getAvatar().setDirection(Direction.NORTH);
-            else if (random.nextDouble() > 0.3 && random.nextDouble() < 0.6)
+                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.NORTH));
+            }
+            else if (random.nextDouble() > 0.3 && random.nextDouble() < 0.6) {
                 getAvatar().setDirection(Direction.SOUTH);
-            else if (random.nextDouble() > 0.6 && random.nextDouble() < 0.9)
+                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.SOUTH));
+            }
+            else if (random.nextDouble() > 0.6 && random.nextDouble() < 0.9) {
                 getAvatar().setDirection(Direction.WEST);
-            else if (random.nextDouble() > 0.9)
+                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.WEST));
+            }
+            else if (random.nextDouble() > 0.9) {
                 getAvatar().setDirection(Direction.EAST);
+                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.EAST));
+            }
 
             var dx = (int) (getAvatar().getMoveX() * speed * delta);
             var dy = (int) (getAvatar().getMoveY() * speed * delta);
+
+
+            if (moving)
+                getAvatar().animatedSprite.update(delta);
+            else if (wasMoving)
+                getAvatar().animatedSprite.reset();
+
+            getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+
+            lastX = getAvatar().getX();
+            lastY = getAvatar().getY();
 
             movement.move(getAvatar(), dx, dy);
         }
