@@ -45,20 +45,40 @@ public class NPC extends Mob {
         this.currentMap = currentMap;
         this.definition = NpcManager.getInstance().getDefinition(id);
         loadAnimatedFrames();
-        getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+        var frames = definition.getAnimatedFrames(Direction.SOUTH);
+        if (frames != null && frames.length > 0) {
+            getAvatar().animatedSprite.setFrames(frames);
+            getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
+        }
+
+        this.lastX = getAvatar().getX();
+        this.lastY = getAvatar().getY();
     }
 
     private void loadAnimatedFrames() {
         // set the NPC AnimatedSprites
         var cacheMan = CacheReader.getInstance().getCacheManager();
-        var spriteSheet = cacheMan.getSpriteSheets().get(definition.getSpriteSheetId());
+        var spriteSheets = cacheMan.getSpriteSheets();
+        var sheetId = definition.getSpriteSheetId();
+
+        if (sheetId < 0 || sheetId >= spriteSheets.size()) {
+            log.error("Invalid sprite sheet ID: {} for NPC {}", sheetId, id);
+            return;
+        }
+
+        var spriteSheet = spriteSheets.get(sheetId);
         var cachedSpriteIndex = spriteSheet.getSpriteId();
         var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
 
-        var animatedFrames = new BufferedImage[spriteSheet.getCols()];
         for (int row = 0; row < spriteSheet.getRows(); row++) {
+            var animatedFrames = new BufferedImage[spriteSheet.getCols()];
             for (int col = 0; col < spriteSheet.getCols(); col++) {
-                var frame = cachedSprite.image().getSubimage(col, row, spriteSheet.getFrameWidth(), spriteSheet.getFrameHeight());
+                var frame = cachedSprite.image().getSubimage(
+                    col * spriteSheet.getFrameWidth(),
+                    row * spriteSheet.getFrameHeight(),
+                    spriteSheet.getFrameWidth(),
+                    spriteSheet.getFrameHeight()
+                );
                 animatedFrames[col] = frame;
             }
             switch (row) {
@@ -79,22 +99,20 @@ public class NPC extends Mob {
             behavior.update(this, delta));
 
         if (random.nextDouble() < 0.01) {
-            var wasMoving = moving;
-            moving = lastX != getAvatar().getX() || lastY != getAvatar().getY();
-
-            if (random.nextDouble() < 0.3) {
+            var roll = random.nextDouble();
+            if (roll < 0.3) {
                 getAvatar().setDirection(Direction.NORTH);
                 getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.NORTH));
             }
-            else if (random.nextDouble() > 0.3 && random.nextDouble() < 0.6) {
+            else if (roll > 0.3 && roll < 0.6) {
                 getAvatar().setDirection(Direction.SOUTH);
                 getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.SOUTH));
             }
-            else if (random.nextDouble() > 0.6 && random.nextDouble() < 0.9) {
+            else if (roll > 0.6 && roll < 0.9) {
                 getAvatar().setDirection(Direction.WEST);
                 getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.WEST));
             }
-            else if (random.nextDouble() > 0.9) {
+            else if (roll > 0.9) {
                 getAvatar().setDirection(Direction.EAST);
                 getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.EAST));
             }
@@ -102,6 +120,8 @@ public class NPC extends Mob {
             var dx = (int) (getAvatar().getMoveX() * speed * delta);
             var dy = (int) (getAvatar().getMoveY() * speed * delta);
 
+            var wasMoving = moving;
+            moving = lastX != getAvatar().getX() || lastY != getAvatar().getY();
 
             if (moving)
                 getAvatar().animatedSprite.update(delta);
