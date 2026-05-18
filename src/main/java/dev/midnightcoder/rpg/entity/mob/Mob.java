@@ -24,7 +24,4 @@ public class Mob extends Entity {
         super.render(renderer);
     }
 
-    @Override
-    public void update(double delta) {}
-
 }
