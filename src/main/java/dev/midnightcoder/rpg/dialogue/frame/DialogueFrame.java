@@ -8,7 +8,7 @@ package dev.midnightcoder.rpg.dialogue.frame;
  */
 public abstract class DialogueFrame {
     private final String id;
-    private final String speaker;
+    private String speaker;
 
     protected DialogueFrame(String id, String speaker) {
         this.id = id;
@@ -23,5 +23,9 @@ public abstract class DialogueFrame {
 
     public String getSpeaker() {
         return speaker;
+    }
+
+    public void setSpeaker(String speaker) {
+        this.speaker = speaker;
     }
 }

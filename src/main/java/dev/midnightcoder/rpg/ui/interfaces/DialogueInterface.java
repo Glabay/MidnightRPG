@@ -43,15 +43,14 @@ public class DialogueInterface extends UIPanel {
     }
 
     public DialogueInterface sendDialogue(String title, String... lines) {
-        this.dialogueTitle = title;
+        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        this.dialogueTitle = title.replace("%PLAYER_NAME%", player.getProfile().getUsername());
         this.dialogueLines = lines;
         return this;
     }
 
     public DialogueInterface sendDialogue(DialogueSession session, String... lines) {
-        this.dialogueTitle = session.getCurrentFrame().getSpeaker();
-        this.dialogueLines = lines;
-        return this;
+        return sendDialogue(session.getCurrentFrame().getSpeaker(), lines);
     }
 
     public void update() {
