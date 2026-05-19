@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.ui.interfaces;
 
+import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.ui.components.UIAction;
 import dev.midnightcoder.engine.renderer.ui.components.UIButton;
@@ -23,36 +24,27 @@ import java.io.IOException;
  */
 public class BottomHUD extends UIPanel {
     public enum Tabs {
-        EQUIPMENT	(1, "gear", () -> MidnightRPG.getInstance().getGameScreen().getEquipmentHUD().display()),
-        SKILL		(2, "experience", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
-        QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
-        MUSIC		(4, "musicTab", () -> MidnightRPG.getInstance().getGameScreen().getMusicHUD().display()),
-        SETTINGS	(5, "settings", () -> IO.println("Settings Tab pressed.")),
-        SPELLBOOK	(6, "spells", () -> IO.println("Spellbook Tab pressed")),
-        COMBAT		(7, "combat", () -> IO.println("Combat Tab pressed")),
-        INVENTORY	(8, "backpack", () -> MidnightRPG.getInstance().getGameScreen().getInventoryHUD().display());
+        EQUIPMENT	(1, 25, () -> MidnightRPG.getInstance().getGameScreen().getEquipmentHUD().display()),
+        SKILL		(2, 24, () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
+        QUEST		(3, 29, () -> IO.println("Quest Tab pressed.")),
+        MUSIC		(4, 30, () -> MidnightRPG.getInstance().getGameScreen().getMusicHUD().display()),
+        SETTINGS	(5, 28, () -> IO.println("Settings Tab pressed.")),
+        SPELLBOOK	(6, 27, () -> IO.println("Spellbook Tab pressed")),
+        COMBAT		(7, 23, () -> IO.println("Combat Tab pressed")),
+        INVENTORY	(8, 21, () -> MidnightRPG.getInstance().getGameScreen().getInventoryHUD().display());
 
         private final int slotId;
         private final UIAction action;
         private final BufferedImage icon;
 
-        Tabs(int slotId, String imageName, UIAction action) {
+        Tabs(int slotId, int spriteId, UIAction action) {
             this.slotId = slotId;
             this.action = action;
-            icon = getButtonImage(imageName);
+            icon = getButtonImage(spriteId);
         }
 
-        private BufferedImage getButtonImage(String imageName) {
-
-            var imageFile = getClass().getResourceAsStream("/ui/icons/" + imageName + ".png");
-            if (imageFile == null)
-                throw new IllegalArgumentException("Image file not found: " + imageName);
-            try {
-                return ImageIO.read(imageFile);
-            }
-            catch (IOException _) {
-                return null;
-            }
+        private BufferedImage getButtonImage(int spriteId) {
+            return CacheReader.getInstance().getTexture(spriteId).image();
         }
 
         public int getSlotId() {
