@@ -8,7 +8,9 @@ import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.assets.PngMapLoader;
 import dev.midnightcoder.rpg.dialogue.script.PokeyGreeting;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.npc.impl.Chicken;
 import dev.midnightcoder.rpg.entity.mob.npc.impl.Pokey;
+import dev.midnightcoder.rpg.entity.mob.npc.impl.StoneGolem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,8 @@ public class TutorialIsland extends GameMap {
         initializeCamera();
 
         npcs.add(new Pokey(37, 52, this));
+        npcs.add(new Chicken(20, 60, this));
+        npcs.add(new StoneGolem(24, 64, this));
     }
 
     private void initializeCamera() {
