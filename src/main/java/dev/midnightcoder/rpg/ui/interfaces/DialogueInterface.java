@@ -7,6 +7,8 @@ import dev.midnightcoder.engine.util.DelayedTask;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.dialogue.DialogueManager;
+import dev.midnightcoder.rpg.dialogue.DialogueSession;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -40,10 +42,16 @@ public class DialogueInterface extends UIPanel {
         this.font12B = new Font("Verdana", Font.BOLD, 10);
     }
 
-    public void sendDialogue(String title, String... lines) {
+    public DialogueInterface sendDialogue(String title, String... lines) {
         this.dialogueTitle = title;
         this.dialogueLines = lines;
-        display();
+        return this;
+    }
+
+    public DialogueInterface sendDialogue(DialogueSession session, String... lines) {
+        this.dialogueTitle = session.getCurrentFrame().getSpeaker();
+        this.dialogueLines = lines;
+        return this;
     }
 
     public void update() {
@@ -59,7 +67,12 @@ public class DialogueInterface extends UIPanel {
                 else if (mouse.getButton() == MouseEvent.NOBUTTON) {
                     if (pressed) {
                         pressed = false;
-                        display();
+                        var activeSession = MidnightRPG.getInstance().getGameScreen()
+                            .getPlayer()
+                            .getDialogueSession();
+
+                        if (activeSession != null)
+                            DialogueManager.getInstance().advance();
                     }
                     ignorePressed = false;
                 }
@@ -100,7 +113,7 @@ public class DialogueInterface extends UIPanel {
             }
 
             // Click to close - Centered at the bottom of the box
-            String ctc = "Click to close.";
+            String ctc = "Click to continue";
             int ctcX = getTextCentered(renderer, ctc);
             int ctcY = y + height - 15;
             renderer.setColor(Color.BLUE);
@@ -108,14 +121,15 @@ public class DialogueInterface extends UIPanel {
             renderer.renderText(ctc, ctcX, ctcY);
 
             // Update click-to-continue rectangle for interaction
-            c2c = new Rectangle(ctcX, ctcY - 12, getTextWidth(renderer, ctc), 16);
+            c2c = new Rectangle(ctcX - 4, ctcY - 16, getTextWidth(renderer, ctc), 16);
+//            renderer.drawRectangle(new Vec2i((int) c2c.getX(), (int) c2c.getY()), c2c.width, c2c.height, Color.BLUE);
         }
     }
 
     public void sendInfoInter(String title, String... info) {
         if (winOpen) return;
         winOpen = true;
-        sendDialogue(title, info);
+        sendDialogue(title, info).display();
         // after 2 seconds, close the window
         DelayedTask.schedule(() -> {
             display();
