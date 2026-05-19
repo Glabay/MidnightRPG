@@ -8,6 +8,7 @@ import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.dialogue.DialogueSession;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
 import dev.midnightcoder.rpg.entity.mob.Mob;
@@ -45,6 +46,7 @@ public class Player extends Mob {
 
     private Entity selectedEntity;
     private Inventory currentInventoryView;
+    private DialogueSession dialogueSession;
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
@@ -232,6 +234,14 @@ public class Player extends Mob {
 
     public Vec2i getPosition() {
         return new Vec2i(playerAvatar.getX(), playerAvatar.getY());
+    }
+
+    public DialogueSession getDialogueSession() {
+        return dialogueSession;
+    }
+
+    public void setDialogueSession(DialogueSession session) {
+        this.dialogueSession = session;
     }
 
     @Override
