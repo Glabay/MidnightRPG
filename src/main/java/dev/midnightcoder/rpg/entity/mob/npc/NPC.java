@@ -8,6 +8,7 @@ import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.dialogue.DialogueManager;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
 import org.slf4j.Logger;
@@ -205,7 +206,7 @@ public class NPC extends Mob {
                     return;
                 }
                 // TODO: Load this NPC's dialogue
-
+                DialogueManager.getInstance().start("pokey_greeting");
             }
             case "examine" ->
                 MidnightRPG.getInstance()
