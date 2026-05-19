@@ -97,44 +97,6 @@ public class NPC extends Mob {
 
         behaviors.forEach(behavior ->
             behavior.update(this, delta));
-
-        if (random.nextDouble() < 0.01) {
-            var roll = random.nextDouble();
-            if (roll < 0.3) {
-                getAvatar().setDirection(Direction.NORTH);
-                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.NORTH));
-            }
-            else if (roll > 0.3 && roll < 0.6) {
-                getAvatar().setDirection(Direction.SOUTH);
-                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.SOUTH));
-            }
-            else if (roll > 0.6 && roll < 0.9) {
-                getAvatar().setDirection(Direction.WEST);
-                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.WEST));
-            }
-            else if (roll > 0.9) {
-                getAvatar().setDirection(Direction.EAST);
-                getAvatar().animatedSprite.setFrames(definition.getAnimatedFrames(Direction.EAST));
-            }
-
-            var dx = (int) (getAvatar().getMoveX() * speed * delta);
-            var dy = (int) (getAvatar().getMoveY() * speed * delta);
-
-            var wasMoving = moving;
-            moving = lastX != getAvatar().getX() || lastY != getAvatar().getY();
-
-            if (moving)
-                getAvatar().animatedSprite.update(delta);
-            else if (wasMoving)
-                getAvatar().animatedSprite.reset();
-
-            getAvatar().setAvatarTexture(getAvatar().animatedSprite.getCurrentFrame());
-
-            lastX = getAvatar().getX();
-            lastY = getAvatar().getY();
-
-            movement.move(getAvatar(), dx, dy);
-        }
     }
 
     @Override
