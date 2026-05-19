@@ -2,6 +2,7 @@ package dev.midnightcoder.rpg.scene.impl;
 
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.tile.Tile;
@@ -9,6 +10,7 @@ import dev.midnightcoder.rpg.assets.audio.MusicTrack;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -26,6 +28,9 @@ public class LoginScreen extends Scene {
     private Font fontPlain;
 
     private final MusicTrack music;
+    private final BufferedImage background;
+    private final BufferedImage wizard;
+    private final BufferedImage loginBox;
 
     private int selectedOption = 0;
 
@@ -37,6 +42,9 @@ public class LoginScreen extends Scene {
         this.onLoadGame = args[1];
         this.onQuit = args[2];
         this.music = new MusicTrack();
+        this.background = TextureFactory.createFromImageFile("/ui/title-banner.png").image();
+        this.wizard = TextureFactory.createFromImageFile("/texture/entity/player/wizard/wizard.png").image();
+        this.loginBox = TextureFactory.createFromImageFile("/ui/center-login.png").image();
     }
 
     @Override
@@ -78,14 +86,26 @@ public class LoginScreen extends Scene {
     public void render(Renderer renderer) {
         super.render(renderer);
         renderer.setColor(Color.BLUE);
+        renderer.renderImage(background, Tile.TILE_SIZE * 5, 42, (int) (background.getWidth() * 1.7D), background.getHeight() + 32);
         renderer.setFont(fontBold);
         var title = "Midnight-RPG";
         renderer.renderText(title, getTextCentered(renderer, title), Tile.TILE_SIZE * 4);
 
+        renderer.renderImage(wizard, Tile.TILE_SIZE * 14, 196, 128, 128);
+        renderer.renderImage(loginBox, (WindowConfig.getWindowWidth() - loginBox.getWidth()) / 2, 300);
+
         renderer.setFont(fontPlain);
-        renderer.renderText("%sNEW GAME".formatted(selectedOption == 0 ? "> ": ""), getTextCentered(renderer, "NEW GAME"), Tile.TILE_SIZE * 14);
-        renderer.renderText("%sLOAD GAME".formatted(selectedOption == 1 ? "> ": ""), getTextCentered(renderer, "LOAD GAME"), Tile.TILE_SIZE * 16);
-        renderer.renderText("%sQUIT".formatted(selectedOption == 2 ? "> ": ""), getTextCentered(renderer, "QUIT"), Tile.TILE_SIZE * 18);
+        var newGame = getFormattedText(0, "NEW GAME");
+        var loadGame = getFormattedText(1, "LOAD GAME");
+        var quit = getFormattedText(2, "QUIT");
+
+        renderer.renderText(newGame, getTextCentered(renderer, newGame), Tile.TILE_SIZE * 14);
+        renderer.renderText(loadGame, getTextCentered(renderer, loadGame), Tile.TILE_SIZE * 16);
+        renderer.renderText(quit, getTextCentered(renderer, quit), Tile.TILE_SIZE * 18);
+    }
+
+    private String getFormattedText(int index, String string) {
+        return "%s%s".formatted(selectedOption == index ? "> ": "", string);
     }
 
     private int getTextCentered(Renderer renderer, String text) {
