@@ -172,6 +172,10 @@ public class NPC extends Mob {
         return id;
     }
 
+    protected int getInteractionDistance() {
+        return 1;
+    }
+
     @Override
     public int getX() {
         return avatar.getX();
@@ -194,26 +198,11 @@ public class NPC extends Mob {
 
     @Override
     public void handleMenuOption(String option) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
-        switch (option.toLowerCase()) {
-            case "talk-to" -> {
-                // if the user is too far, send a dialogue message
-                if (!entityWithinDist(this, 2)) {
-                    MidnightRPG.getInstance()
-                        .getGameScreen()
-                        .getDialogueInterface()
-                        .sendInfoInter("Too far away", "You are too far away to interact with this.");
-                    return;
-                }
-                // TODO: Load this NPC's dialogue
-                DialogueManager.getInstance().start("pokey_greeting");
-            }
-            case "examine" ->
-                MidnightRPG.getInstance()
-                    .getGameScreen()
-                    .getDialogueInterface()
-                    .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
+        if (option.equalsIgnoreCase("examine")) {
+            MidnightRPG.getInstance()
+                .getGameScreen()
+                .getDialogueInterface()
+                .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
         }
     }
-
 }

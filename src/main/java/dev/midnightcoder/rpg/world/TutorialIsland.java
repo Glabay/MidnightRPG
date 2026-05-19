@@ -6,7 +6,9 @@ import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.assets.PngMapLoader;
+import dev.midnightcoder.rpg.dialogue.script.PokeyGreeting;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.npc.impl.Pokey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +32,7 @@ public class TutorialIsland extends GameMap {
 
         initializeCamera();
 
-        var npc = new NPC(0, new Vec2i(37 << 5, 52 << 5), this);
-        npcs.add(npc);
+        npcs.add(new Pokey(37, 52, this));
     }
 
     private void initializeCamera() {
