@@ -1,6 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob;
 
 import dev.midnightcoder.engine.entity.Direction;
+import dev.midnightcoder.engine.entity.mob.AnimatedSprite;
 import dev.midnightcoder.engine.entity.mob.Avatar;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.system.Movement;
