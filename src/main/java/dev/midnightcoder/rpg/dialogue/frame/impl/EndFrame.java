@@ -12,4 +12,9 @@ public class EndFrame extends DialogueFrame {
     public EndFrame(String id, String speaker) {
         super(id, speaker);
     }
+
+    @Override
+    public String getText() {
+        return "End of dialogue";
+    }
 }

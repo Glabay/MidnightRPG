@@ -15,6 +15,8 @@ public abstract class DialogueFrame {
         this.speaker = speaker;
     }
 
+    public abstract String getText();
+
     public String getId() {
         return id;
     }
