@@ -12,12 +12,12 @@ import dev.midnightcoder.rpg.entity.Entity;
 public class Mob extends Entity {
     protected final int moveSpeed = 1;
 
-    protected int speed = 3;
+    public int speed = 3;
 
-    protected boolean moving = false;
+    public boolean moving = false;
 
-    protected int lastX = -1;
-    protected int lastY = -1;
+    public int lastX = -1;
+    public int lastY = -1;
 
     @Override
     public void render(Renderer renderer) {
