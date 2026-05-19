@@ -11,7 +11,7 @@ import dev.midnightcoder.rpg.dialogue.frame.DialogueFrame;
 public class MessageFrame extends DialogueFrame {
     private final String text;
 
-    protected MessageFrame(String id, String speaker, String message) {
+    public MessageFrame(String id, String speaker, String message) {
         super(id, speaker);
         this.text = message;
     }

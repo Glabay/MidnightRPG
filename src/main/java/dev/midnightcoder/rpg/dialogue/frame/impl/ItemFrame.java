@@ -13,7 +13,7 @@ public class ItemFrame extends DialogueFrame  {
     private final String text;
     private final Item item;
 
-    protected ItemFrame(String id, String speaker, Item item, String message) {
+    public ItemFrame(String id, String speaker, Item item, String message) {
         super(id, speaker);
         this.item = item;
         this.text = message;
