@@ -23,14 +23,14 @@ import java.io.IOException;
  */
 public class BottomHUD extends UIPanel {
     public enum Tabs {
-        EQUIPMENT	(1, "equipTab", () -> MidnightRPG.getInstance().getGameScreen().getEquipmentHUD().display()),
-        SKILL		(2, "skillTab", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
+        EQUIPMENT	(1, "gear", () -> MidnightRPG.getInstance().getGameScreen().getEquipmentHUD().display()),
+        SKILL		(2, "experience", () -> MidnightRPG.getInstance().getGameScreen().getSkillsHUD().display()),
         QUEST		(3, "questTab", () -> IO.println("Quest Tab pressed.")),
         MUSIC		(4, "musicTab", () -> MidnightRPG.getInstance().getGameScreen().getMusicHUD().display()),
-        SETTINGS	(5, "optionsTab", () -> IO.println("Settings Tab pressed.")),
-        SPELLBOOK	(6, "spellbookTab", () -> IO.println("Spellbook Tab pressed")),
-        COMBAT		(7, "combatTab", () -> IO.println("Combat Tab pressed")),
-        INVENTORY	(8, "backpackTab", () -> MidnightRPG.getInstance().getGameScreen().getInventoryHUD().display());
+        SETTINGS	(5, "settings", () -> IO.println("Settings Tab pressed.")),
+        SPELLBOOK	(6, "spells", () -> IO.println("Spellbook Tab pressed")),
+        COMBAT		(7, "combat", () -> IO.println("Combat Tab pressed")),
+        INVENTORY	(8, "backpack", () -> MidnightRPG.getInstance().getGameScreen().getInventoryHUD().display());
 
         private final int slotId;
         private final UIAction action;
@@ -43,6 +43,7 @@ public class BottomHUD extends UIPanel {
         }
 
         private BufferedImage getButtonImage(String imageName) {
+
             var imageFile = getClass().getResourceAsStream("/ui/icons/" + imageName + ".png");
             if (imageFile == null)
                 throw new IllegalArgumentException("Image file not found: " + imageName);
