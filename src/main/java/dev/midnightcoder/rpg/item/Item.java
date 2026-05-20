@@ -89,7 +89,7 @@ public class Item extends GameItem implements MenuActionable {
     public void handleDefaultOption(Slot slot, String option) {
         switch (option.toLowerCase()) {
             case "equip": {
-                log.info("Equipping item: {}", getDefinition().getName());
+                log.debug("Equipping item: {}", getDefinition().getName());
                 var equipSlot = EquipmentHUD.equipmentSlots.get(getEquipSlot());
                 if (equipSlot.hasAnItem())
                     removeItem(equipSlot);
@@ -108,7 +108,7 @@ public class Item extends GameItem implements MenuActionable {
         }
     }
 
-    private void removeItem(Slot equipSlot) {
+    public void removeItem(Slot equipSlot) {
         var equipped = equipSlot.getItem();
         var backpack = MidnightRPG.getInstance().getGameScreen().getInventoryHUD();
 
@@ -164,6 +164,7 @@ public class Item extends GameItem implements MenuActionable {
         slot.setItem(null);
         equipHud.addItemToSlot(item, item.getEquipSlot());
     }
+
 
     private int getEquipSlot() {
         return definition.getEquipSlot();
