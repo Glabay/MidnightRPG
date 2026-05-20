@@ -3,7 +3,7 @@ package dev.midnightcoder.rpg.entity.mob.npc.impl;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.dialogue.script.PokeyGreeting;
+import dev.midnightcoder.rpg.dialogue.DialogueManager;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.WanderBehavior;
 import dev.midnightcoder.rpg.util.NpcId;
@@ -39,7 +39,7 @@ public class Pokey extends NPC {
                         .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
                 }
-                new PokeyGreeting().onInteraction(this, player);
+                DialogueManager.getInstance().start("pokey_greeting");
             }
             case "examine" ->
                 MidnightRPG.getInstance()

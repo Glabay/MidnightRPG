@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.assets.tiles;
 
+import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
@@ -44,7 +45,8 @@ public class TileLoader {
 
 
     public void loadTiles() {
-        var groundTiles = getTileTexture("ground_tileset").image();
+        var tileSpriteSheet = CacheReader.getInstance().getCacheManager().getSpriteSheets().getFirst();
+        var groundTiles = CacheReader.getInstance().getTexture(tileSpriteSheet.getSpriteId()).image();
 
         var grassFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 3));
 

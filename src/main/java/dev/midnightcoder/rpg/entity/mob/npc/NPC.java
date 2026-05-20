@@ -35,8 +35,6 @@ public class NPC extends Mob {
     private final List<Behavior> behaviors = new ArrayList<>();
     private final int id;
 
-    private final Random random = new Random();
-
     public NPC(int id, Vec2i position, GameMap currentMap) {
         this.id = id;
         this.movement = new NpcMovement(currentMap.getTileMap());

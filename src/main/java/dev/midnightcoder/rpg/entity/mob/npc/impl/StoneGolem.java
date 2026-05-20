@@ -3,7 +3,6 @@ package dev.midnightcoder.rpg.entity.mob.npc.impl;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.dialogue.script.PokeyGreeting;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.CombatBehavior;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.WanderBehavior;
