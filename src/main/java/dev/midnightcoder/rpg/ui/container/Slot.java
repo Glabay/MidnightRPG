@@ -7,6 +7,7 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
 import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -106,10 +107,9 @@ public class Slot extends Rectangle {
                     if (panel instanceof InventoryHUD) {
                         item.handleDefaultOption(this, getItem().getItemDefaultAction());
                     }
-//                    if (panel instanceof EquipmentHUD) {
-//                        item.unEquipItem(this);
-//                    }
-                    log.info("Default left click action not implemented for slot: {}", slotIndex);
+                    if (panel instanceof EquipmentHUD) {
+                        item.removeItem(this);
+                    }
                     panel.setMousePressed(false);
                 }
             }
