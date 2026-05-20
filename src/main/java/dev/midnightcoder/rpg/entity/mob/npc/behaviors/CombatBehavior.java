@@ -2,6 +2,7 @@ package dev.midnightcoder.rpg.entity.mob.npc.behaviors;
 
 import dev.midnightcoder.rpg.entity.mob.npc.Behavior;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -13,5 +14,10 @@ public class CombatBehavior implements Behavior {
     @Override
     public void update(NPC npc, double delta) {
 
+    }
+
+    @Override
+    public void onInteraction(NPC npc, Player player) {
+        // Handle combat interaction logic here
     }
 }
