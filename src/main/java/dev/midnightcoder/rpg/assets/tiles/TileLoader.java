@@ -9,6 +9,7 @@ import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.engine.world.tile.TileType;
 import dev.midnightcoder.rpg.world.tiles.WorldTile;
 import dev.midnightcoder.rpg.world.tiles.impl.GroundTile;
+import dev.midnightcoder.rpg.world.tiles.impl.TreeStump;
 import dev.midnightcoder.rpg.world.tiles.impl.WallTile;
 import dev.midnightcoder.rpg.world.tiles.impl.WaterTile;
 
@@ -46,7 +47,19 @@ public class TileLoader {
 
     public void loadTiles() {
         var tileSpriteSheet = CacheReader.getInstance().getCacheManager().getSpriteSheets().getFirst();
+        var objectSpriteSheet = CacheReader.getInstance().getCacheManager().getSpriteSheets().get(1);
         var groundTiles = CacheReader.getInstance().getTexture(tileSpriteSheet.getSpriteId()).image();
+        var objectSheet = CacheReader.getInstance().getTexture(objectSpriteSheet.getSpriteId()).image();
+
+        var stoneRock = getTextureFromSpriteSheet(objectSheet, new Vec2i(1, 1));
+        var ironRock = getTextureFromSpriteSheet(objectSheet, new Vec2i(2, 1));
+        var treeStumpRed2 = getTextureFromSpriteSheet(objectSheet, new Vec2i(3, 1));
+
+        var treeStump = getTextureFromSpriteSheet(objectSheet, new Vec2i(1, 0));
+        var treeStumpYellow = getTextureFromSpriteSheet(objectSheet, new Vec2i(0, 0));
+        var treeStumpOrange = getTextureFromSpriteSheet(objectSheet, new Vec2i(1, 0));
+        var treeStumpPink = getTextureFromSpriteSheet(objectSheet, new Vec2i(2, 0));
+        var treeStumpRed = getTextureFromSpriteSheet(objectSheet, new Vec2i(3, 0));
 
         var grassFull = getTextureFromSpriteSheet(groundTiles, new Vec2i(0, 3));
 
@@ -116,6 +129,16 @@ public class TileLoader {
             registry.register(TileColor.STONE_WALL_TOP, new WallTile("wall_stone_cap", stoneWallCap));
             registry.register(TileColor.WOOD_WALL, new WallTile("wall_wood", woodenWall));
             registry.register(TileColor.WOOD_WALL_TOP, new WallTile("wall_wood_cap", woodenWallCap));
+
+            registry.register(TileColor.TREE_STUMP, new TreeStump("normal_stump", treeStump));
+            registry.register(TileColor.TREE_STUMP_PINK, new TreeStump("normal_stump_pink", treeStumpPink));
+            registry.register(TileColor.TREE_STUMP_ORANGE, new TreeStump("normal_stump_orange", treeStumpOrange));
+            registry.register(TileColor.TREE_STUMP_YELLOW, new TreeStump("normal_stump_yellow", treeStumpYellow));
+            registry.register(TileColor.TREE_STUMP_RED, new TreeStump("normal_stump_red", treeStumpRed));
+            registry.register(TileColor.TREE_STUMP_RED2, new TreeStump("normal_stump_red2", treeStumpRed2));
+            registry.register(TileColor.STONE_ROCK, new TreeStump("stone_rock", stoneRock));
+            registry.register(TileColor.IRON_ROCK, new TreeStump("iron_rock", ironRock));
+
 
             registry.register(TileColor.STONE_PATH, getTileType("ground_stone", CollisionFlag.NONE));
             registry.register(TileColor.WOOD_FLOOR, getTileType("floor_wood", CollisionFlag.NONE));

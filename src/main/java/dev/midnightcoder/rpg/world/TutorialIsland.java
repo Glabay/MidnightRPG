@@ -9,6 +9,7 @@ import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.npc.impl.Chicken;
 import dev.midnightcoder.rpg.entity.mob.npc.impl.Pokey;
 import dev.midnightcoder.rpg.entity.mob.npc.impl.StoneGolem;
+import dev.midnightcoder.rpg.entity.object.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
 public class TutorialIsland extends GameMap {
 
     private List<NPC> npcs = new ArrayList<>();
+    private List<GameObject> gameObjects = new ArrayList<>();
 
     public TutorialIsland() {
         IO.println("Initializing tile map for Tutorial Island");
@@ -51,4 +53,10 @@ public class TutorialIsland extends GameMap {
     public List<NPC> getEntities() {
         return npcs;
     }
+
+    @Override
+    public List<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
 }
