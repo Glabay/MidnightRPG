@@ -21,13 +21,14 @@ import java.util.List;
  * @since 2026-04-30
  */
 public class TutorialIsland extends GameMap {
-
-    private List<NPC> npcs = new ArrayList<>();
-    private List<GameObject> gameObjects = new ArrayList<>();
+    private final List<NPC> npcs = new ArrayList<>();
+    private final List<GameObject> gameObjects = new ArrayList<>();
 
     public TutorialIsland() {
         IO.println("Initializing tile map for Tutorial Island");
-        tileMap = new PngMapLoader().loadMapFile(Regions.TUTORIAL_ISLAND.getLandscape());
+        var mapLoader = new PngMapLoader();
+        tileMap = mapLoader.loadMapFile(Regions.TUTORIAL_ISLAND.getLandscape());
+        mapLoader.loadObjectMapFile(this, Regions.TUTORIAL_ISLAND.getObjectMap());
 
         mapWidth = tileMap.width;
         mapHeight = tileMap.height;
