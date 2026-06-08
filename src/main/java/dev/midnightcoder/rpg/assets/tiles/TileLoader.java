@@ -8,10 +8,7 @@ import dev.midnightcoder.engine.world.tile.CollisionFlag;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.engine.world.tile.TileType;
 import dev.midnightcoder.rpg.world.tiles.WorldTile;
-import dev.midnightcoder.rpg.world.tiles.impl.GroundTile;
-import dev.midnightcoder.rpg.world.tiles.impl.TreeStump;
-import dev.midnightcoder.rpg.world.tiles.impl.WallTile;
-import dev.midnightcoder.rpg.world.tiles.impl.WaterTile;
+import dev.midnightcoder.rpg.world.tiles.impl.*;
 
 import java.awt.image.BufferedImage;
 
@@ -136,8 +133,8 @@ public class TileLoader {
             registry.register(TileColor.TREE_STUMP_YELLOW, new TreeStump("normal_stump_yellow", treeStumpYellow));
             registry.register(TileColor.TREE_STUMP_RED, new TreeStump("normal_stump_red", treeStumpRed));
             registry.register(TileColor.TREE_STUMP_RED2, new TreeStump("normal_stump_red2", treeStumpRed2));
-            registry.register(TileColor.STONE_ROCK, new TreeStump("stone_rock", stoneRock));
-            registry.register(TileColor.IRON_ROCK, new TreeStump("iron_rock", ironRock));
+            registry.register(TileColor.STONE_ROCK, new StoneRock("stone_rock", stoneRock));
+            registry.register(TileColor.IRON_ROCK, new StoneRock("iron_rock", ironRock));
 
 
             registry.register(TileColor.STONE_PATH, getTileType("ground_stone", CollisionFlag.NONE));
