@@ -83,7 +83,7 @@ public class PngMapLoader extends MapLoader {
                 if (tileType == null) continue;
                 // create a GameObject at the x, y
                 if (tileType instanceof GameObjectTile gameObject) {
-                    log.info("Creating {} at ({}, {})", gameObject.getClass().getSimpleName(), x, y);
+                    log.debug("Creating {} at ({}, {})", gameObject.getClass().getSimpleName(), x, y);
                     if (gameObject instanceof StoneRock) {
                         addObject(currentMap, new StoneRockObject(currentMap, new Vec2i(x, y)));
                     }
@@ -92,6 +92,7 @@ public class PngMapLoader extends MapLoader {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void addObject(GameMap currentMap, GameObject object) {
         ((List<GameObject>) currentMap.getGameObjects()).add(object);
     }
