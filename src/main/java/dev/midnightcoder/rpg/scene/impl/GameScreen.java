@@ -14,6 +14,7 @@ import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
@@ -89,6 +90,12 @@ public class GameScreen extends Scene {
 
     @Override
     public void update(double delta) {
+        // Object map
+        if (!currentMap.getGameObjects().isEmpty())
+            currentMap.getGameObjects()
+                .stream().map(obj -> (GameObject) obj)
+                .forEach(obj -> obj.update(delta));
+
         // Entities - Player
         player.update(delta);
 
@@ -154,6 +161,16 @@ public class GameScreen extends Scene {
             }
         }
 
+        // Check GameObjects
+        for (var obj : currentMap.getGameObjects()) {
+            GameObject gameObject = (GameObject) obj;
+            if (gameObject.contains(worldX, worldY)) {
+                onEntityClicked(gameObject, mouseB);
+                mousePressed = true;
+                return;
+            }
+        }
+
         // Check Player
         if (player.contains(worldX, worldY)) {
             onEntityClicked(player, mouseB);
@@ -169,6 +186,9 @@ public class GameScreen extends Scene {
             }
             else if (entity instanceof GroundItem groundItem) {
                 menuOpts.addAll(Arrays.stream(groundItem.getItem().getDefinition().getGroundActions()).toList());
+            }
+            else if (entity instanceof GameObject gameObject) {
+                menuOpts.addAll(Arrays.stream(gameObject.getDefinition().getActions()).toList());
             }
             else if (entity instanceof Player player) {
                 // TODO: interactions like Trade, Attack, etc.
@@ -195,6 +215,11 @@ public class GameScreen extends Scene {
             currentMap.renderTileMap(renderer);
 
         // Object map
+        if (!currentMap.getGameObjects().isEmpty()) {
+            currentMap.getGameObjects()
+                .stream().map(obj -> (GameObject) obj)
+                .forEach(obj -> obj.render(renderer));
+        }
 
         // Ground items
         groundItemManager.render(renderer);

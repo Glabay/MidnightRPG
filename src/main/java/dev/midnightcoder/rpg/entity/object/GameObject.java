@@ -36,7 +36,11 @@ public abstract class GameObject extends Entity {
         getImageForObject();
         this.worldX = position.getX() * Tile.TILE_SIZE;
         this.worldY = position.getY() * Tile.TILE_SIZE;
+        this.width = Tile.TILE_SIZE;
+        this.height = Tile.TILE_SIZE;
     }
+
+    protected abstract int getObjectId();
 
     public Vec2i getPosition() {
         return position;
@@ -69,6 +73,12 @@ public abstract class GameObject extends Entity {
                 }
                 log.info("Player is within range, attempting to mine object");
             }
+            case "examine" -> {
+                MidnightRPG.getInstance()
+                    .getGameScreen()
+                    .getDialogueInterface()
+                    .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
+            }
             default ->
                 throw new IllegalArgumentException("Invalid menu option: " + option);
         }
@@ -76,7 +86,8 @@ public abstract class GameObject extends Entity {
 
     private void getImageForObject() {
         var cacheReader = CacheReader.getInstance();
-        var textureId = cacheReader.getCacheManager().getObjects().get(0).getTextureId();
+        this.definition = cacheReader.getCacheManager().getObjects().get(getObjectId());
+        var textureId = definition.getTextureId();
         var cachedSpriteSheet = cacheReader.getCacheManager().getTextures().get(textureId);
         var spriteSheetId = cachedSpriteSheet.getSpriteSheetId();
         var spriteSheetFrame = cachedSpriteSheet.getFrameIndex();
