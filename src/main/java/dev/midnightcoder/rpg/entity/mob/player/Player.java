@@ -119,7 +119,7 @@ public class Player extends Mob {
         playerAvatar.getHitbox().setOffset(3, 5);
         playerAvatar.setHitboxDimension(26, 27);
         // Assign some HP to the player
-        skillSet.getSkill(SkillType.HITPOINTS).addExp(900);
+        skillSet.getSkill(SkillType.HITPOINTS).addExp(6_400);
     }
 
     private void loadAnimatedFrames() {

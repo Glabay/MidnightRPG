@@ -9,7 +9,11 @@ import java.text.DecimalFormat;
  * @since 2026-05-03
  */
 public class Skill {
+    private static final double XP_MULTIPLIER = 25;
+    private static final double XP_CURVE = 2.4;
+
     private final SkillType skillType;
+
     private int level;
     private int experience;
 
@@ -28,10 +32,20 @@ public class Skill {
         }
     }
 
-    // TODO: work out some real level calculation logic
     public void recalculateLevel() {
-        // temp... every 100 exp
-        this.level = (int) (1 + (this.experience / 100));
+        this.level = getLevelForExp(this.experience);
+    }
+
+    private long getExperienceForLevel(int level) {
+        return (long) (XP_MULTIPLIER * Math.pow(level, XP_CURVE));
+    }
+
+    private int getLevelForExp(int exp) {
+        var level = 1;
+        while (level < 99 && getExperienceForLevel(level + 1) <= exp) {
+            level++;
+        }
+        return level;
     }
 
     public SkillType getSkillType() {
@@ -43,7 +57,11 @@ public class Skill {
     }
 
     public String getExperience() {
-        return DecimalFormat.getInstance().format(level);
+        return DecimalFormat.getInstance().format(experience);
+    }
+
+    public String getNextLevel() {
+        return DecimalFormat.getInstance().format(getExperienceForLevel(level + 1));
     }
 
     protected void onLevelUp(int oldLevel, int newLevel) {}

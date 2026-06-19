@@ -37,8 +37,8 @@ public class Slot extends Rectangle {
 
     private Item item;
 
-    private boolean inside = false;
-    private boolean ignorePressed = false;
+    protected boolean inside = false;
+    protected boolean ignorePressed = false;
 
     public Slot(Vec2i position, int size, int id) {
         this.position = position;

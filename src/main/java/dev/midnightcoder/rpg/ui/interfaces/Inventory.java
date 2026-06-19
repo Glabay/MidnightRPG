@@ -24,13 +24,18 @@ public abstract class Inventory extends UIPanel  {
     protected Color fontColor;
 
     public Inventory(Player player) {
-        super(
+        this(
+            player,
             new Vec2i(
                 WindowConfig.getWindowWidth() - 228,
                 WindowConfig.getWindowHeight() - 342
             ),
             new Vec2i(218, 305)
         );
+    }
+
+    protected Inventory(Player player, Vec2i position, Vec2i size) {
+        super(position, size);
         this.player = player;
     }
 
@@ -46,11 +51,20 @@ public abstract class Inventory extends UIPanel  {
     public UIPanel display() {
         var curUi = player.getCurrentInventoryView();
         // if we have an open interface and it's not this one; close it first
-        if (curUi != null && curUi.getInventoryIndex() != this.getInventoryIndex())
-            curUi.display();
+        if (curUi != null && curUi != this) {
+            log.info("Closing current inventory: {}", curUi);
+            curUi.visible = false;
+        }
 
-        player.setCurrentInventoryView(this);
+        super.display(); // Toggles the visibility of this panel
 
-        return super.display();
+        if (this.isVisible()) {
+            log.info("Opened inventory: {}", this);
+            player.setCurrentInventoryView(this);
+        } else {
+            log.info("Closed inventory: {}", this);
+            player.setCurrentInventoryView(null);
+        }
+        return this;
     }
 }
