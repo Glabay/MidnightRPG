@@ -50,21 +50,16 @@ public abstract class Inventory extends UIPanel  {
     @Override
     public UIPanel display() {
         var curUi = player.getCurrentInventoryView();
-        // if we have an open interface and it's not this one; close it first
-        if (curUi != null && curUi != this) {
-            log.info("Closing current inventory: {}", curUi);
+        if (curUi != null && curUi != this)
             curUi.visible = false;
-        }
 
-        super.display(); // Toggles the visibility of this panel
+        super.display();
 
-        if (this.isVisible()) {
-            log.info("Opened inventory: {}", this);
+        if (this.isVisible())
             player.setCurrentInventoryView(this);
-        } else {
-            log.info("Closed inventory: {}", this);
+        else
             player.setCurrentInventoryView(null);
-        }
+
         return this;
     }
 }
