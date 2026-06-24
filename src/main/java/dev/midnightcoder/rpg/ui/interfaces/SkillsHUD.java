@@ -33,8 +33,8 @@ public class SkillsHUD extends Inventory {
 
     public SkillsHUD(Player player) {
         super(player);
-        font = new Font("Verdana", Font.PLAIN, 12);
-        symbol = new Font("Segoe UI Symbol", Font.PLAIN, 18);
+        font = new Font("Verdana", Font.PLAIN, 26);
+        symbol = new Font("Segoe UI Symbol", Font.PLAIN, 24);
         fontColor = new Color(0, 255, 255);
         background = TextureFactory.createFromImageFile("/ui/inventory.png").image();
         skillSlots = new ArrayList<>(SkillType.values().length);
@@ -83,8 +83,9 @@ public class SkillsHUD extends Inventory {
         if (visible) {
             renderer.renderImage(background, position.getX(), position.getY(), size.getWidth(), size.getHeight());
             renderer.setFont(font);
-            renderer.setColor(new Color(0, 255, 255));
-            renderer.renderText("Skills", getTextCentered(renderer, "Skills"), position.getY() + 24);
+            renderer.setColor(fontColor);
+            renderer.renderText("Skills", getTextCentered(renderer, "Skills"), position.getY() + 30);
+            renderer.drawRectangle(new Vec2i(position.getX() + 6, position.getY() + 34), size.getWidth() - 14, 1, fontColor);
 
             if (skillSet == null) return;
             var skillIndex = 0;
@@ -95,8 +96,8 @@ public class SkillsHUD extends Inventory {
                     var skill = skills.get(skillIndex);
                     skillIndex++;
 
-                    var strX = position.getX() + 24 + col * 64;
-                    var strY = position.getY() + 50 + row * 32;
+                    var strX = position.getX() + 20 + col * 64;
+                    var strY = position.getY() + 64 + row * 32;
 
                     renderer.setFont(symbol);
                     renderer.renderText(skill.getSkillType().getSkillIcon(), strX, strY);
@@ -109,12 +110,13 @@ public class SkillsHUD extends Inventory {
 
             // Skill Exp info
             if (selectedSkill != null) {
+                renderer.setFont(font.deriveFont(Font.BOLD, 14.0f));
                 var skillName = selectedSkill.getSkillType().getDisplayName();
-                renderer.renderText(skillName, position.getX() + 8, position.getY() + size.getHeight() - 20);
+                renderer.renderText(skillName, position.getX() + 12, position.getY() + size.getHeight() - 28);
                 var xOffset = getTextWidth(renderer, skillName) + 16;
-                renderer.setFont(font.deriveFont(Font.PLAIN, 10.0f));
+                renderer.setFont(font.deriveFont(Font.PLAIN, 12.0f));
                 renderer.renderText("Exp: ".concat(selectedSkill.getExperience()), position.getX() + xOffset, position.getY() + size.getHeight() - 30);
-                renderer.renderText("Next Level: ".concat(selectedSkill.getNextLevel()), position.getX() + xOffset, position.getY() + size.getHeight() - 14);
+                renderer.renderText("Next Level: ".concat(selectedSkill.getNextLevel()), position.getX() + 12, position.getY() + size.getHeight() - 12);
             }
         }
     }
