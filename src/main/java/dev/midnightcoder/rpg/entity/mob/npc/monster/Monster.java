@@ -1,25 +1,41 @@
-package dev.midnightcoder.rpg.entity.mob.npc.impl;
+package dev.midnightcoder.rpg.entity.mob.npc.monster;
 
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.CombatBehavior;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.WanderBehavior;
-import dev.midnightcoder.rpg.util.NpcId;
+import dev.midnightcoder.rpg.entity.skill.SkillSet;
+import dev.midnightcoder.rpg.entity.skill.SkillType;
 
 /**
- * @author Glabay | Glabay-Studios
+ * @author Glabay | The Midnight Coder
  * @project MidnightRPG
  * @social Discord: Glabay
- * @since 2026-05-19
+ * @website <a href="https://midnightcoder.dev">Midnight Coder</a>
+ * @since 2026-06-24
  */
-public class StoneGolem extends NPC {
+public class Monster extends NPC {
+    protected final SkillSet skillSet;
 
-    public StoneGolem(int tileX, int tileY, GameMap currentMap) {
-        super(NpcId.STONE_GOLEM, new Vec2i(tileX << 5, tileY << 5), currentMap);
+    protected Mob target;
+
+    public Monster(int id, Vec2i position, GameMap currentMap) {
+        super(id, position, currentMap);
         addBehavior(new WanderBehavior());
         addBehavior(new CombatBehavior());
+
+        this.skillSet = new SkillSet(this);
+    }
+
+    @Override
+    public void update(double delta) {
+        super.update(delta);
+        if (target != null) {
+
+        }
     }
 
     @Override
@@ -40,7 +56,7 @@ public class StoneGolem extends NPC {
                         .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
                 }
-                // TODO: Implement Combat System
+                setTarget(player);
             }
             case "examine" ->
                 MidnightRPG.getInstance()
@@ -48,5 +64,17 @@ public class StoneGolem extends NPC {
                     .getDialogueInterface()
                     .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
         }
+    }
+
+    public Mob getTarget() {
+        return target;
+    }
+
+    public void setTarget(Mob target) {
+        this.target = target;
+    }
+
+    protected void setLevel(SkillType skill, int level) {
+        skillSet.getSkills().get(skill.ordinal()).setLevel(level);
     }
 }

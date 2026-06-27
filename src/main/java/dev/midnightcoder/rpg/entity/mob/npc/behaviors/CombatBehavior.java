@@ -1,7 +1,8 @@
 package dev.midnightcoder.rpg.entity.mob.npc.behaviors;
 
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.npc.Behavior;
-import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.npc.monster.Monster;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 /**
@@ -12,12 +13,14 @@ import dev.midnightcoder.rpg.entity.mob.player.Player;
  */
 public class CombatBehavior implements Behavior {
     @Override
-    public void update(NPC npc, double delta) {
+    public void update(Mob npc, double delta) {
 
     }
 
     @Override
-    public void onInteraction(NPC npc, Player player) {
-        // Handle combat interaction logic here
+    public void onInteraction(Mob npc, Player player) {
+        if (npc instanceof Monster monster) {
+            monster.setTarget(player);
+        }
     }
 }

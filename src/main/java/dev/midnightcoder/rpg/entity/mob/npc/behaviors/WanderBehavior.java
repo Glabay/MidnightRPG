@@ -1,8 +1,12 @@
 package dev.midnightcoder.rpg.entity.mob.npc.behaviors;
 
 import dev.midnightcoder.engine.entity.Direction;
+import dev.midnightcoder.engine.entity.Entity;
+import dev.midnightcoder.engine.util.Vec2i;
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.npc.Behavior;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.npc.monster.Monster;
 
 import java.util.Random;
 
@@ -16,7 +20,30 @@ public class WanderBehavior implements Behavior {
     private final Random random = new Random();
 
     @Override
-    public void update(NPC npc, double delta) {
+    public void update(Mob mob, double delta) {
+        if (mob instanceof Monster monster) {
+            if (monster.getTarget() != null) {
+                var start = new Vec2i(monster.getX(), monster.getY());
+                var dest = new Vec2i(monster.getTarget().getX(), monster.getTarget().getY());
+                // if we're close enough to the target
+                if (Vec2i.getDistance(start, dest) <= 1)
+                    return;
+
+                var difX = dest.getX() - start.getX();
+                var difY = dest.getY() - start.getY();
+                var dx = Integer.signum(difX);
+                var dy = Integer.signum(difY);
+
+                if (!monster.getMovement().isBlocked(monster.getAvatar(), dx, dy)) {
+                    monster.getMovement().move(monster.getAvatar(), dx, dy);
+                    return;
+                }
+            }
+        }
+        move((NPC) mob, delta);
+    }
+
+    private void move(NPC npc, double delta) {
         if (random.nextDouble() < 0.04) {
             var roll = random.nextDouble();
             if (roll < 0.3) {

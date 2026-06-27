@@ -1,8 +1,10 @@
 package dev.midnightcoder.rpg.entity.skill;
 
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.mob.player.PlayerLevelHandler;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -16,17 +18,19 @@ import java.util.Map;
 public class SkillSet {
     private final Map<SkillType, Skill> skills = new EnumMap<>(SkillType.class);
 
-    public SkillSet(Player owner) {
-        for (var skillType : SkillType.values()) {
-            skills.put(skillType, getDefaultSkill(owner, skillType));
-        }
+    public SkillSet(Mob owner) {
+        Arrays.stream(SkillType.values())
+            .forEach(skillType ->
+                skills.put(skillType, getDefaultSkill(owner, skillType)));
     }
 
-    private Skill getDefaultSkill(Player owner, SkillType skillType) {
+    private Skill getDefaultSkill(Mob owner, SkillType skillType) {
         return new Skill(skillType) {
             @Override
             protected void onLevelUp(int oldLevel, int newLevel) {
-                PlayerLevelHandler.onLevelUp(owner, getSkillType(), oldLevel, newLevel);
+                if (owner instanceof Player player) {
+                    PlayerLevelHandler.onLevelUp(player, getSkillType(), oldLevel, newLevel);
+                }
             }
         };
     }

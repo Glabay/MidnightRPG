@@ -18,6 +18,7 @@ midnight_cache
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+.junie
 
 ### Eclipse ###
 .apt_generated

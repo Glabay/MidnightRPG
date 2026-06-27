@@ -6,9 +6,9 @@ import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.assets.PngMapLoader;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
-import dev.midnightcoder.rpg.entity.mob.npc.impl.Chicken;
+import dev.midnightcoder.rpg.entity.mob.npc.monster.impl.Chicken;
 import dev.midnightcoder.rpg.entity.mob.npc.impl.Pokey;
-import dev.midnightcoder.rpg.entity.mob.npc.impl.StoneGolem;
+import dev.midnightcoder.rpg.entity.mob.npc.monster.impl.StoneGolem;
 import dev.midnightcoder.rpg.entity.object.GameObject;
 
 import java.util.ArrayList;

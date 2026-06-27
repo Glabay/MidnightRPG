@@ -82,7 +82,7 @@ public class NpcMovement extends Movement {
         }
     }
 
-    protected boolean isBlocked(Entity entity, int tileX, int tileY) {
+    public boolean isBlocked(Entity entity, int tileX, int tileY) {
         var tile = tileMap.getTile(tileX, tileY);
         if (tile == null)
             return true;

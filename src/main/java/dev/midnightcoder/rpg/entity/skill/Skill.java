@@ -32,6 +32,11 @@ public class Skill {
         }
     }
 
+    public void setLevel(int level) {
+        this.experience = Math.toIntExact(getExperienceForLevel(level));
+        recalculateLevel();
+    }
+
     public void recalculateLevel() {
         this.level = getLevelForExp(this.experience);
     }

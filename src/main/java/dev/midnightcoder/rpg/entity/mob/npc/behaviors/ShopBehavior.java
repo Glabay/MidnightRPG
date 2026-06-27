@@ -1,7 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob.npc.behaviors;
 
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.npc.Behavior;
-import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 
 /**
@@ -12,7 +12,7 @@ import dev.midnightcoder.rpg.entity.mob.player.Player;
  */
 public class ShopBehavior implements Behavior {
     @Override
-    public void onInteraction(NPC npc, Player player) {
+    public void onInteraction(Mob npc, Player player) {
         // Open shop
     }
 }

@@ -124,7 +124,7 @@ public class NPC extends Mob {
         return spawnPosition;
     }
 
-    public Movement getMovement() {
+    public NpcMovement getMovement() {
         return movement;
     }
 

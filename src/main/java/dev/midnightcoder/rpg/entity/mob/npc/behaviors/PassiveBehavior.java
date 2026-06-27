@@ -1,7 +1,7 @@
 package dev.midnightcoder.rpg.entity.mob.npc.behaviors;
 
+import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.npc.Behavior;
-import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -11,7 +11,7 @@ import dev.midnightcoder.rpg.entity.mob.npc.NPC;
  */
 public class PassiveBehavior implements Behavior {
     @Override
-    public void update(NPC npc, double delta) {
+    public void update(Mob npc, double delta) {
 
     }
 }
