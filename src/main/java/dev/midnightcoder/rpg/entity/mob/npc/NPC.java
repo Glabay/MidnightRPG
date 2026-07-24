@@ -4,11 +4,9 @@ import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.cache.model.NPCDefinition;
 import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.renderer.Renderer;
-import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
-import dev.midnightcoder.rpg.dialogue.DialogueManager;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
 import org.slf4j.Logger;
@@ -17,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -86,6 +83,10 @@ public class NPC extends Mob {
                 default -> definition.setAnimatedFrames(Direction.EAST, animatedFrames);
             }
         }
+    }
+
+    public int getWalkRadius() {
+        return 0;
     }
 
     @Override

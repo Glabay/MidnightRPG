@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.npc.monster;
 
+import dev.midnightcoder.engine.util.Boundary;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
@@ -24,18 +25,9 @@ public class Monster extends NPC {
 
     public Monster(int id, Vec2i position, GameMap currentMap) {
         super(id, position, currentMap);
-        addBehavior(new WanderBehavior());
-        addBehavior(new CombatBehavior());
+        addBehavior(new CombatBehavior(this));
 
         this.skillSet = new SkillSet(this);
-    }
-
-    @Override
-    public void update(double delta) {
-        super.update(delta);
-        if (target != null) {
-
-        }
     }
 
     @Override
@@ -64,6 +56,15 @@ public class Monster extends NPC {
                     .getDialogueInterface()
                     .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
         }
+    }
+
+    @Override
+    public int getWalkRadius() {
+        return 4;
+    }
+
+    public int getAttackRange() {
+        return getInteractionDistance();
     }
 
     public Mob getTarget() {

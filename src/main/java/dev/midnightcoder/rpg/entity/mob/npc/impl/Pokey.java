@@ -18,7 +18,7 @@ public class Pokey extends NPC {
 
     public Pokey(int tileX, int tileY, GameMap currentMap) {
         super(NpcId.POKEY, new Vec2i(tileX << 5, tileY << 5), currentMap);
-        addBehavior(new WanderBehavior());
+        addBehavior(new WanderBehavior(this));
     }
 
     @Override

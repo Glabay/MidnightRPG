@@ -18,7 +18,7 @@ public class OceanFaery extends NPC {
 
     public OceanFaery(int tileX, int tileY, GameMap currentMap) {
         super(NpcId.OCEANFAERY, new Vec2i(tileX << 5, tileY << 5), currentMap);
-        addBehavior(new WanderBehavior());
+        addBehavior(new WanderBehavior(this));
     }
 
     @Override
