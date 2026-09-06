@@ -71,8 +71,8 @@ public class WanderBehavior implements Behavior {
         if (Vec2i.getDistance(mob.getPosition(), destination) <= Math.min(mob.getHeight(), mob.getWidth()))
             return;
 
-        var difX = destination.getX() - mob.getPosition().getX() >> 5;
-        var difY = destination.getY() - mob.getPosition().getY() >> 5;
+        var difX = destination.getX() - mob.getPosition().getX();
+        var difY = destination.getY() - mob.getPosition().getY();
         var dx = (int) (Integer.signum(difX) * mob.speed * delta);
         var dy = (int) (Integer.signum(difY) * mob.speed * delta);
 

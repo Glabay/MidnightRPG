@@ -7,14 +7,21 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.drop.DropManager;
+import dev.midnightcoder.rpg.drop.NPCDropTable;
+import dev.midnightcoder.rpg.entity.combat.CombatStats;
+import dev.midnightcoder.rpg.entity.combat.NpcCombat;
+import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.NpcAvatar;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+
+import static dev.midnightcoder.rpg.entity.combat.Combat.DEFAULT_DEATH_DELAY;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -31,6 +38,8 @@ public class NPC extends Mob {
     private final NPCDefinition definition;
     private final List<Behavior> behaviors = new ArrayList<>();
     private final int id;
+    private boolean despawned = false;
+    private NPCDropTable dropTable;
 
     public NPC(int id, Vec2i position, GameMap currentMap) {
         this.id = id;
@@ -48,6 +57,16 @@ public class NPC extends Mob {
 
         this.lastX = getAvatar().getX();
         this.lastY = getAvatar().getY();
+        this.deathDelay = definition.getDeathDelay() > 0 ? definition.getDeathDelay() : DEFAULT_DEATH_DELAY;
+        this.combat = new NpcCombat(this);
+        int health = 10;
+        if (definition.getHealth() > 0) {
+            health = definition.getHealth();
+        }
+        else if (definition.getCombatLevel() > 0) {
+            health = definition.getCombatLevel() * 2;
+        }
+        this.combatStats = new CombatStats(health);
     }
 
     private void loadAnimatedFrames() {
@@ -66,16 +85,7 @@ public class NPC extends Mob {
         var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
 
         for (int row = 0; row < spriteSheet.getRows(); row++) {
-            var animatedFrames = new BufferedImage[spriteSheet.getCols()];
-            for (int col = 0; col < spriteSheet.getCols(); col++) {
-                var frame = cachedSprite.image().getSubimage(
-                    col * spriteSheet.getFrameWidth(),
-                    row * spriteSheet.getFrameHeight(),
-                    spriteSheet.getFrameWidth(),
-                    spriteSheet.getFrameHeight()
-                );
-                animatedFrames[col] = frame;
-            }
+            var animatedFrames = getAvatarImages(spriteSheet, cachedSprite, row);
             switch (row) {
                 case 0 -> definition.setAnimatedFrames(Direction.SOUTH, animatedFrames);
                 case 1 -> definition.setAnimatedFrames(Direction.NORTH, animatedFrames);
@@ -91,6 +101,21 @@ public class NPC extends Mob {
 
     @Override
     public void update(double delta) {
+        if (despawned) return;
+
+        if (dying || isDead()) {
+            if (!dying) onDeath();
+
+            int ticks = Math.max(1, (int) Math.round(delta));
+            deathTicks -= ticks;
+            if (deathTicks <= 0) {
+                despawn();
+                dropItems();
+            }
+            updateHitsplats(delta);
+            return;
+        }
+
         super.update(delta);
         getAvatar().updateHitbox();
 
@@ -100,7 +125,49 @@ public class NPC extends Mob {
 
     @Override
     public void render(Renderer renderer) {
+        if (despawned) return;
+
         avatar.render(renderer);
+        super.render(renderer);
+    }
+
+    @Override
+    public void onDeath() {
+        super.onDeath();
+        if (combat != null) {
+            combat.reset();
+        }
+    }
+
+    public List<GroundItem> dropItems() {
+        Player killer = (lastAttacker instanceof Player p) ? p : null;
+        return DropManager.getInstance().dropItems(this, killer);
+    }
+
+    public void despawn() {
+        this.despawned = true;
+    }
+
+    public boolean isDespawned() {
+        return despawned;
+    }
+
+    public void setDespawned(boolean despawned) {
+        this.despawned = despawned;
+    }
+
+    public NPCDropTable getDropTable() {
+        return dropTable;
+    }
+
+    public void setDropTable(NPCDropTable dropTable) {
+        this.dropTable = dropTable;
+    }
+
+    @Override
+    public void applyHit(int damage) {
+        super.applyHit(damage);
+        behaviors.forEach(behavior -> behavior.onDamage(this, damage));
     }
 
     public void addBehavior(Behavior behavior) {
@@ -158,8 +225,33 @@ public class NPC extends Mob {
     }
 
     @Override
+    public NpcCombat getCombat() {
+        return (NpcCombat) combat;
+    }
+
+    @Override
     public void handleMenuOption(String option) {
-        if (option.equalsIgnoreCase("examine")) {
+        if (despawned || isDead()) {
+            return;
+        }
+        if (option.equalsIgnoreCase("attack")) {
+            if (!entityWithinDist(this, getInteractionDistance())) {
+                MidnightRPG.getInstance()
+                    .getGameScreen()
+                    .getDialogueInterface()
+                    .sendInfoInter("Too far away", "You are too far away to interact with this.");
+                return;
+            }
+            var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+            if (player != null) {
+                player.getCombat().setTarget(this);
+                player.getCombat().attack(this);
+                if (getCombat() != null) {
+                    getCombat().retaliate(player);
+                }
+            }
+        }
+        else if (option.equalsIgnoreCase("examine")) {
             MidnightRPG.getInstance()
                 .getGameScreen()
                 .getDialogueInterface()

@@ -21,6 +21,14 @@ public class CombatStats {
         this.currentHealth = Math.min(maxHealth, this.currentHealth + healing);
     }
 
+    public void heal(int healing) {
+        this.currentHealth += healing;
+    }
+
+    public void setCurrentHealth(int currentHealth) {
+        this.currentHealth = Math.max(0, currentHealth);
+    }
+
     public int getCurrentHealth() {
         return currentHealth;
     }

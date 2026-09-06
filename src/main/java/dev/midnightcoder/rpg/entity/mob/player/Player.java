@@ -11,6 +11,7 @@ import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.dialogue.DialogueSession;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
+import dev.midnightcoder.rpg.entity.combat.PlayerCombat;
 import dev.midnightcoder.rpg.entity.mob.Mob;
 import dev.midnightcoder.rpg.entity.mob.PlayerAvatar;
 import dev.midnightcoder.rpg.entity.skill.SkillSet;
@@ -22,8 +23,6 @@ import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.util.EnumMap;
-import java.util.Map;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -32,17 +31,14 @@ import java.util.Map;
  * @since 2026-05-01
  */
 public class Player extends Mob {
-    private final int SPRITESHEET_ID = 5;
-
     private final PlayerAvatar playerAvatar;
-
     private final PlayerMovement playerMovement;
     private final KeyboardInputManager input;
     private final PlayerProfile profile;
     private final SkillSet skillSet;
     private final Backpack backpack;
     private final Equipment equipment;
-    private final CombatStats combatStats;
+    private final Vec2i spawnPosition;
 
     private Entity selectedEntity;
     private Inventory currentInventoryView;
@@ -50,14 +46,16 @@ public class Player extends Mob {
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
+        this.spawnPosition = new Vec2i(37 << 5, 50 << 5);
 
         playerMovement = new PlayerMovement(currentMap.getTileMap());
-        playerAvatar = new PlayerAvatar(new Vec2i(37 << 5, 50 << 5), currentMap, this.input, playerMovement);
+        playerAvatar = new PlayerAvatar(spawnPosition, currentMap, this.input, playerMovement);
         profile = new PlayerProfile(username);
         skillSet = new SkillSet(this);
         backpack = new Backpack();
         equipment = new Equipment();
         combatStats = new CombatStats(getMaxHealth());
+        combat = new PlayerCombat(this);
 
         // load up default details
         loadDefaults();
@@ -75,6 +73,11 @@ public class Player extends Mob {
 
     @Override
     public void update(double delta) {
+        if (isDead()) {
+            onDeath();
+            return;
+        }
+        super.update(delta);
         playerAvatar.updateHitbox();
         // Movement logic
         if (input.isKeyHeld(KeyEvent.VK_SHIFT))
@@ -110,8 +113,14 @@ public class Player extends Mob {
     }
 
     @Override
+    public GameMap getCurrentMap() {
+        return playerAvatar != null ? playerAvatar.getCurrentMap() : null;
+    }
+
+    @Override
     public void render(Renderer renderer) {
         playerAvatar.render(renderer);
+        super.render(renderer);
     }
 
     private void loadDefaults() {
@@ -126,21 +135,13 @@ public class Player extends Mob {
         // set the NPC AnimatedSprites
         var cacheMan = CacheReader.getInstance().getCacheManager();
         var spriteSheets = cacheMan.getSpriteSheets();
+        int SPRITESHEET_ID = 5;
         var spriteSheet = spriteSheets.get(SPRITESHEET_ID);
         var cachedSpriteIndex = spriteSheet.getSpriteId();
         var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
 
         for (int row = 0; row < spriteSheet.getRows(); row++) {
-            var animatedFrames = new BufferedImage[spriteSheet.getCols()];
-            for (int col = 0; col < spriteSheet.getCols(); col++) {
-                var frame = cachedSprite.image().getSubimage(
-                    col * spriteSheet.getFrameWidth(),
-                    row * spriteSheet.getFrameHeight(),
-                    spriteSheet.getFrameWidth(),
-                    spriteSheet.getFrameHeight()
-                );
-                animatedFrames[col] = frame;
-            }
+            var animatedFrames = getAvatarImages(spriteSheet, cachedSprite, row);
             switch (row) {
                 case 0 -> getAvatar().setAnimatedFrames(Direction.SOUTH, animatedFrames);
                 case 1 -> getAvatar().setAnimatedFrames(Direction.NORTH, animatedFrames);
@@ -200,8 +201,9 @@ public class Player extends Mob {
         return playerAvatar;
     }
 
-    public CombatStats getCombatStats() {
-        return combatStats;
+    @Override
+    public PlayerCombat getCombat() {
+        return (PlayerCombat) combat;
     }
 
     public Entity getSelectedEntity() {
@@ -242,6 +244,31 @@ public class Player extends Mob {
 
     public void setDialogueSession(DialogueSession session) {
         this.dialogueSession = session;
+    }
+
+    @Override
+    public void onDeath() {
+        super.onDeath();
+        respawn();
+    }
+
+    public void respawn() {
+        if (playerAvatar != null && spawnPosition != null) {
+            playerAvatar.setX(spawnPosition.getX());
+            playerAvatar.setY(spawnPosition.getY());
+            lastX = spawnPosition.getX();
+            lastY = spawnPosition.getY();
+        }
+        if (combatStats != null) {
+            combatStats.heal(getMaxHealth(), getMaxHealth());
+        }
+        dying = false;
+        deathTicks = 0;
+        setSelectedEntity(null);
+        clearHitsplats();
+        if (combat != null) {
+            combat.reset();
+        }
     }
 
     @Override

@@ -39,7 +39,13 @@ public class OceanFaery extends NPC {
                         .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
                 }
-                // TODO: Implement Combat System
+                if (player != null) {
+                    player.getCombat().setTarget(this);
+                    player.getCombat().attack(this);
+                    if (getCombat() != null) {
+                        getCombat().retaliate(player);
+                    }
+                }
             }
             case "examine" ->
                 MidnightRPG.getInstance()

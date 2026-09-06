@@ -103,6 +103,7 @@ public class GameScreen extends Scene {
         if (!currentMap.getEntities().isEmpty())
             currentMap.getEntities()
                 .stream().map(e -> (NPC) e)
+                .filter(npc -> !npc.isDespawned())
                 .forEach(entity -> entity.update(delta));
 
         // Ground items
@@ -145,7 +146,7 @@ public class GameScreen extends Scene {
         // Check NPCs
         for (var e : currentMap.getEntities()) {
             NPC npc = (NPC) e;
-            if (npc.contains(worldX, worldY)) {
+            if (!npc.isDespawned() && !npc.isDead() && npc.contains(worldX, worldY)) {
                 onEntityClicked(npc, mouseB);
                 mousePressed = true;
                 return;
@@ -234,6 +235,7 @@ public class GameScreen extends Scene {
         if (!currentMap.getEntities().isEmpty())
             currentMap.getEntities()
                 .stream().map(e -> (NPC) e)
+                .filter(npc -> !npc.isDespawned())
                 .forEach(entity -> entity.render(renderer));
 
         // Projectiles
