@@ -84,18 +84,18 @@ public class InventoryHUD extends Inventory  {
     }
 
     public void addItem(Item item) {
-        if (backpack.addNewItem(item)) {
-            var slot = backpack.findSlotForItem(item);
-            if (slot >= 0) {
-                log.debug("Found existing slot for item: {}", item);
-                addItemToSlot(item, slot);
-                return;
-            }
-            var slotIndex = backpack.getFirstAvailableSlot();
-            if (slotIndex >= 0) {
-                log.debug("Adding item to first available slot: {}", slotIndex);
-                addItemToSlot(item, slotIndex);
-            }
+        var addedToSlot = backpack.addNewItem(item);
+        // if we added the item to an existing slot, we're done
+        if (addedToSlot >= 0) {
+            log.debug("Found existing slot for item: {}", item);
+            addItemToSlot(item, addedToSlot);
+            return;
+        }
+        // find the first available slot
+        var slotIndex = backpack.getFirstAvailableSlot();
+        if (slotIndex >= 0) {
+            log.debug("Adding item to first available slot: {}", slotIndex);
+            addItemToSlot(item, slotIndex);
         }
     }
 
