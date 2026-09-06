@@ -17,14 +17,14 @@ public abstract class Inventory {
         this.items = new Item[capacity];
     }
 
-    public boolean addNewItem(Item item) {
+    public int addNewItem(Item item) {
         for (int i = 0; i < capacity; i++) {
             if (items[i] == null) {
                 items[i] = item;
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public Item getItemFromSlot(int slot) {
