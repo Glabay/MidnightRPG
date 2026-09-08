@@ -4,17 +4,18 @@ import dev.midnightcoder.engine.core.Game;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
+import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.scene.SceneManager;
 import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.scene.impl.LoginScreen;
 import dev.midnightcoder.rpg.ui.UIManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -24,6 +25,8 @@ import java.util.List;
  */
 public class MidnightRPG implements Game {
     public static MidnightRPG instance;
+
+    protected final Map<DepletedResource, GameObject> depletedResources = new HashMap<>();
 
     private SceneManager sceneManager;
     private KeyboardInputManager input;
@@ -106,5 +109,13 @@ public class MidnightRPG implements Game {
             players.add(player);
 
         entities.add(entity);
+    }
+
+    public Map<DepletedResource, GameObject> getDepletedResources() {
+        return depletedResources;
+    }
+
+    public void addDepletedResource(GameObject resource, DepletedResource depletedResource) {
+        depletedResources.put(depletedResource, resource);
     }
 }

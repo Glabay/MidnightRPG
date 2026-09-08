@@ -1,6 +1,6 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
-import dev.midnightcoder.engine.entity.Entity;
+import dev.midnightcoder.engine.entity.EngineEntity;
 import dev.midnightcoder.engine.entity.mob.Mob;
 import dev.midnightcoder.engine.system.Movement;
 import dev.midnightcoder.engine.world.TileMap;
@@ -82,7 +82,7 @@ public class PlayerMovement extends Movement {
         }
     }
 
-    protected boolean isBlocked(Entity entity, int tileX, int tileY) {
+    protected boolean isBlocked(EngineEntity entity, int tileX, int tileY) {
         var tile = tileMap.getTile(tileX, tileY);
         if (tile == null)
             return true;

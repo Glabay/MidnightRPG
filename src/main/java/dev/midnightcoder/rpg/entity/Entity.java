@@ -1,7 +1,6 @@
 package dev.midnightcoder.rpg.entity;
 
-import dev.midnightcoder.engine.renderer.Renderer;
-
+import dev.midnightcoder.engine.entity.EngineEntity;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.util.MenuActionable;
@@ -12,14 +11,13 @@ import dev.midnightcoder.rpg.util.MenuActionable;
  * @social Discord: Glabay
  * @since 2026-05-01
  */
-public abstract class Entity implements MenuActionable {
+public abstract class Entity extends EngineEntity implements MenuActionable {
     protected int worldX;
     protected int worldY;
     protected int width;
     protected int height;
 
     public void update(double delta) {}
-    public void render(Renderer renderer) {}
 
     public int getX() {
         return worldX;
@@ -46,7 +44,7 @@ public abstract class Entity implements MenuActionable {
         // Default implementation
     }
 
-    protected boolean entityWithinDist(Entity entity, int distance) {
+    public boolean entityWithinDist(Entity entity, int distance) {
         var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
         var dist = Vec2i.getDistance(
             new Vec2i(player.getAvatar().getX(), player.getAvatar().getY()),

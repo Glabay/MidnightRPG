@@ -18,5 +18,14 @@ public class ItemId {
     public static final int IRON_PICKAXE = 8;
     public static final int STEEL_PICKAXE = 9;
     public static final int NORMAL_LOGS = 10;
-    public static final int IRON_ORE = 11;
+    public static final int STONE = 11;
+    public static final int COPPER_ORE = 12;
+    public static final int TIN_ORE = 13;
+    public static final int IRON_ORE = 14;
+    public static final int COAL = 15;
+    public static final int MITHRIL_ORE = 16;
+    public static final int BRONZE_BAR = 17;
+    public static final int IRON_BAR = 18;
+    public static final int STEEL_BAR = 19;
+    public static final int MITHRIL_BAR = 20;
 }

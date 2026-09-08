@@ -9,6 +9,7 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.content.skills.mining.MiningAction;
 import dev.midnightcoder.rpg.entity.Entity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,11 @@ public abstract class GameObject extends Entity {
         var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
         switch (option.toLowerCase()) {
             case "mine" -> {
+                // If the player is already skilling, cancel the action
+                if (player.getSkillingAction() != null) {
+                    player.setSkillingAction(null);
+                    return;
+                }
                 // if the user is too far, send a dialogue message
                 if (!entityWithinDist(this, 2)) {
                     MidnightRPG.getInstance()
@@ -72,8 +78,10 @@ public abstract class GameObject extends Entity {
                     return;
                 }
                 log.info("Player is within range, attempting to mine object");
+                player.setSkillingAction(new MiningAction(player, this));
             }
             case "examine" -> {
+                log.info("Examine option selected for object with ID: {}", getObjectId());
                 MidnightRPG.getInstance()
                     .getGameScreen()
                     .getDialogueInterface()

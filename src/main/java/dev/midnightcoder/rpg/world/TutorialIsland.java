@@ -1,5 +1,6 @@
 package dev.midnightcoder.rpg.world;
 
+import dev.midnightcoder.engine.entity.EngineEntity;
 import dev.midnightcoder.engine.renderer.camera.Camera2D;
 import dev.midnightcoder.engine.window.WindowConfig;
 import dev.midnightcoder.engine.world.GameMap;

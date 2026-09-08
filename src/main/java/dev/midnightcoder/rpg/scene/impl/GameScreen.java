@@ -9,6 +9,7 @@ import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.assets.audio.MusicTrack;
+import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.ground.GroundItem;
 import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
@@ -90,19 +91,28 @@ public class GameScreen extends Scene {
 
     @Override
     public void update(double delta) {
+        if (!MidnightRPG.getInstance().getDepletedResources().isEmpty()) {
+            var resources = MidnightRPG.getInstance()
+                .getDepletedResources()
+                .keySet()
+                .stream().toList();
+            resources.forEach(DepletedResource::tick);
+        }
+
         // Object map
         if (!currentMap.getGameObjects().isEmpty())
-            currentMap.getGameObjects()
-                .stream().map(obj -> (GameObject) obj)
+            currentMap.getGameObjects().stream()
+                .map(obj -> (GameObject) obj)
                 .forEach(obj -> obj.update(delta));
+
 
         // Entities - Player
         player.update(delta);
 
         // Entities - NPCs
         if (!currentMap.getEntities().isEmpty())
-            currentMap.getEntities()
-                .stream().map(e -> (NPC) e)
+            currentMap.getEntities().stream()
+                .map(e -> (NPC) e)
                 .filter(npc -> !npc.isDespawned())
                 .forEach(entity -> entity.update(delta));
 
@@ -356,5 +366,9 @@ public class GameScreen extends Scene {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public GameMap getCurrentMap() {
+        return currentMap;
     }
 }

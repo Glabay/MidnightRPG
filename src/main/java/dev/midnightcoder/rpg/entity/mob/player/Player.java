@@ -8,6 +8,7 @@ import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.content.skills.SkillingAction;
 import dev.midnightcoder.rpg.dialogue.DialogueSession;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.combat.CombatStats;
@@ -20,6 +21,8 @@ import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
 import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -31,6 +34,7 @@ import java.awt.image.BufferedImage;
  * @since 2026-05-01
  */
 public class Player extends Mob {
+    private static final Logger log = LoggerFactory.getLogger(Player.class);
     private final PlayerAvatar playerAvatar;
     private final PlayerMovement playerMovement;
     private final KeyboardInputManager input;
@@ -43,6 +47,7 @@ public class Player extends Mob {
     private Entity selectedEntity;
     private Inventory currentInventoryView;
     private DialogueSession dialogueSession;
+    private SkillingAction skillingAction;
 
     public Player(String username, GameMap currentMap, KeyboardInputManager input) {
         this.input = input;
@@ -110,6 +115,11 @@ public class Player extends Mob {
         getAvatar().getCurrentMap()
             .getCamera()
             .follow(targetX, targetY);
+
+        // Skilling
+        if (skillingAction != null) {
+            skillingAction.process();
+        }
     }
 
     @Override
@@ -281,4 +291,13 @@ public class Player extends Mob {
         return playerAvatar.getHeight();
     }
 
+
+    public void setSkillingAction(SkillingAction skillingAction) {
+        log.info("Setting skilling action for player");
+        this.skillingAction = skillingAction;
+    }
+
+    public SkillingAction getSkillingAction() {
+        return skillingAction;
+    }
 }
