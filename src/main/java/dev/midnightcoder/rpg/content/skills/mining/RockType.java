@@ -1,7 +1,7 @@
 package dev.midnightcoder.rpg.content.skills.mining;
 
 import dev.midnightcoder.rpg.entity.object.GameObject;
-import dev.midnightcoder.rpg.entity.object.impl.StoneRockObject;
+import dev.midnightcoder.rpg.entity.object.impl.mineable.StoneRockObject;
 import dev.midnightcoder.rpg.item.ItemManager;
 import dev.midnightcoder.rpg.util.ItemId;
 import org.slf4j.Logger;

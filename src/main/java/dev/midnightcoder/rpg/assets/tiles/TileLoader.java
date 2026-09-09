@@ -133,8 +133,11 @@ public class TileLoader {
             registry.register(TileColor.TREE_STUMP_YELLOW, new TreeStump("normal_stump_yellow", treeStumpYellow));
             registry.register(TileColor.TREE_STUMP_RED, new TreeStump("normal_stump_red", treeStumpRed));
             registry.register(TileColor.TREE_STUMP_RED2, new TreeStump("normal_stump_red2", treeStumpRed2));
-            registry.register(TileColor.STONE_ROCK, new StoneRock("stone_rock", stoneRock));
-            registry.register(TileColor.IRON_ROCK, new StoneRock("iron_rock", ironRock));
+
+            registry.register(TileColor.STONE_ROCK, new MineableRock("stone_rock", stoneRock));
+            registry.register(TileColor.COPPER_ROCK, new MineableRock("copper_rock", stoneRock));
+            registry.register(TileColor.TIN_ROCK, new MineableRock("tin_rock", stoneRock));
+            registry.register(TileColor.IRON_ROCK, new MineableRock("iron_rock", ironRock));
 
 
             registry.register(TileColor.STONE_PATH, getTileType("ground_stone", CollisionFlag.NONE));

@@ -8,9 +8,9 @@ import dev.midnightcoder.engine.world.loader.MapLoader;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.assets.tiles.TileColorRegistry;
 import dev.midnightcoder.rpg.entity.object.GameObject;
-import dev.midnightcoder.rpg.entity.object.impl.StoneRockObject;
+import dev.midnightcoder.rpg.entity.object.impl.mineable.*;
 import dev.midnightcoder.rpg.world.tiles.GameObjectTile;
-import dev.midnightcoder.rpg.world.tiles.impl.StoneRock;
+import dev.midnightcoder.rpg.world.tiles.impl.MineableRock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,8 +84,16 @@ public class PngMapLoader extends MapLoader {
                 // create a GameObject at the x, y
                 if (tileType instanceof GameObjectTile gameObject) {
                     log.debug("Creating {} at ({}, {})", gameObject.getClass().getSimpleName(), x, y);
-                    if (gameObject instanceof StoneRock) {
-                        addObject(currentMap, new StoneRockObject(currentMap, new Vec2i(x, y)));
+                    if (gameObject instanceof MineableRock rock) {
+                        switch (rock.getId()) {
+                            case "stone_rock" -> addObject(currentMap, new StoneRockObject(currentMap, new Vec2i(x, y)));
+                            case "copper_rock" -> addObject(currentMap, new CopperRockObject(currentMap, new Vec2i(x, y)));
+                            case "tin_rock" -> addObject(currentMap, new TinRockObject(currentMap, new Vec2i(x, y)));
+                            case "iron_rock" -> addObject(currentMap, new IronRockObject(currentMap, new Vec2i(x, y)));
+                            case "coal_rock" -> addObject(currentMap, new CoalRockObject(currentMap, new Vec2i(x, y)));
+                            case "mithril_rock" -> addObject(currentMap, new MithrilRockObject(currentMap, new Vec2i(x, y)));
+                            default -> log.warn("Unknown rock type: {}", rock.getId());
+                        }
                     }
                 }
             }

@@ -97,6 +97,11 @@ public abstract class GameObject extends Entity {
         this.definition = cacheReader.getCacheManager().getObjects().get(getObjectId());
         var textureId = definition.getTextureId();
         var cachedSpriteSheet = cacheReader.getCacheManager().getTextures().get(textureId);
+        if (cachedSpriteSheet.getSpriteSheetId() == -1) {
+            var spriteId = cachedSpriteSheet.getSpriteId();
+            image = cacheReader.getTexture(spriteId).image();
+            return;
+        }
         var spriteSheetId = cachedSpriteSheet.getSpriteSheetId();
         var spriteSheetFrame = cachedSpriteSheet.getFrameIndex();
         var spriteSheet = cacheReader.getCacheManager().getSpriteSheets().get(spriteSheetId);
