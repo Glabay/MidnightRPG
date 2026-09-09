@@ -90,34 +90,34 @@ public class PngMapLoader extends MapLoader {
                 if (tileType instanceof GameObjectTile gameObject) {
                     log.debug("Creating {} at ({}, {})", gameObject.getClass().getSimpleName(), x, y);
                     // TODO: Figure out a better way to load these Objects
-                    if (gameObject instanceof MineableRock rock) {
-                        switch (rock.getId()) {
-                            case "stone_rock" -> addObject(currentMap, new StoneRockObject(currentMap, new Vec2i(x, y)));
-                            case "copper_rock" -> addObject(currentMap, new CopperRockObject(currentMap, new Vec2i(x, y)));
-                            case "tin_rock" -> addObject(currentMap, new TinRockObject(currentMap, new Vec2i(x, y)));
-                            case "iron_rock" -> addObject(currentMap, new IronRockObject(currentMap, new Vec2i(x, y)));
-                            case "coal_rock" -> addObject(currentMap, new CoalRockObject(currentMap, new Vec2i(x, y)));
-                            case "mithril_rock" -> addObject(currentMap, new MithrilRockObject(currentMap, new Vec2i(x, y)));
-                            default -> log.warn("Unknown rock type: {}", rock.getId());
+                    switch (gameObject) {
+                        case MineableRock rock -> {
+                            switch (rock.getId()) {
+                                case "stone_rock" -> addObject(currentMap, new StoneRockObject(currentMap, new Vec2i(x, y)));
+                                case "copper_rock" -> addObject(currentMap, new CopperRockObject(currentMap, new Vec2i(x, y)));
+                                case "tin_rock" -> addObject(currentMap, new TinRockObject(currentMap, new Vec2i(x, y)));
+                                case "iron_rock" -> addObject(currentMap, new IronRockObject(currentMap, new Vec2i(x, y)));
+                                case "coal_rock" -> addObject(currentMap, new CoalRockObject(currentMap, new Vec2i(x, y)));
+                                case "mithril_rock" -> addObject(currentMap, new MithrilRockObject(currentMap, new Vec2i(x, y)));
+                            }
                         }
-                    }
-                    if (gameObject instanceof TreeStump treeStump) {
-                        switch (treeStump.getId()) {
-                            case "normal_stump" -> addObject(currentMap, new TreeStumpEntity(currentMap, new Vec2i(x, y)));
-                            case "normal_stump_pink" -> addObject(currentMap, new TreeStumpPinkObject(currentMap, new Vec2i(x, y)));
-                            case "normal_stump_orange" -> addObject(currentMap, new TreeStumpOrangeObject(currentMap, new Vec2i(x, y)));
-                            case "normal_stump_yellow" -> addObject(currentMap, new TreeStumpYellowObject(currentMap, new Vec2i(x, y)));
-                            case "normal_stump_red" -> addObject(currentMap, new TreeStumpRoseObject(currentMap, new Vec2i(x, y)));
-                            case "normal_stump_red2" -> addObject(currentMap, new TreeStumpTulipObject(currentMap, new Vec2i(x, y)));
-                            default -> log.warn("Unknown tree stump type: {}", treeStump.getId());
+                        case TreeStump treeStump -> {
+                            switch (treeStump.getId()) {
+                                case "normal_stump" -> addObject(currentMap, new TreeStumpEntity(currentMap, new Vec2i(x, y)));
+                                case "normal_stump_pink" -> addObject(currentMap, new TreeStumpPinkObject(currentMap, new Vec2i(x, y)));
+                                case "normal_stump_orange" -> addObject(currentMap, new TreeStumpOrangeObject(currentMap, new Vec2i(x, y)));
+                                case "normal_stump_yellow" -> addObject(currentMap, new TreeStumpYellowObject(currentMap, new Vec2i(x, y)));
+                                case "normal_stump_red" -> addObject(currentMap, new TreeStumpRoseObject(currentMap, new Vec2i(x, y)));
+                                case "normal_stump_red2" -> addObject(currentMap, new TreeStumpTulipObject(currentMap, new Vec2i(x, y)));
+                            }
                         }
-                    }
-                    if (gameObject instanceof Bushes bushes) {
-                        switch (bushes.getId()) {
-                            case "normal_bush" -> addObject(currentMap, new BushesObject(currentMap, new Vec2i(x, y)));
-                            case "berry_bush" -> addObject(currentMap, new BushesBerryObject(currentMap, new Vec2i(x, y)));
-                            default -> log.warn("Unknown bush type: {}", bushes.getId());
+                        case Bushes bushes -> {
+                            switch (bushes.getId()) {
+                                case "normal_bush" -> addObject(currentMap, new BushesObject(currentMap, new Vec2i(x, y)));
+                                case "berry_bush" -> addObject(currentMap, new BushesBerryObject(currentMap, new Vec2i(x, y)));
+                            }
                         }
+                        default -> log.warn("Unknown Object type: {}", gameObject.getId());
                     }
                 }
             }
