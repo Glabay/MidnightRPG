@@ -127,6 +127,9 @@ public class TileLoader {
             registry.register(TileColor.WOOD_WALL, new WallTile("wall_wood", woodenWall));
             registry.register(TileColor.WOOD_WALL_TOP, new WallTile("wall_wood_cap", woodenWallCap));
 
+            registry.register(TileColor.BUSHES, new Bushes("normal_bush"));
+            registry.register(TileColor.BUSHES_BERRY, new Bushes("berry_bush"));
+
             registry.register(TileColor.TREE_STUMP, new TreeStump("normal_stump", treeStump));
             registry.register(TileColor.TREE_STUMP_PINK, new TreeStump("normal_stump_pink", treeStumpPink));
             registry.register(TileColor.TREE_STUMP_ORANGE, new TreeStump("normal_stump_orange", treeStumpOrange));

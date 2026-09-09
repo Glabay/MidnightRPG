@@ -14,10 +14,4 @@ public class MineableRock extends GameObjectTile {
     public MineableRock(String id, Texture texture) {
         super(id, texture, CollisionFlag.FULL);
     }
-
-
-    @Override
-    protected void loadGameObject(String tileId) {
-
-    }
 }

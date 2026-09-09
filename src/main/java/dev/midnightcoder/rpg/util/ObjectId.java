@@ -14,4 +14,11 @@ public class ObjectId {
     public static final int COAL_ROCK = 4;
     public static final int MITHRIL_ROCK = 5;
     public static final int NORMAL_TREE_STUMP = 6;
+    public static final int NORMAL_TREE_STUMP_PINK = 7;
+    public static final int NORMAL_TREE_STUMP_ORANGE = 8;
+    public static final int NORMAL_TREE_STUMP_YELLOW = 9;
+    public static final int NORMAL_TREE_STUMP_RED = 10;
+    public static final int NORMAL_TREE_STUMP_RED2 = 11;
+    public static final int BUSHES = 12;
+    public static final int BUSHES_BERRY = 13;
 }
