@@ -21,4 +21,8 @@ public class ObjectId {
     public static final int NORMAL_TREE_STUMP_RED2 = 11;
     public static final int BUSHES = 12;
     public static final int BUSHES_BERRY = 13;
+    public static final int NORMAL_TREE = 14;
+    public static final int OAK_TREE = 15;
+    public static final int MAPLE_TREE = 16;
+    public static final int WILLOW_TREE = 17;
 }
