@@ -28,4 +28,8 @@ public class ItemId {
     public static final int IRON_BAR = 18;
     public static final int STEEL_BAR = 19;
     public static final int MITHRIL_BAR = 20;
+    public static final int OAK_LOGS = 21;
+    public static final int MAPLE_LOGS = 22;
+    public static final int WILLOW_LOGS = 23;
+
 }
