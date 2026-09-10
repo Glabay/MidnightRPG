@@ -300,4 +300,11 @@ public class Player extends Mob {
     public SkillingAction getSkillingAction() {
         return skillingAction;
     }
+
+    public void sendMessage(String message) {
+        MidnightRPG.getInstance()
+            .getGameScreen()
+            .getDialogueInterface()
+            .sendInfoInter("GAME MESSAGE", message);
+    }
 }
