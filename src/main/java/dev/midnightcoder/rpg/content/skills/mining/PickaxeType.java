@@ -7,8 +7,6 @@ import dev.midnightcoder.rpg.item.Item;
 import dev.midnightcoder.rpg.util.ItemId;
 
 import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Objects;
 
 /**
  * @author Glabay | The Midnight Coder

@@ -1,7 +1,7 @@
 package dev.midnightcoder.rpg.content.skills.mining;
 
 import dev.midnightcoder.rpg.entity.object.GameObject;
-import dev.midnightcoder.rpg.entity.object.impl.mineable.StoneRockObject;
+import dev.midnightcoder.rpg.entity.object.impl.mineable.*;
 import dev.midnightcoder.rpg.item.ItemManager;
 import dev.midnightcoder.rpg.util.ItemId;
 import org.slf4j.Logger;
@@ -45,6 +45,10 @@ public enum RockType {
     public static RockType findRockTypeFromObject(GameObject rockObject) {
         var pickaxe = switch(rockObject) {
             case StoneRockObject _ -> STONE;
+            case CoalRockObject _ -> COAL;
+            case CopperRockObject _ -> COPPER;
+            case IronRockObject _ -> IRON;
+            case MithrilRockObject _ -> MITHRIL;
             default -> throw new IllegalStateException("Unexpected value: " + rockObject);
         };
         log.info("Finding rock type for object: {}", rockObject);

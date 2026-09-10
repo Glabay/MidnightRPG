@@ -42,7 +42,7 @@ public class MiningAction extends SkillingAction {
             actionDelay--;
             return;
         }
-        log.info("Mining action processing");
+
         if (isSuccessful()) {
             onSuccess();
             depleteResource();
