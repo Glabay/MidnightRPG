@@ -10,11 +10,12 @@ import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
 import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.content.skills.mining.MiningAction;
+import dev.midnightcoder.rpg.content.skills.woodcutting.ChoppingAction;
 import dev.midnightcoder.rpg.entity.Entity;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
@@ -31,14 +32,23 @@ public abstract class GameObject extends Entity {
     private ObjectDefinition definition;
     private BufferedImage image;
 
+    protected GameObject(GameMap currentMap, Vec2i position, int width, int height) {
+        this.currentMap = currentMap;
+        this.position = position;
+        getImageForObject();
+        this.width = width;
+        this.height = height;
+        this.worldX = position.getX() * Tile.TILE_SIZE;
+        this.worldY = position.getY() * Tile.TILE_SIZE;
+    }
     protected GameObject(GameMap currentMap, Vec2i position) {
         this.currentMap = currentMap;
         this.position = position;
         getImageForObject();
-        this.worldX = position.getX() * Tile.TILE_SIZE;
-        this.worldY = position.getY() * Tile.TILE_SIZE;
         this.width = Tile.TILE_SIZE;
         this.height = Tile.TILE_SIZE;
+        this.worldX = position.getX() * this.width;
+        this.worldY = position.getY() * this.height;
     }
 
     protected abstract int getObjectId();
@@ -64,21 +74,14 @@ public abstract class GameObject extends Entity {
         var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
         switch (option.toLowerCase()) {
             case "mine" -> {
-                // If the player is already skilling, cancel the action
-                if (player.getSkillingAction() != null) {
-                    player.setSkillingAction(null);
-                    return;
-                }
-                // if the user is too far, send a dialogue message
-                if (!entityWithinDist(this, 2)) {
-                    MidnightRPG.getInstance()
-                        .getGameScreen()
-                        .getDialogueInterface()
-                        .sendInfoInter("Too far away", "You are too far away to interact with this.");
-                    return;
-                }
+                if (executionProhibited(player)) return;
                 log.info("Player is within range, attempting to mine object");
                 player.setSkillingAction(new MiningAction(player, this));
+            }
+            case "chop" -> {
+                if (executionProhibited(player)) return;
+                log.info("Player is within range, attempting to chop tree");
+                player.setSkillingAction(new ChoppingAction(player, this));
             }
             case "examine" -> {
                 log.info("Examine option selected for object with ID: {}", getObjectId());
@@ -90,6 +93,21 @@ public abstract class GameObject extends Entity {
             default ->
                 throw new IllegalArgumentException("Invalid menu option: " + option);
         }
+    }
+
+    private boolean executionProhibited(Player player) {
+        if (player.getSkillingAction() != null) {
+            player.setSkillingAction(null);
+            return true;
+        }
+        if (!entityWithinDist(this, 2)) {
+            MidnightRPG.getInstance()
+                .getGameScreen()
+                .getDialogueInterface()
+                .sendInfoInter("Too far away", "You are too far away to interact with this.");
+            return true;
+        }
+        return false;
     }
 
     private void getImageForObject() {
@@ -118,6 +136,14 @@ public abstract class GameObject extends Entity {
 
     public ObjectDefinition getDefinition() {
         return definition;
+    }
+
+    public GameMap getCurrentMap() {
+        return currentMap;
+    }
+
+    public BufferedImage getImage() {
+        return image;
     }
 
     @Override

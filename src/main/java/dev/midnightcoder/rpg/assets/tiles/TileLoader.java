@@ -142,6 +142,10 @@ public class TileLoader {
             registry.register(TileColor.TIN_ROCK, new MineableRock("tin_rock", stoneRock));
             registry.register(TileColor.IRON_ROCK, new MineableRock("iron_rock", ironRock));
 
+            registry.register(TileColor.NORMAL_TREE, new Tree("normal_tree"));
+            registry.register(TileColor.OAK_TREE, new Tree("oak_tree"));
+            registry.register(TileColor.MAPLE_TREE, new Tree("maple_tree"));
+            registry.register(TileColor.WILLOW_TREE, new Tree("willow_tree"));
 
             registry.register(TileColor.STONE_PATH, getTileType("ground_stone", CollisionFlag.NONE));
             registry.register(TileColor.WOOD_FLOOR, getTileType("floor_wood", CollisionFlag.NONE));

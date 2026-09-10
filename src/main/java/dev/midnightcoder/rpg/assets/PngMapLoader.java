@@ -11,10 +11,15 @@ import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.entity.object.impl.bushes.BushesBerryObject;
 import dev.midnightcoder.rpg.entity.object.impl.bushes.BushesObject;
 import dev.midnightcoder.rpg.entity.object.impl.mineable.*;
+import dev.midnightcoder.rpg.entity.object.impl.trees.MapleTreeObject;
+import dev.midnightcoder.rpg.entity.object.impl.trees.NormalTreeObject;
+import dev.midnightcoder.rpg.entity.object.impl.trees.OakTreeObject;
+import dev.midnightcoder.rpg.entity.object.impl.trees.WillowTreeObject;
 import dev.midnightcoder.rpg.entity.object.impl.trees.stump.*;
 import dev.midnightcoder.rpg.world.tiles.GameObjectTile;
 import dev.midnightcoder.rpg.world.tiles.impl.Bushes;
 import dev.midnightcoder.rpg.world.tiles.impl.MineableRock;
+import dev.midnightcoder.rpg.world.tiles.impl.Tree;
 import dev.midnightcoder.rpg.world.tiles.impl.TreeStump;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -115,6 +120,14 @@ public class PngMapLoader extends MapLoader {
                             switch (bushes.getId()) {
                                 case "normal_bush" -> addObject(currentMap, new BushesObject(currentMap, new Vec2i(x, y)));
                                 case "berry_bush" -> addObject(currentMap, new BushesBerryObject(currentMap, new Vec2i(x, y)));
+                            }
+                        }
+                        case Tree tree -> {
+                            switch (tree.getId()) {
+                                case "normal_tree" -> addObject(currentMap, new NormalTreeObject(currentMap, new Vec2i(x, y)));
+                                case "oak_tree" -> addObject(currentMap, new OakTreeObject(currentMap, new Vec2i(x, y)));
+                                case "maple_tree" -> addObject(currentMap, new MapleTreeObject(currentMap, new Vec2i(x, y)));
+                                case "willow_tree" -> addObject(currentMap, new WillowTreeObject(currentMap, new Vec2i(x, y)));
                             }
                         }
                         default -> log.warn("Unknown Object type: {}", gameObject.getId());
