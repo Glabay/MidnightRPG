@@ -47,6 +47,7 @@ public enum RockType {
             case StoneRockObject _ -> STONE;
             case CoalRockObject _ -> COAL;
             case CopperRockObject _ -> COPPER;
+            case TinRockObject _ -> TIN;
             case IronRockObject _ -> IRON;
             case MithrilRockObject _ -> MITHRIL;
             default -> throw new IllegalStateException("Unexpected value: " + rockObject);
