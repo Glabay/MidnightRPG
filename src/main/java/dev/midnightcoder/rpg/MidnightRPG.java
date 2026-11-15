@@ -111,6 +111,14 @@ public class MidnightRPG implements Game {
         entities.add(entity);
     }
 
+    public void removeEntity(Entity entity) {
+        entities.remove(entity);
+        if (entity instanceof NPC npc)
+            NPCs.remove(npc);
+        else if (entity instanceof Player player)
+            players.remove(player);
+    }
+
     public Map<DepletedResource, GameObject> getDepletedResources() {
         return depletedResources;
     }

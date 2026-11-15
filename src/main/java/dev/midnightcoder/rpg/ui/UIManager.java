@@ -35,4 +35,12 @@ public class UIManager {
     public List<UIPanel> getPanels() {
         return panels;
     }
+
+    /**
+     * Removes all UI panels and clears the internal list.
+     * Call this when the UI manager is no longer needed (e.g., on scene unload).
+     */
+    public void clearPanels() {
+        panels.clear();
+    }
 }

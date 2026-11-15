@@ -258,8 +258,43 @@ public class GameScreen extends Scene {
 
     @Override
     public void onUnload() {
-        // TODO: Implement cleanup logic
+        IO.println("Unloading game screen...");
+
         music.stop();
+        music.release();
+
+        uiManager.clearPanels();
+
+        if (player != null) {
+            player.setSkillingAction(null);
+
+            if (player.getDialogueSession() != null &&
+                player.getDialogueSession().isActive()
+            ) player.setDialogueSession(null);
+
+            if (player.getCombat() != null)
+                player.getCombat().reset();
+            player.clearHitsplats();
+            player.setSelectedEntity(null);
+
+            MidnightRPG.getInstance().removeEntity(player);
+        }
+
+        MidnightRPG.getInstance().getDepletedResources().clear();
+
+        groundItemManager.getGroundItems().clear();
+
+        player = null;
+        currentMap = null;
+
+        topHUD = null;
+        bottomHUD = null;
+        inventoryHUD = null;
+        skillsHUD = null;
+        contextMenu = null;
+        audioHUD = null;
+        equipmentHUD = null;
+        dialogueInterface = null;
     }
 
     private void initializeAudioSystem() {
