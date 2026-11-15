@@ -102,7 +102,7 @@ public class GameScreen extends Scene {
         // Object map
         if (!currentMap.getGameObjects().isEmpty())
             currentMap.getGameObjects().stream()
-                .map(obj -> (GameObject) obj)
+                .map(GameObject.class::cast)
                 .forEach(obj -> obj.update(delta));
 
 
@@ -112,7 +112,7 @@ public class GameScreen extends Scene {
         // Entities - NPCs
         if (!currentMap.getEntities().isEmpty())
             currentMap.getEntities().stream()
-                .map(e -> (NPC) e)
+                .map(NPC.class::cast)
                 .filter(npc -> !npc.isDespawned())
                 .forEach(entity -> entity.update(delta));
 
@@ -228,7 +228,7 @@ public class GameScreen extends Scene {
         // Object map
         if (!currentMap.getGameObjects().isEmpty()) {
             currentMap.getGameObjects()
-                .stream().map(obj -> (GameObject) obj)
+                .stream().map(GameObject.class::cast)
                 .forEach(obj -> obj.render(renderer));
         }
 
@@ -244,7 +244,7 @@ public class GameScreen extends Scene {
         // Entities - NPCs
         if (!currentMap.getEntities().isEmpty())
             currentMap.getEntities()
-                .stream().map(e -> (NPC) e)
+                .stream().map(NPC.class::cast)
                 .filter(npc -> !npc.isDespawned())
                 .forEach(entity -> entity.render(renderer));
 
