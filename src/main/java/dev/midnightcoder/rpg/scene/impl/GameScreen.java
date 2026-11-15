@@ -7,7 +7,7 @@ import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.scene.Scene;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.GameServices;
 import dev.midnightcoder.rpg.assets.audio.MusicTrack;
 import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.entity.Entity;
@@ -17,7 +17,6 @@ import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.item.Item;
-import dev.midnightcoder.rpg.save.SaveManager;
 import dev.midnightcoder.rpg.save.SavedProfile;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
@@ -25,10 +24,10 @@ import dev.midnightcoder.rpg.ui.interfaces.*;
 import dev.midnightcoder.rpg.util.ItemId;
 import dev.midnightcoder.rpg.world.TutorialIsland;
 
-import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -43,6 +42,8 @@ public class GameScreen extends Scene {
     private final AWTMouseInputHandler mouse;
     private final UIManager uiManager;
     private final MusicTrack music;
+    private final GameServices gameServices;
+    private final Map<DepletedResource, GameObject> depletedResources;
     private final GroundItemManager groundItemManager;
 
     private GameMap currentMap;
@@ -60,18 +61,20 @@ public class GameScreen extends Scene {
 
     private boolean mousePressed;
 
-    public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode) {
+    public GameScreen(UIManager uiManager, KeyboardInputManager input, AWTMouseInputHandler mouse, GameStartMode startMode, GameServices gameServices, Map<DepletedResource, GameObject> depletedResources) {
         this.uiManager = uiManager;
         this.input = input;
         this.mouse = mouse;
         this.startMode = startMode;
         this.music = new MusicTrack();
-        this.groundItemManager = GroundItemManager.getInstance();
+        this.gameServices = gameServices;
+        this.depletedResources = depletedResources;
+        this.groundItemManager = gameServices.groundItemManager();
     }
 
     @Override
     public void onLoad() {
-        SaveManager.getInstance().init();
+        gameServices.saveManager().init();
         initializeAudioSystem();
 
         var isNewGame = startMode == GameStartMode.NEW_GAME;
@@ -94,11 +97,8 @@ public class GameScreen extends Scene {
 
     @Override
     public void update(double delta) {
-        if (!MidnightRPG.getInstance().getDepletedResources().isEmpty()) {
-            var resources = MidnightRPG.getInstance()
-                .getDepletedResources()
-                .keySet()
-                .stream().toList();
+        if (!depletedResources.isEmpty()) {
+            var resources = depletedResources.keySet().stream().toList();
             resources.forEach(DepletedResource::tick);
         }
 
@@ -263,19 +263,15 @@ public class GameScreen extends Scene {
     public void onUnload() {
         IO.println("Unloading game screen...");
 
-        // 0. Auto-save player before cleanup
         if (player != null) {
-            SaveManager.getInstance().savePlayer(player);
+            gameServices.saveManager().savePlayer(player);
         }
 
-        // 1. Stop and release audio resources (native Clip)
         music.stop();
         music.release();
 
-        // 2. Clear all UI panels
         uiManager.clearPanels();
 
-        // 3. Clean up player state
         if (player != null) {
             player.setSkillingAction(null);
 
@@ -287,11 +283,9 @@ public class GameScreen extends Scene {
                 player.getCombat().reset();
             player.clearHitsplats();
             player.setSelectedEntity(null);
-
-            MidnightRPG.getInstance().removeEntity(player);
         }
 
-        MidnightRPG.getInstance().getDepletedResources().clear();
+        depletedResources.clear();
 
         groundItemManager.getGroundItems().clear();
 
@@ -360,20 +354,19 @@ public class GameScreen extends Scene {
     private void startNewGame() {
         // Generate the World
         currentMap = new TutorialIsland();
-        player = new Player("Glabay", currentMap, input);
-        MidnightRPG.getInstance().addEntity(player);
+        player = new Player("Glabay", currentMap, input, gameServices);
     }
 
     private void loadExistingGame() {
         IO.println("Loading existing game");
 
-        if (!SaveManager.getInstance().hasSave()) {
+        if (!gameServices.saveManager().hasSave()) {
             IO.println("No save found, starting new game");
             startNewGame();
             return;
         }
 
-        SavedProfile savedProfile = SaveManager.getInstance().loadPlayer();
+        SavedProfile savedProfile = gameServices.saveManager().loadPlayer();
         if (savedProfile == null) {
             IO.println("Failed to load save, starting new game");
             startNewGame();
@@ -382,8 +375,7 @@ public class GameScreen extends Scene {
 
         // Generate the World
         currentMap = new TutorialIsland();
-        player = new Player(savedProfile.getUsername(), currentMap, input);
-        MidnightRPG.getInstance().addEntity(player);
+        player = new Player(savedProfile.username(), currentMap, input, gameServices);
 
         // Restore all saved state
         player.loadPlayerSettings(savedProfile);
@@ -437,5 +429,9 @@ public class GameScreen extends Scene {
 
     public GameMap getCurrentMap() {
         return currentMap;
+    }
+
+    public GameServices getGameServices() {
+        return gameServices;
     }
 }

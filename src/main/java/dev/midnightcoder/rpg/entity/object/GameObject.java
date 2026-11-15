@@ -8,15 +8,17 @@ import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
-import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.content.skills.mining.MiningAction;
 import dev.midnightcoder.rpg.content.skills.woodcutting.ChoppingAction;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.image.BufferedImage;
+import java.util.Map;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -28,22 +30,28 @@ public abstract class GameObject extends Entity {
     private static final Logger log = LoggerFactory.getLogger(GameObject.class);
     private final Vec2i position;
     private final GameMap currentMap;
+    private final GameScreen gameScreen;
+    private final Map<DepletedResource, GameObject> depletedResourceMap;
 
     private ObjectDefinition definition;
     private BufferedImage image;
 
-    protected GameObject(GameMap currentMap, Vec2i position, int width, int height) {
+    protected GameObject(GameMap currentMap, Vec2i position, int width, int height, GameScreen gameScreen, Map<DepletedResource, GameObject> depletedResourceMap) {
         this.currentMap = currentMap;
         this.position = position;
+        this.gameScreen = gameScreen;
+        this.depletedResourceMap = depletedResourceMap;
         getImageForObject();
         this.width = width;
         this.height = height;
         this.worldX = position.getX() * Tile.TILE_SIZE;
         this.worldY = position.getY() * Tile.TILE_SIZE;
     }
-    protected GameObject(GameMap currentMap, Vec2i position) {
+    protected GameObject(GameMap currentMap, Vec2i position, GameScreen gameScreen, Map<DepletedResource, GameObject> depletedResourceMap) {
         this.currentMap = currentMap;
         this.position = position;
+        this.gameScreen = gameScreen;
+        this.depletedResourceMap = depletedResourceMap;
         getImageForObject();
         this.width = Tile.TILE_SIZE;
         this.height = Tile.TILE_SIZE;
@@ -71,22 +79,21 @@ public abstract class GameObject extends Entity {
 
     @Override
     public void handleMenuOption(String option) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        var player = gameScreen.getPlayer();
         switch (option.toLowerCase()) {
             case "mine" -> {
                 if (executionProhibited(player)) return;
                 log.info("Player is within range, attempting to mine object");
-                player.setSkillingAction(new MiningAction(player, this));
+                player.setSkillingAction(new MiningAction(player, this, gameScreen, depletedResourceMap));
             }
             case "chop" -> {
                 if (executionProhibited(player)) return;
                 log.info("Player is within range, attempting to chop tree");
-                player.setSkillingAction(new ChoppingAction(player, this));
+                player.setSkillingAction(new ChoppingAction(player, this, gameScreen, depletedResourceMap));
             }
             case "examine" -> {
                 log.info("Examine option selected for object with ID: {}", getObjectId());
-                MidnightRPG.getInstance()
-                    .getGameScreen()
+                gameScreen
                     .getDialogueInterface()
                     .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
             }
@@ -100,9 +107,8 @@ public abstract class GameObject extends Entity {
             player.setSkillingAction(null);
             return true;
         }
-        if (!entityWithinDist(this, 2)) {
-            MidnightRPG.getInstance()
-                .getGameScreen()
+        if (!entityWithinDist(this, 2, gameScreen.getPlayer())) {
+            gameScreen
                 .getDialogueInterface()
                 .sendInfoInter("Too far away", "You are too far away to interact with this.");
             return true;

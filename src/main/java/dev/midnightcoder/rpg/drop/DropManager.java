@@ -22,18 +22,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class DropManager {
     private static final Logger log = LoggerFactory.getLogger(DropManager.class);
-    private static DropManager instance;
 
     private final Map<Integer, NPCDropTable> dropTables = new ConcurrentHashMap<>();
+    private final GroundItemManager groundItemManager;
 
-    public static DropManager getInstance() {
-        if (instance == null) {
-            instance = new DropManager();
-        }
-        return instance;
-    }
-
-    public DropManager() {
+    public DropManager(GroundItemManager groundItemManager) {
+        this.groundItemManager = groundItemManager;
         initDefaultDrops();
     }
 
@@ -96,7 +90,7 @@ public class DropManager {
                     .at(tilePos)
                     .onMap(npc.getCurrentMap())
                     .withOwner(killer);
-            GroundItemManager.getInstance()
+            groundItemManager
                 .addGroundItem(groundItem);
 
             groundItems.add(groundItem);

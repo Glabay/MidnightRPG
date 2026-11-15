@@ -2,10 +2,11 @@ package dev.midnightcoder.rpg.entity.mob.npc.impl;
 
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.dialogue.DialogueManager;
 import dev.midnightcoder.rpg.entity.mob.npc.NPC;
+import dev.midnightcoder.rpg.entity.mob.npc.NpcManager;
 import dev.midnightcoder.rpg.entity.mob.npc.behaviors.WanderBehavior;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.util.NpcId;
 
 /**
@@ -16,8 +17,8 @@ import dev.midnightcoder.rpg.util.NpcId;
  */
 public class Pokey extends NPC {
 
-    public Pokey(int tileX, int tileY, GameMap currentMap) {
-        super(NpcId.POKEY, new Vec2i(tileX << 5, tileY << 5), currentMap);
+    public Pokey(int tileX, int tileY, GameMap currentMap, NpcManager npcManager, GameScreen gameScreen) {
+        super(NpcId.POKEY, new Vec2i(tileX << 5, tileY << 5), currentMap, npcManager, gameScreen, gameScreen.getGameServices().dropManager());
         addBehavior(new WanderBehavior(this));
     }
 
@@ -28,22 +29,20 @@ public class Pokey extends NPC {
 
     @Override
     public void handleMenuOption(String option) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        var gs = getGameScreen();
+        var player = gs.getPlayer();
         switch (option.toLowerCase()) {
             case "talk-to" -> {
-                // if the user is too far, send a dialogue message
-                if (!entityWithinDist(this, getInteractionDistance())) {
-                    MidnightRPG.getInstance()
-                        .getGameScreen()
+                if (!entityWithinDist(this, getInteractionDistance(), player)) {
+                    gs
                         .getDialogueInterface()
                         .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
                 }
-                DialogueManager.getInstance().start("pokey_greeting");
+                gs.getGameServices().dialogueManager().start("pokey_greeting");
             }
             case "examine" ->
-                MidnightRPG.getInstance()
-                    .getGameScreen()
+                gs
                     .getDialogueInterface()
                     .sendInfoInter(getDefinition().getName(), getDefinition().getDescription());
         }

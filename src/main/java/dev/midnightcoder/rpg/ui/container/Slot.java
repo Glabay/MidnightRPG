@@ -1,12 +1,13 @@
 package dev.midnightcoder.rpg.ui.container;
 
+import dev.midnightcoder.engine.input.mouse.AWTMouseInputHandler;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.renderer.ui.components.UIPanel;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.window.WindowConfig;
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
 import dev.midnightcoder.rpg.ui.interfaces.InventoryHUD;
 import org.slf4j.Logger;
@@ -27,6 +28,8 @@ public class Slot extends Rectangle {
     private static final Logger log = LoggerFactory.getLogger(Slot.class);
     private final int slotIndex;
     private final int size;
+    private final GameScreen gameScreen;
+    private final AWTMouseInputHandler mouse;
 
     private final BufferedImage blankSlot;
     private final Vec2i position;
@@ -40,10 +43,12 @@ public class Slot extends Rectangle {
     protected boolean inside = false;
     protected boolean ignorePressed = false;
 
-    public Slot(Vec2i position, int size, int id) {
+    public Slot(Vec2i position, int size, int id, GameScreen gameScreen, AWTMouseInputHandler mouse) {
         this.position = position;
         this.size = size;
         this.slotIndex = id;
+        this.gameScreen = gameScreen;
+        this.mouse = mouse;
         this.blankSlot = TextureFactory.createFromImageFile("/items/blankInvSlot.png").image();
         this.slotFont = new Font("Arial", Font.BOLD, 11);
         this.itemQuantityColor = new Color(0, 150, 200);
@@ -55,7 +60,6 @@ public class Slot extends Rectangle {
         if (item != null)
             icon = item.getIcon().image();
 
-        var mouse = MidnightRPG.getInstance().getMouse();
         var leftMouseButtonDown = mouse.getButton() == MouseEvent.BUTTON1;
         var rightMouseButtonDown = mouse.getButton() == MouseEvent.BUTTON3;
         if (contains(new Point(mouse.getX(), mouse.getY()))) {
@@ -77,7 +81,7 @@ public class Slot extends Rectangle {
                         }
 
                         // Open context menu
-                        var contextMenu = MidnightRPG.getInstance().getGameScreen().getContextMenu()
+                        var contextMenu = gameScreen.getContextMenu()
                             .newMenu()
                             .setPosition(new Vec2i(mouse.getX(), mouse.getY()))
                             .withTitle("Choose")
@@ -108,7 +112,7 @@ public class Slot extends Rectangle {
                         item.handleDefaultOption(this, getItem().getItemDefaultAction());
                     }
                     if (panel instanceof EquipmentHUD) {
-                        item.removeItem(this);
+                        item.removeItem(this, gameScreen);
                     }
                     panel.setMousePressed(false);
                 }

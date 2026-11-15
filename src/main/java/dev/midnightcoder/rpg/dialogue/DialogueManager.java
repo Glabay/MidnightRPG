@@ -1,11 +1,11 @@
 package dev.midnightcoder.rpg.dialogue;
 
 import dev.midnightcoder.cache.CacheReader;
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.dialogue.choice.DialogueChoice;
 import dev.midnightcoder.rpg.dialogue.frame.DialogueFrame;
 import dev.midnightcoder.rpg.dialogue.frame.impl.*;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 
 import java.util.HashMap;
 
@@ -16,19 +16,25 @@ import java.util.HashMap;
  * @since 2026-05-17
  */
 public class DialogueManager {
-    private static DialogueManager instance;
-
     private final DialogueRepository repository;
+    private GameScreen gameScreen;
 
     private DialogueSession session;
 
-    private DialogueManager(DialogueRepository repository) {
-        this.repository = repository;
-        loadDialogues();
+    public DialogueManager(CacheReader cacheReader) {
+        this.repository = new DialogueRepository();
+        loadDialogues(cacheReader);
     }
 
-    private void loadDialogues() {
-        var cacheReader = CacheReader.getInstance();
+    /**
+     * Set the GameScreen reference after construction to break the circular dependency.
+     * Called by MidnightRPG after GameScreen is created.
+     */
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
+
+    private void loadDialogues(CacheReader cacheReader) {
 
         for (var def : cacheReader.getCacheManager().getDialogues()) {
             var frames = new HashMap<String, DialogueFrame>();
@@ -54,20 +60,12 @@ public class DialogueManager {
         }
     }
 
-    public static DialogueManager getInstance() {
-        if (instance == null) {
-            instance = new DialogueManager(new DialogueRepository());
-        }
-        return instance;
-    }
-
     public void start(String dialogueId) {
         if (!repository.contains(dialogueId)) {
             throw new IllegalArgumentException("Dialogue with ID '" + dialogueId + "' does not exist");
         }
         session = new DialogueSession(repository.get(dialogueId));
 
-        var gameScreen = MidnightRPG.getInstance().getGameScreen();
         var dialogueInter = gameScreen.getDialogueInterface();
         dialogueInter.sendDialogue(session, session.getCurrentFrame().getText())
             .display();
@@ -80,7 +78,6 @@ public class DialogueManager {
 
         session.advance();
 
-        var gameScreen = MidnightRPG.getInstance().getGameScreen();
         var dialogueInter = gameScreen.getDialogueInterface();
 
         if (session.getCurrentFrame() instanceof EndFrame) {

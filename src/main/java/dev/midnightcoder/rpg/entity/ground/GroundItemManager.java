@@ -15,18 +15,10 @@ import java.util.List;
  */
 public class GroundItemManager {
     private static final Logger log = LoggerFactory.getLogger(GroundItemManager.class);
-    private static GroundItemManager instance;
 
     private final List<GroundItem> groundItems;
 
-    public static GroundItemManager getInstance() {
-        if (instance == null) {
-            instance = new GroundItemManager();
-        }
-        return instance;
-    }
-
-    GroundItemManager() {
+    public GroundItemManager() {
         groundItems = new ArrayList<>();
     }
 

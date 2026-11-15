@@ -6,5 +6,5 @@ void main() {
     // TODO: Load Splash Screen while assets load
     var am = AssetManager.getInstance();
         am.loadAssets();
-    Engine.start(MidnightRPG.getInstance());
+    Engine.start(new MidnightRPG());
 }

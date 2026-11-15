@@ -1,9 +1,10 @@
 package dev.midnightcoder.rpg.content.skills;
 
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.object.GameObject;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Glabay | The Midnight Coder
@@ -15,13 +16,19 @@ import java.util.List;
 public final class DepletedResource {
     private final int refreshedId;
     private int refreshTicks;
+    private final Map<DepletedResource, GameObject> depletedResources;
+    private final GameScreen gameScreen;
 
     public DepletedResource(
         int refreshedId,
-        int refreshAt
+        int refreshAt,
+        Map<DepletedResource, GameObject> depletedResources,
+        GameScreen gameScreen
     ) {
         this.refreshedId = refreshedId;
         this.refreshTicks = refreshAt;
+        this.depletedResources = depletedResources;
+        this.gameScreen = gameScreen;
     }
 
     public void tick() {
@@ -31,26 +38,17 @@ public final class DepletedResource {
 
     @SuppressWarnings("unchecked")
     private void restoreDepletedResource() {
-        var resource = MidnightRPG.getInstance()
-            .getDepletedResources()
-            .get(this);
+        var resource = depletedResources.get(this);
 
         if (resource != null) {
             resource.getDefinition()
                 .setTextureId(refreshedId);
         }
-        var original = MidnightRPG.getInstance()
-            .getDepletedResources()
-            .get(this);
+        var original = depletedResources.get(this);
 
-        MidnightRPG.getInstance()
-            .getDepletedResources()
-            .remove(this);
+        depletedResources.remove(this);
 
-        ((List<GameObject>) MidnightRPG.getInstance()
-            .getGameScreen()
-            .getCurrentMap()
-            .getGameObjects())
+        ((List<GameObject>) gameScreen.getCurrentMap().getGameObjects())
             .add(original);
 
     }

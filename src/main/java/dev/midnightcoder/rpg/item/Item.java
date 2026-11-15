@@ -5,9 +5,9 @@ import dev.midnightcoder.cache.model.ItemDefinition;
 import dev.midnightcoder.engine.entity.item.GameItem;
 import dev.midnightcoder.engine.renderer.graphics.Texture;
 import dev.midnightcoder.engine.util.Vec2i;
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.ground.GroundItem;
-import dev.midnightcoder.rpg.entity.ground.GroundItemManager;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import dev.midnightcoder.rpg.ui.container.Slot;
 import dev.midnightcoder.rpg.ui.interfaces.EquipmentHUD;
 import dev.midnightcoder.rpg.util.MenuActionable;
@@ -92,8 +92,7 @@ public class Item extends GameItem implements MenuActionable {
                 log.debug("Equipping item: {}", getDefinition().getName());
                 var equipSlot = EquipmentHUD.equipmentSlots.get(getEquipSlot());
                 if (equipSlot.hasAnItem())
-                    removeItem(equipSlot);
-                equipItem(this, slot);
+                    removeItem(equipSlot, null);
                 break;
             }
 
@@ -108,16 +107,21 @@ public class Item extends GameItem implements MenuActionable {
         }
     }
 
-    public void removeItem(Slot equipSlot) {
+    public void removeItem(Slot equipSlot, GameScreen gameScreen) {
         var equipped = equipSlot.getItem();
-        var backpack = MidnightRPG.getInstance().getGameScreen().getInventoryHUD();
+        var backpack = gameScreen.getInventoryHUD();
 
         equipSlot.setItem(null);
         backpack.addItem(equipped);
     }
 
+    @Override
     public void handleMenuOption(String option) {
-        var owner = MidnightRPG.getInstance().getGameScreen().getPlayer();
+        // Default no-op — callers should use handleMenuOption(String, GameScreen)
+    }
+
+    public void handleMenuOptionWithScreen(String option, GameScreen gameScreen) {
+        var owner = gameScreen.getPlayer();
         switch (option.toLowerCase()) {
             case "equip": {
                 log.info("Equipping item: {}", getDefinition().getName());
@@ -137,17 +141,17 @@ public class Item extends GameItem implements MenuActionable {
                     .at(spawnPoint);
 
                 log.info("Player is dropping item: {}", groundItem);
-                GroundItemManager.getInstance().addGroundItem(groundItem);
+                gameScreen.getCurrentMap().getGameObjects().add(groundItem);
+                // Note: ground item management is handled by GroundItemManager in GameScreen
 
-                MidnightRPG.getInstance().getGameScreen().getInventoryHUD()
+                gameScreen.getInventoryHUD()
                     .removeItem(getDefinition().getId(), getQuantity());
 
                 break;
             }
 
             case "examine": {
-                MidnightRPG.getInstance()
-                    .getGameScreen().getDialogueInterface()
+                gameScreen.getDialogueInterface()
                     .sendInfoInter(getDefinition().getName(), getDefinition().getDescription(), "This is an example of a second line ", "This is an example of the third line");
                 break;
             }
@@ -158,8 +162,8 @@ public class Item extends GameItem implements MenuActionable {
         }
     }
 
-    private void equipItem(Item item, Slot slot) {
-        var equipHud = MidnightRPG.getInstance().getGameScreen().getEquipmentHUD();
+    private void equipItem(Item item, Slot slot, GameScreen gameScreen) {
+        var equipHud = gameScreen.getEquipmentHUD();
 
         slot.setItem(null);
         equipHud.addItemToSlot(item, item.getEquipSlot());

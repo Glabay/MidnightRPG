@@ -18,21 +18,12 @@ import java.util.List;
 public class ItemManager implements CacheDefinition {
     private static final Logger logger = LoggerFactory.getLogger(ItemManager.class);
 
-    private static ItemManager instance;
-
     private final List<ItemDefinition> itemDefinitions;
     private final CacheReader cacheReader;
 
-    public static ItemManager getInstance() {
-        if (instance == null) {
-            instance = new ItemManager();
-        }
-        return instance;
-    }
-
-    ItemManager() {
+    public ItemManager(CacheReader cacheReader) {
         logger.info("Initializing ItemManager");
-        this.cacheReader = CacheReader.getInstance();
+        this.cacheReader = cacheReader;
 
         this.itemDefinitions = new ArrayList<>();
 

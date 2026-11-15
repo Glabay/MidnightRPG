@@ -1,15 +1,16 @@
 package dev.midnightcoder.rpg.content.skills.woodcutting;
 
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.content.skills.SkillingAction;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -25,8 +26,8 @@ public class ChoppingAction extends SkillingAction {
     private final GameObject treeObject;
     private final TreeType treeType;
 
-    public ChoppingAction(Player player, GameObject treeObject) {
-        super(player, "Woodcutting", SkillType.WOODCUTTING);
+    public ChoppingAction(Player player, GameObject treeObject, GameScreen gameScreen, Map<DepletedResource, GameObject> depletedResourceMap) {
+        super(player, "Woodcutting", SkillType.WOODCUTTING, gameScreen, depletedResourceMap);
         this.treeObject = treeObject;
         this.treeType = TreeType.findTreeFromObject(treeObject);
     }
@@ -38,7 +39,7 @@ public class ChoppingAction extends SkillingAction {
             player.setSkillingAction(null);
             return;
         }
-        if (!player.entityWithinDist(treeObject, 1)) {
+        if (!player.entityWithinDist(treeObject, 1, player)) {
             player.setSkillingAction(null);
             return;
         }
@@ -58,8 +59,7 @@ public class ChoppingAction extends SkillingAction {
         var hatchet = Hatchet.findBestHatchet(player);
         if (hatchet == null) {
             player.setSkillingAction(null);
-            MidnightRPG.getInstance()
-                .getGameScreen()
+            gameScreen
                 .getDialogueInterface()
                 .sendInfoInter("Missing hatchet", "You do not seem to have a hatchet.");
             log.info("Woodcutting action failed due to missing hatchet");
@@ -80,16 +80,11 @@ public class ChoppingAction extends SkillingAction {
     @Override
     protected void depleteResource() {
         var originalTextureId = treeObject.getDefinition().getTextureId();
-        MidnightRPG.getInstance()
-            .addDepletedResource(treeObject,
-                new DepletedResource(originalTextureId, treeType.getRespawnTicks())
-            );
-        MidnightRPG.getInstance()
-            .getGameScreen()
-            .getCurrentMap()
-            .getGameObjects()
-            .remove(treeObject);
-
+        depletedResourceMap.put(
+            new DepletedResource(originalTextureId, treeType.getRespawnTicks(), depletedResourceMap, gameScreen),
+            treeObject
+        );
+        gameScreen.getCurrentMap().getGameObjects().remove(treeObject);
         player.setSkillingAction(null);
 
     }

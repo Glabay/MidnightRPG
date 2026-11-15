@@ -2,7 +2,7 @@ package dev.midnightcoder.rpg.entity;
 
 import dev.midnightcoder.engine.entity.EngineEntity;
 import dev.midnightcoder.engine.util.Vec2i;
-import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.util.MenuActionable;
 
 /**
@@ -44,8 +44,7 @@ public abstract class Entity extends EngineEntity implements MenuActionable {
         // Default implementation
     }
 
-    public boolean entityWithinDist(Entity entity, int distance) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+    public boolean entityWithinDist(Entity entity, int distance, Player player) {
         var dist = Vec2i.getDistance(
             new Vec2i(player.getAvatar().getX(), player.getAvatar().getY()),
             new Vec2i(entity.getX(), entity.getY())

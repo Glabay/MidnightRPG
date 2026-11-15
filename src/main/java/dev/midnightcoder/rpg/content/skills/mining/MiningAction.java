@@ -1,15 +1,16 @@
 package dev.midnightcoder.rpg.content.skills.mining;
 
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.content.skills.DepletedResource;
 import dev.midnightcoder.rpg.content.skills.SkillingAction;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -25,15 +26,15 @@ public class MiningAction extends SkillingAction {
     private final GameObject rockObject;
     private final RockType rockType;
 
-    public MiningAction(Player player, GameObject rockObject) {
-        super(player, "Mining", SkillType.MINING);
+    public MiningAction(Player player, GameObject rockObject, GameScreen gameScreen, Map<DepletedResource, GameObject> depletedResourceMap) {
+        super(player, "Mining", SkillType.MINING, gameScreen, depletedResourceMap);
         this.rockObject = rockObject;
         this.rockType = RockType.findRockTypeFromObject(rockObject);
     }
 
     @Override
     public void process() {
-        if (!player.entityWithinDist(rockObject, 1)) {
+        if (!player.entityWithinDist(rockObject, 1, player)) {
             player.setSkillingAction(null);
             return;
         }
@@ -55,8 +56,7 @@ public class MiningAction extends SkillingAction {
         var pickaxeType = PickaxeType.findBestPickaxe(player);
         if (pickaxeType == null) {
             player.setSkillingAction(null);
-            MidnightRPG.getInstance()
-                .getGameScreen()
+            gameScreen
                 .getDialogueInterface()
                 .sendInfoInter("Missing Pickaxe", "You do not seem to have a pickaxe.");
             log.info("Mining action failed due to missing pickaxe");
@@ -86,16 +86,11 @@ public class MiningAction extends SkillingAction {
     @Override
     protected void depleteResource() {
         var originalTextureId = rockObject.getDefinition().getTextureId();
-        MidnightRPG.getInstance()
-            .addDepletedResource(rockObject,
-                new DepletedResource(originalTextureId, rockType.getRespawnTicks())
-            );
-        MidnightRPG.getInstance()
-            .getGameScreen()
-            .getCurrentMap()
-            .getGameObjects()
-            .remove(rockObject);
-
+        depletedResourceMap.put(
+            new DepletedResource(originalTextureId, rockType.getRespawnTicks(), depletedResourceMap, gameScreen),
+            rockObject
+        );
+        gameScreen.getCurrentMap().getGameObjects().remove(rockObject);
         player.setSkillingAction(null);
     }
 

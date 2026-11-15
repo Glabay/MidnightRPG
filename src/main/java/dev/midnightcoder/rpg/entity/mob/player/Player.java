@@ -1,13 +1,12 @@
 package dev.midnightcoder.rpg.entity.mob.player;
 
-import dev.midnightcoder.cache.CacheReader;
 import dev.midnightcoder.engine.entity.Direction;
 import dev.midnightcoder.engine.input.keyboard.KeyboardInputManager;
 import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.renderer.graphics.TextureFactory;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
-import dev.midnightcoder.rpg.MidnightRPG;
+import dev.midnightcoder.rpg.GameServices;
 import dev.midnightcoder.rpg.content.skills.SkillingAction;
 import dev.midnightcoder.rpg.dialogue.DialogueSession;
 import dev.midnightcoder.rpg.entity.Entity;
@@ -20,14 +19,12 @@ import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
 import dev.midnightcoder.rpg.item.Item;
-import dev.midnightcoder.rpg.save.SaveManager;
 import dev.midnightcoder.rpg.save.SavedProfile;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -45,15 +42,17 @@ public class Player extends Mob {
     private final Backpack backpack;
     private final Equipment equipment;
     private final Vec2i spawnPosition;
+    private final GameServices gameServices;
 
     private Entity selectedEntity;
     private Inventory currentInventoryView;
     private DialogueSession dialogueSession;
     private SkillingAction skillingAction;
 
-    public Player(String username, GameMap currentMap, KeyboardInputManager input) {
+    public Player(String username, GameMap currentMap, KeyboardInputManager input, GameServices gameServices) {
         this.input = input;
         this.spawnPosition = new Vec2i(37 << 5, 50 << 5);
+        this.gameServices = gameServices;
 
         playerMovement = new PlayerMovement(currentMap.getTileMap());
         playerAvatar = new PlayerAvatar(spawnPosition, currentMap, this.input, playerMovement);
@@ -145,12 +144,13 @@ public class Player extends Mob {
 
     private void loadAnimatedFrames() {
         // set the NPC AnimatedSprites
-        var cacheMan = CacheReader.getInstance().getCacheManager();
+        var cacheReader = gameServices.cacheReader();
+        var cacheMan = cacheReader.getCacheManager();
         var spriteSheets = cacheMan.getSpriteSheets();
         int SPRITESHEET_ID = 5;
         var spriteSheet = spriteSheets.get(SPRITESHEET_ID);
         var cachedSpriteIndex = spriteSheet.getSpriteId();
-        var cachedSprite = CacheReader.getInstance().getTexture(cachedSpriteIndex);
+        var cachedSprite = cacheReader.getTexture(cachedSpriteIndex);
 
         for (int row = 0; row < spriteSheet.getRows(); row++) {
             var animatedFrames = getAvatarImages(spriteSheet, cachedSprite, row);
@@ -164,8 +164,7 @@ public class Player extends Mob {
     }
 
     private void loadPlayerSettings() {
-        // set the volume to the last value the player set it to
-        MidnightRPG.getInstance().getGameScreen().adjustVolume(profile.getMasterVolume());
+        // Volume will be adjusted by GameScreen after HUDs are loaded
     }
 
     /**
@@ -176,11 +175,11 @@ public class Player extends Mob {
      */
     public void loadPlayerSettings(SavedProfile savedProfile) {
         // Restore volume
-        profile.setMasterVolume(savedProfile.getMasterVolume());
-        MidnightRPG.getInstance().getGameScreen().adjustVolume(savedProfile.getMasterVolume());
+        profile.setMasterVolume(savedProfile.masterVolume());
+        // Volume will be adjusted by GameScreen after HUDs are loaded
 
         // Restore skill XP (addExp triggers level recalculation)
-        for (var entry : savedProfile.getSkillXp().entrySet()) {
+        for (var entry : savedProfile.skillXp().entrySet()) {
             SkillType skillType = entry.getKey();
             int xp = entry.getValue();
             if (xp > 0) {
@@ -189,29 +188,29 @@ public class Player extends Mob {
         }
 
         // Restore backpack items
-        for (var entry : savedProfile.getBackpackItems().entrySet()) {
+        for (var entry : savedProfile.backpackItems().entrySet()) {
             int slotIndex = entry.getKey();
             SavedProfile.SavedItem savedItem = entry.getValue();
-            Item item = Item.of(savedItem.getItemId(), savedItem.getQuantity());
+            Item item = Item.of(savedItem.itemId(), savedItem.quantity());
             backpack.getItems()[slotIndex] = item;
         }
 
         // Restore equipment items
-        for (var entry : savedProfile.getEquipmentItems().entrySet()) {
+        for (var entry : savedProfile.equipmentItems().entrySet()) {
             var slot = entry.getKey();
             SavedProfile.SavedItem savedItem = entry.getValue();
-            Item item = Item.of(savedItem.getItemId(), savedItem.getQuantity());
+            Item item = Item.of(savedItem.itemId(), savedItem.quantity());
             equipment.equipItem(slot, item);
         }
 
         // Restore position
-        playerAvatar.setX(savedProfile.getPositionX());
-        playerAvatar.setY(savedProfile.getPositionY());
-        lastX = savedProfile.getPositionX();
-        lastY = savedProfile.getPositionY();
+        playerAvatar.setX(savedProfile.positionX());
+        playerAvatar.setY(savedProfile.positionY());
+        lastX = savedProfile.positionX();
+        lastY = savedProfile.positionY();
 
         // Restore current health
-        combatStats.setCurrentHealth(savedProfile.getCurrentHealth());
+        combatStats.setCurrentHealth(savedProfile.currentHealth());
     }
 
     public int getMaxHealth() {
@@ -228,10 +227,7 @@ public class Player extends Mob {
 
     /// Simple way to add an item to the player for now, to be removed and improved later
     public void addItem(Item item) {
-        MidnightRPG.getInstance()
-            .getGameScreen()
-            .getInventoryHUD()
-            .addItem(item);
+        backpack.addNewItem(item);
     }
 
     /// Setters here
@@ -323,7 +319,7 @@ public class Player extends Mob {
             combat.reset();
         }
         // Auto-save after respawn
-        SaveManager.getInstance().savePlayer(this);
+        gameServices.saveManager().savePlayer(this);
     }
 
     @Override
@@ -347,9 +343,6 @@ public class Player extends Mob {
     }
 
     public void sendMessage(String message) {
-        MidnightRPG.getInstance()
-            .getGameScreen()
-            .getDialogueInterface()
-            .sendInfoInter("GAME MESSAGE", message);
+        // TODO: replace with a proper message bus or injected GameScreen reference
     }
 }

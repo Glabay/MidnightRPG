@@ -29,38 +29,25 @@ public class SaveManager {
     private static final String DB_PATH = DB_DIR + "/player.db";
     private static final String JDBC_URL = "jdbc:sqlite:" + DB_PATH;
 
-    private static SaveManager instance;
-
     private Connection connection;
 
-    private SaveManager() {
+    public SaveManager() {
     }
 
-    public static SaveManager getInstance() {
-        if (instance == null) {
-            instance = new SaveManager();
-        }
-        return instance;
-    }
-
-    /**
-     * Initializes the database directory and creates all tables if they don't exist.
-     * Call this once at game startup before any save/load operations.
-     */
     public void init() {
         try {
-            // Create the saves directory if it doesn't exist
             Files.createDirectories(Path.of(DB_DIR));
 
-            // Connect to the database (creates the file if it doesn't exist)
             connection = DriverManager.getConnection(JDBC_URL);
             connection.setAutoCommit(true);
 
             createTables();
             log.info("SaveManager initialized: database at {}", DB_PATH);
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             log.error("Failed to initialize SaveManager database", e);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             log.error("Failed to create saves directory", e);
         }
     }

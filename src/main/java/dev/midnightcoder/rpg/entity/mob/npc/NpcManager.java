@@ -17,21 +17,13 @@ import java.util.List;
  */
 public class NpcManager implements CacheDefinition {
     private static final Logger logger = LoggerFactory.getLogger(NpcManager.class);
-    private static NpcManager instance;
 
     private final List<NPCDefinition> definitions;
     private final CacheReader cacheReader;
 
-    public static NpcManager getInstance() {
-        if (instance == null) {
-            instance = new NpcManager();
-        }
-        return instance;
-    }
-
-    NpcManager() {
+    public NpcManager(CacheReader cacheReader) {
         logger.info("Initializing NpcManager");
-        this.cacheReader = CacheReader.getInstance();
+        this.cacheReader = cacheReader;
 
         this.definitions = new ArrayList<>();
 

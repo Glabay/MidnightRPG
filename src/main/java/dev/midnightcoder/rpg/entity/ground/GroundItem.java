@@ -4,10 +4,10 @@ import dev.midnightcoder.engine.renderer.Renderer;
 import dev.midnightcoder.engine.util.Vec2i;
 import dev.midnightcoder.engine.world.GameMap;
 import dev.midnightcoder.engine.world.tile.Tile;
-import dev.midnightcoder.rpg.MidnightRPG;
 import dev.midnightcoder.rpg.entity.Entity;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.scene.impl.GameScreen;
 
 /**
  * @author Glabay | Glabay-Studios
@@ -80,15 +80,12 @@ public class GroundItem extends Entity {
         return isExpired;
     }
 
-    @Override
-    public void handleMenuOption(String option) {
-        var player = MidnightRPG.getInstance().getGameScreen().getPlayer();
+    public void handleMenuOption(String option, GameScreen gameScreen) {
+        var player = gameScreen.getPlayer();
         switch (option.toLowerCase()) {
             case "pick-up", "take" -> {
-                // if the user is too far, send a dialogue message
-                if (!entityWithinDist(this, 2)) {
-                    MidnightRPG.getInstance()
-                        .getGameScreen()
+                if (!entityWithinDist(this, 2, player)) {
+                    gameScreen
                         .getDialogueInterface()
                         .sendInfoInter("Too far away", "You are too far away to interact with this.");
                     return;
@@ -97,11 +94,15 @@ public class GroundItem extends Entity {
                 isExpired = true;
             }
             case "examine" ->
-                MidnightRPG.getInstance()
-                    .getGameScreen()
+                gameScreen
                     .getDialogueInterface()
                     .sendInfoInter(getItem().getDefinition().getName(), getItem().getDefinition().getDescription());
         }
+    }
+
+    @Override
+    public void handleMenuOption(String option) {
+        // Default no-op — callers should use handleMenuOption(String, GameScreen)
     }
 
     @Override

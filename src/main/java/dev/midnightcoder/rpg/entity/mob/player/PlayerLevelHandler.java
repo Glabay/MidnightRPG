@@ -15,7 +15,6 @@ public class PlayerLevelHandler {
         if (skillType == SkillType.HITPOINTS) {
             player.getCombatStats().heal(newLevel - oldLevel, newLevel);
         }
-        // Auto-save after level-up
         SaveManager.getInstance().savePlayer(player);
     }
 }
