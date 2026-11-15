@@ -17,6 +17,8 @@ import dev.midnightcoder.rpg.entity.mob.npc.NPC;
 import dev.midnightcoder.rpg.entity.mob.player.Player;
 import dev.midnightcoder.rpg.entity.object.GameObject;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.save.SaveManager;
+import dev.midnightcoder.rpg.save.SavedProfile;
 import dev.midnightcoder.rpg.scene.GameStartMode;
 import dev.midnightcoder.rpg.ui.UIManager;
 import dev.midnightcoder.rpg.ui.interfaces.*;
@@ -69,6 +71,7 @@ public class GameScreen extends Scene {
 
     @Override
     public void onLoad() {
+        SaveManager.getInstance().init();
         initializeAudioSystem();
 
         var isNewGame = startMode == GameStartMode.NEW_GAME;
@@ -260,11 +263,19 @@ public class GameScreen extends Scene {
     public void onUnload() {
         IO.println("Unloading game screen...");
 
+        // 0. Auto-save player before cleanup
+        if (player != null) {
+            SaveManager.getInstance().savePlayer(player);
+        }
+
+        // 1. Stop and release audio resources (native Clip)
         music.stop();
         music.release();
 
+        // 2. Clear all UI panels
         uiManager.clearPanels();
 
+        // 3. Clean up player state
         if (player != null) {
             player.setSkillingAction(null);
 
@@ -355,6 +366,27 @@ public class GameScreen extends Scene {
 
     private void loadExistingGame() {
         IO.println("Loading existing game");
+
+        if (!SaveManager.getInstance().hasSave()) {
+            IO.println("No save found, starting new game");
+            startNewGame();
+            return;
+        }
+
+        SavedProfile savedProfile = SaveManager.getInstance().loadPlayer();
+        if (savedProfile == null) {
+            IO.println("Failed to load save, starting new game");
+            startNewGame();
+            return;
+        }
+
+        // Generate the World
+        currentMap = new TutorialIsland();
+        player = new Player(savedProfile.getUsername(), currentMap, input);
+        MidnightRPG.getInstance().addEntity(player);
+
+        // Restore all saved state
+        player.loadPlayerSettings(savedProfile);
     }
 
     public DialogueInterface getDialogueInterface() {

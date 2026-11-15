@@ -65,6 +65,10 @@ public class Skill {
         return DecimalFormat.getInstance().format(experience);
     }
 
+    public int getExperienceInt() {
+        return experience;
+    }
+
     public String getNextLevel() {
         return DecimalFormat.getInstance().format(getExperienceForLevel(level + 1));
     }

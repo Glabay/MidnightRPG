@@ -20,6 +20,8 @@ import dev.midnightcoder.rpg.entity.skill.SkillType;
 import dev.midnightcoder.rpg.inventory.container.Backpack;
 import dev.midnightcoder.rpg.inventory.container.Equipment;
 import dev.midnightcoder.rpg.item.Item;
+import dev.midnightcoder.rpg.save.SaveManager;
+import dev.midnightcoder.rpg.save.SavedProfile;
 import dev.midnightcoder.rpg.ui.interfaces.Inventory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -162,13 +164,54 @@ public class Player extends Mob {
     }
 
     private void loadPlayerSettings() {
-        // update their position on this map
         // set the volume to the last value the player set it to
         MidnightRPG.getInstance().getGameScreen().adjustVolume(profile.getMasterVolume());
-        // load SkillSet
-        // load Backpack
-        // load Equipment
-        // load CombatStats
+    }
+
+    /**
+     * Restores all player state from a saved profile loaded from the database.
+     * Called after the Player constructor when loading an existing game.
+     *
+     * @param savedProfile the saved data to restore
+     */
+    public void loadPlayerSettings(SavedProfile savedProfile) {
+        // Restore volume
+        profile.setMasterVolume(savedProfile.getMasterVolume());
+        MidnightRPG.getInstance().getGameScreen().adjustVolume(savedProfile.getMasterVolume());
+
+        // Restore skill XP (addExp triggers level recalculation)
+        for (var entry : savedProfile.getSkillXp().entrySet()) {
+            SkillType skillType = entry.getKey();
+            int xp = entry.getValue();
+            if (xp > 0) {
+                skillSet.getSkill(skillType).addExp(xp);
+            }
+        }
+
+        // Restore backpack items
+        for (var entry : savedProfile.getBackpackItems().entrySet()) {
+            int slotIndex = entry.getKey();
+            SavedProfile.SavedItem savedItem = entry.getValue();
+            Item item = Item.of(savedItem.getItemId(), savedItem.getQuantity());
+            backpack.getItems()[slotIndex] = item;
+        }
+
+        // Restore equipment items
+        for (var entry : savedProfile.getEquipmentItems().entrySet()) {
+            var slot = entry.getKey();
+            SavedProfile.SavedItem savedItem = entry.getValue();
+            Item item = Item.of(savedItem.getItemId(), savedItem.getQuantity());
+            equipment.equipItem(slot, item);
+        }
+
+        // Restore position
+        playerAvatar.setX(savedProfile.getPositionX());
+        playerAvatar.setY(savedProfile.getPositionY());
+        lastX = savedProfile.getPositionX();
+        lastY = savedProfile.getPositionY();
+
+        // Restore current health
+        combatStats.setCurrentHealth(savedProfile.getCurrentHealth());
     }
 
     public int getMaxHealth() {
@@ -279,6 +322,8 @@ public class Player extends Mob {
         if (combat != null) {
             combat.reset();
         }
+        // Auto-save after respawn
+        SaveManager.getInstance().savePlayer(this);
     }
 
     @Override
